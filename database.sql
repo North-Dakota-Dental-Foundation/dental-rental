@@ -85,10 +85,39 @@ VALUES
 ('1', 'The Cool Dudes', '1234 5th St S', 'The main man', 'kuledude420@hotmail.com', '1234567890', 'Chadtown', 'OG', '98765', '2020-12-11', '2020-12-12', 'To be awesome', 'Lit'
 );
 
+INSERT INTO "equipment_requests"
+("equipment_id", "request_id")
+VALUES 
+('1', '1');
+
+-- TABLE PUTS --
+
+UPDATE "equipment" -- Change equipment status --
+SET "equipment_status" = 'Pending...'
+WHERE "id" = '2';
+
+UPDATE "requests" -- Change request status --
+SET "status" = 'Pending...'
+WHERE "id" = '1';
+
+-- TABLE DELETES --
+
+DELETE FROM "user" WHERE "id" = '1';
+
+DELETE FROM "equipment" WHERE "id" = '1';
+
+DELETE FROM "requests" WHERE "id" = '1';
+
+-- JOIN EQUIPMENT AND REQUESTS -- 
+
+SELECT * FROM "equipment"
+JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id"
+JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";
+
 -- TABLE DROPS -- 
 
 DROP TABLE "user";
 
 DROP TABLE "equipment" CASCADE;
 
-DROP TABLE "requests";
+DROP TABLE "requests" CASCADE;
