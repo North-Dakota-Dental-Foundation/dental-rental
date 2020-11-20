@@ -8,10 +8,11 @@ const {
 /**
  * GET route template
  */
-router.get("/", rejectUnauthenticated, (req, res) => {
-  console.log("hi");
-  res.send(200);
-}); // End of GET route
+router.get('/', rejectUnauthenticated, (req, res) => {
+    res.send(200);
+    console.log('Hello world!')
+});// End of GET route
+
 
 /**
  * POST route template
