@@ -3,6 +3,7 @@
 -- You must use double quotes in every query that user is in:
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
+
 -- CREATE TABLES --
 
 CREATE TABLE "user" (
@@ -74,8 +75,9 @@ VALUES
 INSERT INTO "equipment"
 ("equipment_item", "equipment_status", "serial_number", "nddf_code")
 VALUES
-('A cool item', 'Available', '1234', '5678'
-);
+('A cool item', 'Available', '1234', '5678'),
+('Another cool item', 'Unavailable', '2345', '6789'),
+('Cordless Prophy', 'Available', 'SMS-AA0687', 'CP006');
 
 INSERT INTO "requests" 
 ("equipment_id", "company", "address", "point_of_contact", "email", "phone_number", "city", "state", "zip", "start_date", "end_date", "purpose", "status")
