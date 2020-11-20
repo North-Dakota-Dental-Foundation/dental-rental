@@ -10,6 +10,7 @@ const {
  */
 router.get('/', rejectUnauthenticated, (req, res) => {
     res.send(200);
+    console.log('Hello world!')
 });// End of GET route
 
 /**
