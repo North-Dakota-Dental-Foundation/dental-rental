@@ -42,8 +42,19 @@ pool
     });
 });
 
-router.put('/', (req, res) => {
-    // PUT route code here
+router.put('/:id', (req, res) => {
+    console.log("Updating Status of Equipment", id);
+    let queryText = `UPDATE "equipment" SET "status" WHERE "id" = $1;`;
+    pool   
+        .query(queryText, [id])
+        .then((result) => {
+            console.log("Equipment Status was updated.", result);
+            res.sendStatus(200);
+        })
+        .catch((error)=> {
+            console.log(error);
+        })
+
   });
 
   router.delete("/:id", rejectUnauthenticated, (req, res) => {
