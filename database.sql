@@ -16,5 +16,4 @@ CREATE TABLE " equipment" (
     "equipment_item" VARCHAR (255),
     "serial_number" VARCHAR (255),
     "nddf_code" VARCHAR (40),
-
 );
