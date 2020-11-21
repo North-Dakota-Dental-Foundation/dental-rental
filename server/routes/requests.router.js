@@ -8,17 +8,25 @@ const {
 /**
  * GET route template
  */
-
 router.get("/", rejectUnauthenticated, (req, res) => {
-  res.send(200);
-  console.log("Hello world!");
+  const queryText = 'SELECT * from "requests"';
+  pool
+    .query(queryText)
+    .then((result) => res.send(result.rows))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 }); // End of GET route
 
 /**
  * POST route template
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
-  console.log("IN POST");
+  if (req.isAuthenticated() === false) {
+    res.sendStatus(403);
+    return;
+  }
   res.send(201);
 }); // End of POST route
 
