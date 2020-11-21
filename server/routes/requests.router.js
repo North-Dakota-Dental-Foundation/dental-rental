@@ -61,14 +61,10 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       equipment_in_request
     );
 
-    const status = "pending";
+    const status = "PENDING";
 
     //equipment, company, address, point_of_contact, email, phone_number, city, state, zip
     // start date, end date, purpose, status
-
-    //INSERT A REQUEST INTO requests table
-
-    // UNCOMMENT BELOW:
 
     const newRequest = await pool.query(
       "INSERT INTO requests (company, address, point_of_contact, email, phone_number, city, state, zip, start_date, end_date, purpose, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
@@ -91,34 +87,15 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     const requestId = newRequest.rows[0].id;
     console.log("new request id", requestId);
 
-    // //grab newPractice.rows.id to get the PRACTICE_ID
-    // const practiceId = newPractice.rows[0].id;
-
-    // //give order to the array of poses. this MUST be done due to the asynchronous nature of the map() method below
-    // //the order of poses in the array does not guarantee that they will be inserted into the pose table in the same order
-    // //solution: create a order column that keeps track of this for a given practice of a certain user
-    // poses = poses.map((poseObj, index) => {
-    //   poseObj["pose_order"] = index;
-    //   return poseObj;
-    // });
-
-    // //for each pose in the pose array above,
-    // //select the poses ID from the poses table
-    // //INSERT INTO junction table with pose_id, practice_id, and pose_time
-    // poses.map(async (poseObj) => {
-    //   const result = await pool.query(
-    //     "SELECT id FROM poses WHERE pose_name=$1",
-    //     [poseObj.pose_name]
-    //   );
-    //   const poseId = result.rows[0].id;
-    //   const poseTimeForGivenPractice = poseObj.time;
-    //   const orderOfGivenPose = poseObj.pose_order;
-    //   const newPracticePose = await pool.query(
-    //     "INSERT INTO practices_poses (practice_id, pose_id, pose_time, pose_order) VALUES ($1,$2,$3,$4) RETURNING *",
-    //     [practiceId, poseId, poseTimeForGivenPractice, orderOfGivenPose]
-    //   );
-    // });
-
+    // for each equipment item in the equipment_in_request variable, link the request and each equipment item
+    // by inserting into the equipment_requests junction table
+    equipment_in_request.map(async (equipmentObj) => {
+      console.log(equipmentObj.id);
+      const newEquipmentRequest = await pool.query(
+        "INSERT INTO equipment_requests (equipment_id, request_id) VALUES ($1,$2) RETURNING *",
+        [equipmentObj.id, requestId]
+      );
+    });
     res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
@@ -129,8 +106,21 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 /**
  * PUT route template
  */
-router.put("/", rejectUnauthenticated, (req, res) => {
-  console.log("IN PUT");
+
+//pending, rejected, approved, completed
+router.put("/:id", rejectUnauthenticated, (req, res) => {
+  console.log("Updating Request Status", id);
+  let queryText = `UPDATE "requests" SET "status" WHERE "id" = $1;`;
+  pool
+    .query(queryText, [id])
+    .then((result) => {
+      console.log("Request Status has been updated.", result);
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   res.send(200);
 }); // End of PUT route
 
