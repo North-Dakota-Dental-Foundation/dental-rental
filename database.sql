@@ -4,6 +4,17 @@
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
 
+
+-- TABLE SELECTS --
+
+SELECT * FROM "user";
+
+SELECT * FROM "equipment";
+
+SELECT * FROM "requests";
+
+SELECT * FROM "equipment_requests";
+
 -- CREATE TABLES --
 
 CREATE TABLE "user" (
@@ -25,12 +36,11 @@ CREATE TABLE "equipment" (
 
 CREATE TABLE "requests" (
 "id" SERIAL PRIMARY KEY, 
-"equipment_id" INTEGER NOT NULL REFERENCES "equipment",
 "company" VARCHAR (80) NOT NULL,
 "address" VARCHAR (80) NOT NULL,
 "point_of_contact" VARCHAR (80) NOT NULL,
 "email" VARCHAR (80) NOT NULL,
-"phone_number" INTEGER NOT NULL,
+"phone_number" BIGINT NOT NULL,
 "city" VARCHAR (80) NOT NULL,
 "state" VARCHAR (80) NOT NULL,
 "zip" INTEGER NOT NULL, 
@@ -48,41 +58,31 @@ CREATE TABLE "equipment_requests" (
 "request_id" INTEGER REFERENCES "requests"
 );
 
--- TABLE SELECTS --
-
-SELECT * FROM "user";
-
-SELECT * FROM "equipment";
-
-SELECT * FROM "requests";
-
-SELECT * FROM "equipment_requests";
-
 -- TABLE INSERTS --
 
 INSERT INTO "user"
 ("firstname", "lastname", "username", "password")
 VALUES
-('John', 'Cena', 'WWEPogChamp@chadmail.com', 'EndYourCareer'
+('Matthew', 'Leiman', 'matthewtest123@gmail.com', 'password'
 );
 
 INSERT INTO "user"
 ("firstname", "lastname", "username", "password", "super_admin")
 VALUES
-('Jack', 'Sparrow', 'TheCaptainJackSparrow@piratemail.com', 'Pirate4Life', 'true'
+('Garret', 'Larson', 'garrettest123@gmail.com', 'password', 'true'
 );
 
 INSERT INTO "equipment"
 ("equipment_item", "equipment_status", "serial_number", "nddf_code")
 VALUES
-('A cool item', 'Available', '1234', '5678'),
-('Another cool item', 'Unavailable', '2345', '6789'),
+('chair', 'Available', '1234', '5678'),
+('toothbrush', 'Unavailable', '2345', '6789'),
 ('Cordless Prophy', 'Available', 'SMS-AA0687', 'CP006');
 
 INSERT INTO "requests" 
-("equipment_id", "company", "address", "point_of_contact", "email", "phone_number", "city", "state", "zip", "start_date", "end_date", "purpose", "status")
+("company", "address", "point_of_contact", "email", "phone_number", "city", "state", "zip", "start_date", "end_date", "purpose", "status")
 VALUES 
-('1', 'The Cool Dudes', '1234 5th St S', 'The main man', 'kuledude420@hotmail.com', '1234567890', 'Chadtown', 'OG', '98765', '2020-12-11', '2020-12-12', 'To be awesome', 'Lit'
+('Dentistry Plus', '1234 5th St S', 'Dr. Garret', 'garretl@gmail.com', '1234567890', 'Fargo', 'ND', '98765', '2020-12-1', '2020-12-12', 'Charity Dental Work', 'Available'
 );
 
 INSERT INTO "equipment_requests"
@@ -116,8 +116,10 @@ JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";
 
 -- TABLE DROPS -- 
 
-DROP TABLE "user";
+-- DROP TABLE "user";
 
-DROP TABLE "equipment" CASCADE;
+-- DROP TABLE "equipment" CASCADE;
 
-DROP TABLE "requests" CASCADE;
+-- DROP TABLE "requests" CASCADE;
+
+-- DROP TABLE "equipment_requests";

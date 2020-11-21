@@ -68,7 +68,7 @@ router.delete("/:id", rejectUnauthenticated, (req, res) => {
       res.sendStatus(204);
     })
     .catch((error) => {
-      console.log("Error in deleting message,", error);
+      console.log("Error in deleting inventory,", error);
       res.sendStatus(500);
     });
 });
