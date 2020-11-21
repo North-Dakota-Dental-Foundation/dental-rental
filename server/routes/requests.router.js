@@ -27,23 +27,20 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(403);
     return;
   }
-  // requests, equipment, equipment_request table
-  //
-  // practices, poses,    practices_poses
   try {
     const {
-      company,
-      address,
-      point_of_contact,
-      email,
-      phone_number,
-      city,
-      state,
-      zip,
-      start_date,
-      end_date,
-      purpose,
-      equipment_in_request,
+      company, //string
+      address, //string
+      point_of_contact, //string
+      email, //string
+      phone_number, //number
+      city, //string
+      state, //string
+      zip, //number
+      start_date, //string
+      end_date, //string
+      purpose, //string
+      equipment_in_request, //arr of equipment in a particular request
     } = req.body;
 
     console.log(
@@ -109,31 +106,46 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 
 //pending, rejected, approved, completed
 router.put("/:id", rejectUnauthenticated, (req, res) => {
-  console.log("Updating Request Status", id);
-  let queryText = `UPDATE "requests" SET "status" WHERE "id" = $1;`;
+  const { id } = req.params;
+  const { status } = req.body;
+
+  let queryText = `UPDATE "requests" SET "status" = $1 WHERE "id" = $2;`;
   pool
-    .query(queryText, [id])
+    .query(queryText, [status, id])
     .then((result) => {
-      console.log("Request Status has been updated.", result);
       res.sendStatus(200);
     })
     .catch((error) => {
       console.log(error);
     });
-
-  res.send(200);
 }); // End of PUT route
 
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
-  console.log(req.requests, req.params);
-  console.log(
-    `Deleting Equipment with ID ${req.params.id} by User ${req.requests.name}`
-  );
-  let queryText = `DELETE FROM requests WHERE id = $1;`;
+  // console.log(req.requests, req.params);
+  // console.log(
+  //   `Deleting Equipment with ID ${req.params.id} by User ${req.requests.name}`
+  // );
+  const { id } = req.params;
+
+  //note: must delete from junction table first due to foreign key constraints
+  let queryText_1 = `DELETE FROM "equipment_requests" WHERE "request_id" = $1;`;
   pool
-    .query(queryText, [req.params.id])
+    .query(queryText_1, [id])
     .then((result) => {
-      res.sendStatus(204);
+      console.log(
+        "Successfully deleted request reference in equipment_requests junction table"
+      );
+    })
+    .catch((error) => {
+      console.log("Error in deleting request,", error);
+      res.sendStatus(500);
+    });
+
+  let queryText_2 = `DELETE FROM "requests" WHERE "id" = $1;`;
+  pool
+    .query(queryText_2, [id])
+    .then((result) => {
+      res.sendStatus(200);
     })
     .catch((error) => {
       console.log("Error in deleting request,", error);
