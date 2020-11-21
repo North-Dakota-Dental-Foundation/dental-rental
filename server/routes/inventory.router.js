@@ -50,13 +50,15 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
+// FUTURE FEATURE (TODO): The ability to edit any of the equipment properties
 router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const { equipment_status } = req.body;
   console.log("Updating Status of Equipment", id);
-  let queryText = `UPDATE "equipment" SET "status" WHERE "id" = $1;`;
+  let queryText = `UPDATE "equipment" SET "equipment_status" = $1 WHERE "id" = $2;`;
   pool
-    .query(queryText, [id])
+    .query(queryText, [equipment_status, id])
     .then((result) => {
-      console.log("Equipment Status was updated.", result);
       res.sendStatus(200);
     })
     .catch((error) => {
@@ -65,13 +67,11 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
-  console.log(req.user, req.params);
-  console.log(
-    `Deleting Equipment with ID ${req.params.id} by User ${req.user.name}`
-  );
-  let queryText = `DELETE FROM equipment WHERE id = $1;`;
+  const { id } = req.params;
+  console.log(`Deleting Equipment with ID ${id}`);
+  let queryText = `DELETE FROM "equipment" WHERE "id" = $1;`;
   pool
-    .query(queryText, [req.params.id])
+    .query(queryText, [id])
     .then((result) => {
       res.sendStatus(200);
     })
