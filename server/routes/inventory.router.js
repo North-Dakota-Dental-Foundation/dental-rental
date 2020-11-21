@@ -10,7 +10,7 @@ const {
  */
 router.get("/", (req, res) => {
   console.log("GET /inventory");
-  const queryText = 'SELECT * from "equipment" order by name;';
+  const queryText = 'SELECT * from "equipment" order by equipment_item;';
   pool
     .query(queryText)
     .then((result) => res.send(result.rows))
@@ -25,14 +25,22 @@ router.get("/", (req, res) => {
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
   console.log("POST /inventory");
+
+  const { equipment_item, serial_number, nddf_code } = req.body;
+  const equipment_status = "AVAILABLE";
+
   if (req.isAuthenticated() === false) {
     res.sendStatus(403);
     return;
   }
-  const queryText = `INSERT INTO "equipment" ("equipment_item", "serial_number", "nddf_code") VALUES ($1,$2,$3)`;
-  const queryValue = [req.body.id];
+  const queryText = `INSERT INTO "equipment" ("equipment_item", "equipment_status", "serial_number", "nddf_code") VALUES ($1,$2,$3,$4)`;
   pool
-    .query(queryText, queryValue)
+    .query(queryText, [
+      equipment_item,
+      equipment_status,
+      serial_number,
+      nddf_code,
+    ])
     .then((result) => {
       res.sendStatus(201);
     })
