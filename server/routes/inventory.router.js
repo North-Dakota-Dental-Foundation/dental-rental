@@ -6,7 +6,7 @@ const {
 } = require("../modules/authentication-middleware");
 
 /**
- * GET route template
+ * GET all inventory
  */
 router.get("/", (req, res) => {
   console.log("GET /inventory");
@@ -21,7 +21,22 @@ router.get("/", (req, res) => {
 });
 
 /**
- * POST route template
+ * GET (technically a POST) all inventory by date range
+ */
+router.post("/all-inventory-by-date-range/", (req, res) => {
+  console.log("GET inventory for date range");
+  //   const queryText = 'SELECT * from "equipment" order by equipment_item;';
+  //   pool
+  //     .query(queryText)
+  //     .then((result) => res.send(result.rows))
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res.sendStatus(500);
+  //     });
+}); // end of GET
+
+/**
+ * POST an inventory item
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
   console.log("POST /inventory");

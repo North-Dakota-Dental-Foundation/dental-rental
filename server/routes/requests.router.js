@@ -6,7 +6,7 @@ const {
 } = require("../modules/authentication-middleware");
 
 /**
- * GET route template
+ * GET route
  */
 router.get("/", rejectUnauthenticated, (req, res) => {
   const queryText = 'SELECT * from "requests"';
@@ -20,7 +20,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 }); // End of GET route
 
 /**
- * POST route template
+ * POST route
  */
 router.post("/", rejectUnauthenticated, async (req, res) => {
   if (req.isAuthenticated() === false) {
@@ -101,9 +101,8 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 }); // End of POST route
 
 /**
- * PUT route template
+ * PUT route
  */
-
 //pending, rejected, approved, completed
 router.put("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
@@ -120,6 +119,9 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
     });
 }); // End of PUT route
 
+/**
+ * DELETE route
+ */
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   // console.log(req.requests, req.params);
   // console.log(
@@ -151,6 +153,6 @@ router.delete("/:id", rejectUnauthenticated, (req, res) => {
       console.log("Error in deleting request,", error);
       res.sendStatus(500);
     });
-});
+}); // End of DELETE route
 
 module.exports = router;
