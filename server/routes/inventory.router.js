@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
+let moment = require("moment");
 
 /**
  * GET all inventory
@@ -24,15 +25,22 @@ router.get("/", (req, res) => {
  * GET (technically a POST) all inventory by date range
  */
 router.post("/all-inventory-by-date-range/", (req, res) => {
+  const { endDate, startDate } = req.body; //date format: yyyy-mm-dd
+  //TODO: add buffering dates based on client's workflow
+
+  const startDateBuffered = moment(startDate).subtract(2, "week").format();
+  const endDateBuffered = moment(endDate).add(2, "week").format();
+
+  console.log(startDateBuffered, endDateBuffered);
   console.log("GET inventory for date range");
-  //   const queryText = 'SELECT * from "equipment" order by equipment_item;';
-  //   pool
-  //     .query(queryText)
-  //     .then((result) => res.send(result.rows))
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.sendStatus(500);
-  //     });
+  const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2))`;
+  pool
+    .query(queryText, [endDateBuffered, startDateBuffered])
+    .then((result) => res.send(result.rows))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 }); // end of GET
 
 /**

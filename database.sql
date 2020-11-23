@@ -4,15 +4,15 @@
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
 
--- SELECT ALL INVENTORY ITEMS NOT IN CURRENT REQUESTS --
-SELECT "equipment".id
+-- SELECT ALL INVENTORY ITEMS NOT IN CURRENT REQUESTS FOR A GIVEN TIME RANGE --
+SELECT "equipment".*
 FROM "equipment"
 WHERE "equipment".id NOT IN (
 SELECT "equipment".id FROM "equipment"
 JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id"
 JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id"
-WHERE "requests".start_date <= @upperBoundParam -- start_datetime(col) < @upperbound d2
-AND "requests".end_date >= @lowerBoundParam -- end_datetime(col) > @lowerbound d1
+WHERE "requests".start_date <= '2020-11-30' -- start_datetime(col) < @upperbound d2
+AND "requests".end_date >= '2020-11-01' -- end_datetime(col) > @lowerbound d1
 );
 
 -- TABLE SELECTS --
