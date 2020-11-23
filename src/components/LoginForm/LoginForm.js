@@ -4,8 +4,11 @@ import mapStoreToProps from '../../redux/mapStoreToProps';
 
 class LoginForm extends Component {
   state = {
+    firstName: '',
+    lastName: '',
     username: '',
     password: '',
+    superAdmin: '',
   };
 
   login = (event) => {

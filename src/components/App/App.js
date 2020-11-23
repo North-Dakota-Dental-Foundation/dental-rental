@@ -1,30 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   HashRouter as Router,
   Route,
   Redirect,
   Switch,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import Nav from '../Nav/Nav';
-import Footer from '../Footer/Footer';
+import Nav from "../Nav/Nav";
+import Footer from "../Footer/Footer";
 
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
-import AboutPage from '../AboutPage/AboutPage';
-import UserPage from '../UserPage/UserPage';
-import InfoPage from '../InfoPage/InfoPage';
-import LandingPage from '../LandingPage/LandingPage';
-import LoginPage from '../LoginPage/LoginPage';
-import RegisterPage from '../RegisterPage/RegisterPage';
+import AboutPage from "../AboutPage/AboutPage";
+import UserPage from "../UserPage/UserPage";
+import InfoPage from "../InfoPage/InfoPage";
+import LandingPage from "../LandingPage/LandingPage";
+import LoginPage from "../LoginPage/LoginPage";
+import RegisterPage from "../RegisterPage/RegisterPage";
+import InventoryView from "../_DR_Inventory_View/InventoryView";
+import RentalRequest from "../_DR_RentalRequests/RentalRequests";
+import SubmissionForm from "../_DR_SubmissonForm/SubmissionForm";
+import Users from "../_DR_Users/Users";
 
-import './App.css';
+import "./App.css";
 
 class App extends Component {
   componentDidMount() {
-    this.props.dispatch({ type: 'FETCH_USER' });
+    this.props.dispatch({ type: "FETCH_USER" });
   }
 
   render() {
@@ -40,8 +44,8 @@ class App extends Component {
             <Route
               // shows AboutPage at all times (logged in or not)
               exact
-              path="/about"
-              component={AboutPage}
+              path="/rental_requests"
+              component={RentalRequest}
             />
 
             {/* For protected routes, the view could show one of several things on the same route.
@@ -51,15 +55,15 @@ class App extends Component {
             <ProtectedRoute
               // logged in shows UserPage else shows LoginPage
               exact
-              path="/user"
-              component={UserPage}
+              path="/inventory_view"
+              component={InventoryView}
             />
 
             <ProtectedRoute
               // logged in shows InfoPage else shows LoginPage
               exact
-              path="/info"
-              component={InfoPage}
+              path="/users"
+              component={Users}
             />
 
             {/* When a value is supplied for the authRedirect prop the user will
@@ -81,15 +85,6 @@ class App extends Component {
               exact
               path="/registration"
               component={RegisterPage}
-              authRedirect="/user"
-            />
-            <ProtectedRoute
-              // with authRedirect:
-              // - if logged in, redirects to "/user"
-              // - else shows LandingPage at "/home"
-              exact
-              path="/home"
-              component={LandingPage}
               authRedirect="/user"
             />
 
