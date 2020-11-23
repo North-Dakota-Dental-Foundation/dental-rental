@@ -10,10 +10,10 @@ function* userPageSaga() {
     //     'POST',
     //     postItem,
     // );
-    // yield takeEvery(
-    //     'DELETE',
-    //     deleteItem,
-    // );
+    yield takeEvery(
+        'DELETE_USER',
+        deleteUser,
+    );
     // yield takeEvery(
     //     'EDIT',
     //     editItem,
@@ -27,6 +27,16 @@ function* fetchUsers(action) {
         yield put({ type: 'SET_USERS', payload: response.data });
     } catch (error) {
         console.log('Failed to get user info from /users/allusers', error);
+    };
+};
+
+function* deleteUser(action) {
+    try {
+        const id = action.payload;
+        yield axios.delete(`/userpage/deleteuser/${id}`, action.payload);
+        yield put({ type: 'FETCH_USERS' });
+    } catch (err) {
+        console.log('Failed to delete message from /userpage/deleteuser', err)
     };
 };
 

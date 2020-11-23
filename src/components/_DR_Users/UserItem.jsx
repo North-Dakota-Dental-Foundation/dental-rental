@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class UserItem extends Component {
+
+    handleDeleteUser = () => {
+        console.log(`Deleting user with ID ${this.props.user.id}`);
+        this.props.dispatch({ type: 'DELETE_USER', payload: this.props.user.id, });
+    };
 
     render() {
 
@@ -16,7 +22,7 @@ class UserItem extends Component {
                     <td>{this.props.user.username}</td>
                     <td>{this.props.user.phonenumber}</td>
                     <td>{super_admin}</td>
-                    <td><button>Delete</button></td>
+                    <td><button onClick={this.handleDeleteUser}>Delete</button></td>
                 </tr>
 
             </>
@@ -24,4 +30,4 @@ class UserItem extends Component {
     }
 }
 
-export default UserItem;
+export default connect() (UserItem);
