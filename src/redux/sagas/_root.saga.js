@@ -1,12 +1,12 @@
-import { all } from 'redux-saga/effects';
-import loginSaga from './login.saga';
-import registrationSaga from './registration.saga';
-import userSaga from './user.saga';
+import { all } from "redux-saga/effects";
+import loginSaga from "./login.saga";
+import registrationSaga from "./registration.saga";
+import userSaga from "./user.saga";
 
-import inventoryViewSaga from './DR_inventoryView.saga'
-import rentalRequestSaga from './DR_rentalRequest.saga'
-import submissionFormSaga from './DR_submissionForm.saga'
-import userPageSaga from './DR_userPage.saga'
+import inventoryViewSaga from "./DR_inventoryView.saga";
+import rentalRequestSaga from "./DR_rentalRequest.saga";
+import submissionFormSaga from "./DR_submissionForm.saga";
+import userPageSaga from "./DR_userPage.saga";
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.

@@ -1,19 +1,22 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 
 class InventoryView extends Component {
   state = {
-    equipment: "",
-    equipmentStatus: "",
-    serialNumber: "",
-    nddfCode: "",
+    equipment_item: "",
+    equipment_status: "",
+    serial_number: "",
+    nddf_code: "",
     filterStatus: "",
     changeStatus: "",
     isOpen: false,
+    notes: "",
   };
 
   handleChange = (event) => {
@@ -27,23 +30,23 @@ class InventoryView extends Component {
     event.preventDefault();
     this.closeModal();
 
-    /*     this.props.dispatch({
+    this.props.dispatch({
       type: "CREATE_ITEM",
       payload: this.state,
-    }); */
+    });
 
     swal({
       title: "New Equipment Added To Inventory",
-      text: `You have successfully added ${this.state.equipment}to your inventory.`,
+      text: `You have successfully added ${this.state.equipment_item}to your inventory.`,
       icon: "success",
       buttons: true,
     });
 
     this.setState({
-      equipment: "",
-      equipmentStatus: "",
-      serialNumber: "",
-      nddfCode: "",
+      equipment_item: "",
+      equipment_status: "",
+      serial_number: "",
+      nddf_code: "",
     });
   };
 
@@ -103,9 +106,9 @@ class InventoryView extends Component {
                       Equipment Name:
                       <input
                         onChange={(e) =>
-                          this.setState({ equipment: e.target.value })
+                          this.setState({ equipment_item: e.target.value })
                         }
-                        value={this.state.equipment}
+                        value={this.state.equipment_item}
                         required
                       />
                     </Col>
@@ -114,9 +117,9 @@ class InventoryView extends Component {
                       Serial Number:
                       <input
                         onChange={(e) =>
-                          this.setState({ serialNumber: e.target.value })
+                          this.setState({ serial_number: e.target.value })
                         }
-                        value={this.state.serialNumber}
+                        value={this.state.serial_number}
                         required
                       />
                     </Col>
@@ -126,9 +129,9 @@ class InventoryView extends Component {
                       NDDF Code:
                       <input
                         onChange={(e) =>
-                          this.setState({ nddfCode: e.target.value })
+                          this.setState({ nddf_code: e.target.value })
                         }
-                        value={this.state.nddfCode}
+                        value={this.state.nddf_code}
                         required
                       />{" "}
                     </Col>
@@ -136,9 +139,9 @@ class InventoryView extends Component {
                       Equipment Status:{" "}
                       <select
                         onChange={(e) =>
-                          this.setState({ equipmentStatus: e.target.value })
+                          this.setState({ equipment_status: e.target.value })
                         }
-                        value={this.state.equipmentStatus}
+                        value={this.state.equipment_status}
                         required
                       >
                         <option value={"Available"}>Available</option>
@@ -173,22 +176,26 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <br />
+        <br />
 
-        <table>
-          <tr>
-            <th>Equipment</th>
-            <th>Serial #</th>
-            <th>NDDF Code</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Delete Equipment</th>
-          </tr>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Serial #</th>
+              <th>NDDF Code</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Delete Equipment</th>
+            </tr>
+          </thead>
 
           <tr>
-            <td>Chaos Emerald</td>
-            <td>1234567</td>
-            <td>CHAOSCONTROL2</td>
+            <td>{}</td>
+            <td>{}</td>
+            <td>{}</td>
             <td>
+              {" "}
               <select name="changeStatus">
                 <option>Available</option>
                 <option>Checked-Out</option>
@@ -197,17 +204,20 @@ class InventoryView extends Component {
                 <option>Missing</option>
               </select>
             </td>
+
             <td>
+              {" "}
               <button>Add Note</button>
             </td>
             <td>
+              {" "}
               <button>Delete Item</button>
             </td>
           </tr>
-        </table>
+        </Table>
       </>
     );
   }
 }
 
-export default InventoryView;
+export default connect()(InventoryView);

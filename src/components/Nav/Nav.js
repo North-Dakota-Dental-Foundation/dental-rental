@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import "./Nav.css";
 import mapStoreToProps from "../../redux/mapStoreToProps";
+import { Navbar } from "react-bootstrap";
 
 const Nav = (props) => {
   let loginLinkData = {
