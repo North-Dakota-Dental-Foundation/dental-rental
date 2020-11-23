@@ -4,6 +4,31 @@
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
 
+-- SELECT ALL EQUIPMENT FOR ALL REQUESTS
+SELECT * FROM "equipment"
+JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id"
+JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";
+--WHERE request.id == some id
+
+-- SUBQUERY: SELECT REQUESTS WITH ALL EQUIPMENT IN A REQUEST of APPROVED or PENDING
+SELECT * FROM "equipment"
+JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id"
+JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id"
+WHERE "requests".start_date <= '2020-11-13' -- start_datetime(col) < @upperbound d2
+AND "requests".end_date >= '2020-09-17' -- end_datetime(col) > @lowerbound d1
+AND "requests".status IN ('PENDING', 'APPROVED');
+--------------
+-- *** IMPORTNT *** SELECT ALL EQUIPMENT THAT ARE AVAILABLE FOR A GIVEN DATE RANGE
+SELECT "equipment".*
+FROM "equipment"
+WHERE "equipment".id NOT IN (
+	SELECT DISTINCT "equipment".id FROM "equipment"
+	JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id"
+	JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id"
+	WHERE "requests".start_date <= '2020-11-13' -- start_datetime(col) < @upperbound d2
+	AND "requests".end_date >= '2020-09-17' -- end_datetime(col) > @lowerbound d1
+	AND "requests".status IN ('PENDING', 'APPROVED') -- only want requests that are in the 'PENDING' OR 'APPROVED' status NOT the 'COMPLETED' or 'REJECTED' status
+);
 
 -- TABLE SELECTS --
 
