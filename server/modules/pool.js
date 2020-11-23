@@ -28,6 +28,7 @@ if (process.env.DATABASE_URL) {
   };
 } else {
   config = {
+
     // user: "postgres",
     // password: "password",
     host: "localhost", // Server hosting the postgres database
