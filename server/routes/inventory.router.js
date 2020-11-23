@@ -4,9 +4,10 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
+let moment = require("moment");
 
 /**
- * GET route template
+ * GET all inventory
  */
 router.get("/", (req, res) => {
   console.log("GET /inventory");
@@ -21,7 +22,26 @@ router.get("/", (req, res) => {
 });
 
 /**
- * POST route template
+ * GET (technically a POST) all equipment by date range
+ */
+router.post("/all-inventory-by-date-range/", (req, res) => {
+  const { endDate, startDate } = req.body; //date format: yyyy-mm-dd
+  const startDateBuffered = moment(startDate).subtract(2, "week").format();
+  const endDateBuffered = moment(endDate).add(2, "week").format();
+  console.log(startDateBuffered, endDateBuffered);
+
+  const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2) AND "requests".status IN ('PENDING', 'APPROVED') )`;
+  pool
+    .query(queryText, [endDateBuffered, startDateBuffered])
+    .then((result) => res.send(result.rows))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+}); // end of GET
+
+/**
+ * POST an inventory item
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
   console.log("POST /inventory");
