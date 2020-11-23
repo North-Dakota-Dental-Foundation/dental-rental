@@ -1,6 +1,7 @@
-import { combineReducers } from 'redux';
-import errors from './errors.reducer';
-import user from './user.reducer';
+import { combineReducers } from "redux";
+import errors from "./errors.reducer";
+import user from "./user.reducer";
+import inventoryReducer from "./inventory.reducer";
 
 import userPageReducer from './DR_userPage.reducer'
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
 
   userPageReducer,
+  inventoryReducer,
 });
 
 export default rootReducer;

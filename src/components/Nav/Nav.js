@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import "./Nav.css";
 import mapStoreToProps from "../../redux/mapStoreToProps";
+import { Navbar } from "react-bootstrap";
 
 const Nav = (props) => {
   let loginLinkData = {
@@ -18,9 +19,11 @@ const Nav = (props) => {
 
   return (
     <div className="nav">
-      <Link to="/home">
-        <h2 className="nav-title">NDDF Dental Rental</h2>
-      </Link>
+      <div className="navLink">
+        <Link to="/rental_requests">
+          <h3 className="nav-title">Dental Rental</h3>
+        </Link>
+      </div>
       <div className="nav-right">
         <Link className="nav-link" to={loginLinkData.path}>
           {/* Show this link if they are logged in or not,
