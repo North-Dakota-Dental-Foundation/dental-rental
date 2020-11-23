@@ -45,7 +45,6 @@ class RentalRequests extends Component {
                 <option>Pending...</option>
                 <option>Approved</option>
                 <option>Rejected</option>
-                <option>Archived</option>
               </select>
             </td>
           </tr>
