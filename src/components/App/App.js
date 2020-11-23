@@ -29,7 +29,6 @@ import "./App.css";
 class App extends Component {
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_USER" });
-    this.props.dispatch({ type: "FETCH_ITEM" });
   }
 
   render() {
@@ -99,4 +98,8 @@ class App extends Component {
   }
 }
 
-export default connect()(App);
+const mapStateToProps = (state) => ({
+  state: state,
+  equipment: state.inventoryReducer.equipment,
+});
+export default connect(mapStateToProps)(App);

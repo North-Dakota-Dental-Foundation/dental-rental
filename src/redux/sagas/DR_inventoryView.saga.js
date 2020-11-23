@@ -4,6 +4,7 @@ import { put, takeEvery, takeLatest, select } from "redux-saga/effects";
 function* createEquipment(action) {
   try {
     // clear any alerts that may be in there already
+    yield put({ type: "CLEAR_ALERT" });
 
     yield axios.post("/api/inventory", action.payload);
     // dispatch an alert that the upload was successful
