@@ -40,6 +40,32 @@ class InventoryView extends Component {
       });
   };
 
+  deleteInventory = (inventoryId) => {
+    swal({
+      title: `Are you sure you want to delete ${this.props.equipment_item}?`,
+      text: "Once this item is deleted, you will have to re-add it.",
+      icon: "warning",
+      buttons: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`/api/inventory/${inventoryId}`)
+          .then((response) => {
+            console.log(response.data);
+            swal(`${this.state.inventory.equipment_item} has been deleted.`, {
+              icon: "success",
+            });
+            this.getInventory();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        swal(`${this.state.equipment_item} has NOT been deleted.`);
+      }
+    });
+  };
+
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
@@ -228,7 +254,9 @@ class InventoryView extends Component {
                 </td>
                 <td>
                   {" "}
-                  <button>Delete Item</button>
+                  <button onClick={() => this.deleteInventory(inventory.id)}>
+                    Delete Item
+                  </button>
                 </td>
               </tr>
             ))}
