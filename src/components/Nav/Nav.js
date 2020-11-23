@@ -18,8 +18,8 @@ const Nav = (props) => {
 
   return (
     <div className="nav">
-      <Link to="/rental_requests">
-        <h2 className="nav-title">Dental Rental</h2>
+      <Link to="/home">
+        <h2 className="nav-title">NDDF Dental Rental</h2>
       </Link>
       <div className="nav-right">
         <Link className="nav-link" to={loginLinkData.path}>
