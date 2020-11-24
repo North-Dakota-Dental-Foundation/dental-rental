@@ -56,6 +56,7 @@ CREATE TABLE "equipment" (
 "id" SERIAL PRIMARY KEY,
 "equipment_item" VARCHAR (160) NOT NULL,
 "equipment_status" VARCHAR (40) NOT NULL,
+"note" VARCHAR (255),
 "serial_number" VARCHAR (40) NOT NULL,
 "nddf_code" VARCHAR (40)
 );

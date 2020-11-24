@@ -1,0 +1,25 @@
+#users {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#addUserInputs {
+   padding: 20px;
+}
+
+#userTable {
+    justify-content: center;
+}
+
+#adminSelectdesc {
+
+}
+
+#superAdminSelect {
+
+}
+
+.addUserInput {
+    margin: 8px;
+}
+
