@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
-
 import Select from 'react-select';
 import { Form, Button } from "react-bootstrap";
 
@@ -29,33 +28,6 @@ class SubmissionForm extends Component {
     if (!(this.state.currentlySelectedEquipment)) {
       alert("Error: you cannot submit a form without selected equipment.");
     }
-    // const {
-    //   company, //string
-    //   address, //string
-    //   point_of_contact, //string
-    //   email, //string
-    //   phone_number, //number
-    //   city, //string
-    //   state, //string
-    //   zip, //number
-    //   equipment_in_request, //arr of equipment in a particular request
-    // } = req.body;
-
-    // console.log(
-    //   this.state.practiceCompany,
-    //   this.state.address,
-    //   this.state.pointOfContact,
-    //   this.state.phoneNumber,
-    //   this.state.city,
-    //   this.state.startDate,
-    //   this.state.endDate,
-    //   this.state.purposeForRequest,
-    //   this.state.currentlySelectedEquipment,
-    //   this.state.email,
-    //   this.state.zip,
-    //   this.state.state
-    // );
-
     axios
       .post("/api/requests/", {
         company: this.state.practiceCompany,
@@ -127,7 +99,7 @@ class SubmissionForm extends Component {
         <Form onSubmit={this.handleSubmit}>
         Start Date:
         <DatePicker required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
-
+        {" "}
         End Date:
         <DatePicker required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
 
