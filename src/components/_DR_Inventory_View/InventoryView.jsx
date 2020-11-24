@@ -40,9 +40,12 @@ class InventoryView extends Component {
       });
   };
 
-  deleteInventory = (inventoryId) => {
+  deleteInventory = (inventoryId, objectIndex) => {
+    console.log(this.state.inventory);
+    console.log(objectIndex);
+
     swal({
-      title: `Are you sure you want to delete ${this.props.equipment_item}?`,
+      title: `Are you sure you want to delete ${this.state.inventory[objectIndex].equipment_item}?`,
       text: "Once this item is deleted, you will have to re-add it.",
       icon: "warning",
       buttons: true,
@@ -52,16 +55,21 @@ class InventoryView extends Component {
           .delete(`/api/inventory/${inventoryId}`)
           .then((response) => {
             console.log(response.data);
-            swal(`${this.state.inventory.equipment_item} has been deleted.`, {
-              icon: "success",
-            });
+            swal(
+              `${this.state.inventory[objectIndex].equipment_item} has been deleted.`,
+              {
+                icon: "success",
+              }
+            );
             this.getInventory();
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
-        swal(`${this.state.equipment_item} has NOT been deleted.`);
+        swal(
+          `${this.state.inventory[objectIndex].equipment_item} has NOT been deleted.`
+        );
       }
     });
   };
@@ -232,7 +240,7 @@ class InventoryView extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.inventory.map((inventory) => (
+            {this.state.inventory.map((inventory, index) => (
               <tr>
                 <td>{inventory.equipment_item}</td>
                 <td>{inventory.serial_number}</td>
@@ -254,7 +262,9 @@ class InventoryView extends Component {
                 </td>
                 <td>
                   {" "}
-                  <button onClick={() => this.deleteInventory(inventory.id)}>
+                  <button
+                    onClick={() => this.deleteInventory(inventory.id, index)}
+                  >
                     Delete Item
                   </button>
                 </td>
