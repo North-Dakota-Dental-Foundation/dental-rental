@@ -73,7 +73,8 @@ router.post("/", rejectUnauthenticated, (req, res) => {
 // FUTURE FEATURE (TODO): The ability to edit any of the equipment properties
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const { equipment_status } = req.body;
+  let { equipment_status } = req.body;
+  equipment_status = equipment_status.toUpperCase();
   console.log("Updating Status of Equipment", id);
   let queryText = `UPDATE "equipment" SET "equipment_status" = $1 WHERE "id" = $2;`;
   pool

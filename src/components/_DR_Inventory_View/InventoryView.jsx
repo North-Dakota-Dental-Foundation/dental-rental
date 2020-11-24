@@ -19,6 +19,7 @@ class InventoryView extends Component {
     isOpen: false,
     notes: "",
     inventory: [],
+    isEdit: false,
   };
 
   componentDidMount() {
@@ -38,6 +39,16 @@ class InventoryView extends Component {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  editStatus = (id, value) => {
+    this.props.dispatch({
+      type: "EDIT_STATUS",
+      payload: {
+        equipment_status: value,
+        equipment_id: id,
+      },
+    });
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
@@ -240,19 +251,24 @@ class InventoryView extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.inventory.map((inventory, index) => (
+            {this.state.inventory.map((inventoryItem, index) => (
               <tr>
-                <td>{inventory.equipment_item}</td>
-                <td>{inventory.serial_number}</td>
-                <td>{inventory.nddf_code}</td>
+                <td>{inventoryItem.equipment_item}</td>
+                <td>{inventoryItem.serial_number}</td>
+                <td>{inventoryItem.nddf_code}</td>
                 <td>
                   {" "}
-                  <select name="changeStatus">
-                    <option>Available</option>
-                    <option>Checked-Out</option>
-                    <option>Shipped</option>
-                    <option>In Inspection</option>
-                    <option>Missing</option>
+                  <select
+                    onChange={(event) =>
+                      this.editStatus(inventoryItem.id, event.target.value)
+                    }
+                    name="changeStatus"
+                  >
+                    <option value={"Available"}>Available</option>
+                    <option value={"Checked-Out"}>Checked-Out</option>
+                    <option value={"Shipped"}>Shipped</option>
+                    <option value={"In Inspection"}>In Inspection</option>
+                    <option value={"Missing"}>Missing</option>
                   </select>
                 </td>
 
@@ -262,11 +278,14 @@ class InventoryView extends Component {
                 </td>
                 <td>
                   {" "}
-                  <button
-                    onClick={() => this.deleteInventory(inventory.id, index)}
+                  <Button
+                    variant="danger"
+                    onClick={() =>
+                      this.deleteInventory(inventoryItem.id, index)
+                    }
                   >
                     Delete Item
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
