@@ -6,6 +6,7 @@ import { Button, Table } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
+import axios from "axios";
 
 class InventoryView extends Component {
   state = {
@@ -17,6 +18,52 @@ class InventoryView extends Component {
     changeStatus: "",
     isOpen: false,
     notes: "",
+    inventory: [],
+  };
+
+  componentDidMount() {
+    this.getInventory();
+  }
+
+  getInventory = () => {
+    console.log("In getInventory");
+    axios
+      .get("/api/inventory")
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          inventory: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  deleteInventory = (inventoryId) => {
+    swal({
+      title: `Are you sure you want to delete ${this.props.equipment_item}?`,
+      text: "Once this item is deleted, you will have to re-add it.",
+      icon: "warning",
+      buttons: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`/api/inventory/${inventoryId}`)
+          .then((response) => {
+            console.log(response.data);
+            swal(`${this.state.inventory.equipment_item} has been deleted.`, {
+              icon: "success",
+            });
+            this.getInventory();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        swal(`${this.state.equipment_item} has NOT been deleted.`);
+      }
+    });
   };
 
   handleChange = (event) => {
@@ -41,6 +88,17 @@ class InventoryView extends Component {
       icon: "success",
       buttons: true,
     });
+    axios
+      .get("/api/inventory")
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          inventory: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     this.setState({
       equipment_item: "",
@@ -135,22 +193,6 @@ class InventoryView extends Component {
                         required
                       />{" "}
                     </Col>
-                    <Col>
-                      Equipment Status:{" "}
-                      <select
-                        onChange={(e) =>
-                          this.setState({ equipment_status: e.target.value })
-                        }
-                        value={this.state.equipment_status}
-                        required
-                      >
-                        <option value={"Available"}>Available</option>
-                        <option value={"Checked-Out"}>Checked Out</option>
-                        <option value={"Shipped"}>Shipped</option>
-                        <option value={"In Inspection"}>In Inspection</option>
-                        <option value={"Missing"}>Missing</option>
-                      </select>
-                    </Col>
                   </Row>
 
                   <br />
@@ -189,35 +231,44 @@ class InventoryView extends Component {
               <th>Delete Equipment</th>
             </tr>
           </thead>
+          <tbody>
+            {this.state.inventory.map((inventory) => (
+              <tr>
+                <td>{inventory.equipment_item}</td>
+                <td>{inventory.serial_number}</td>
+                <td>{inventory.nddf_code}</td>
+                <td>
+                  {" "}
+                  <select name="changeStatus">
+                    <option>Available</option>
+                    <option>Checked-Out</option>
+                    <option>Shipped</option>
+                    <option>In Inspection</option>
+                    <option>Missing</option>
+                  </select>
+                </td>
 
-          <tr>
-            <td>{}</td>
-            <td>{}</td>
-            <td>{}</td>
-            <td>
-              {" "}
-              <select name="changeStatus">
-                <option>Available</option>
-                <option>Checked-Out</option>
-                <option>Shipped</option>
-                <option>In Inspection</option>
-                <option>Missing</option>
-              </select>
-            </td>
-
-            <td>
-              {" "}
-              <button>Add Note</button>
-            </td>
-            <td>
-              {" "}
-              <button>Delete Item</button>
-            </td>
-          </tr>
+                <td>
+                  {" "}
+                  <button>Add Note</button>
+                </td>
+                <td>
+                  {" "}
+                  <button onClick={() => this.deleteInventory(inventory.id)}>
+                    Delete Item
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </Table>
       </>
     );
   }
 }
 
-export default connect()(InventoryView);
+const mapStateToProps = (state) => ({
+  state: state,
+  equipment: state.inventoryReducer.equipment,
+});
+export default connect(mapStateToProps)(InventoryView);
