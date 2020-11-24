@@ -282,8 +282,8 @@ class InventoryView extends Component {
                       <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Notes for ${}</Form.Label>
                         <Form.Control
-                          onClick={(event) => {
-                            alert(event.target.value);
+                          onChange={(event) => {
+                            console.log(event.target.value);
                           }}
                           as="textarea"
                           rows={3}
