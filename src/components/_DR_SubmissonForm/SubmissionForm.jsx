@@ -4,11 +4,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 
 import Select from 'react-select';
+import { Form, Button } from "react-bootstrap";
 
 class SubmissionForm extends Component {
   state = {
     pointOfContact: "",
-    location: "",
+    city: "",
     phoneNumber: "",
     practiceCompany: "",
     address: "",
@@ -17,8 +18,15 @@ class SubmissionForm extends Component {
     endDate: new Date(),
     availableEquipment: [],
     arrOptions: [],
-    currentlySelectedEquipment: [],
+    currentlySelectedEquipment: "",
   };
+
+  handleSubmit = () => {
+    console.log('in submit')
+    if (!(this.state.currentlySelectedEquipment)) {
+      alert("Error: you cannot submit a form without selected equipment.");
+    }
+  }
 
   handleChange = (event) => {
     this.setState({
@@ -53,27 +61,28 @@ class SubmissionForm extends Component {
       .then((res) => {
         this.setState({ availableEquipment: res.data });
         const options = res.data.map((equipmentObj) => {
-          return { value: equipmentObj.id, label: equipmentObj.equipment_item } //value allows us to select the correct equipment by using its id
-        });
+          return { value: equipmentObj.id, label: equipmentObj.equipment_item, ...equipmentObj } //value allows us to select the correct equipment by using its id
+        }); //value and label are keys that are required for the react-select dropdown menu
         this.setState({ arrOptions: options}); //arrOptions needed for React-Select's Select tag
       })
       .catch((err) => console.log(err));
   };
 
   render() {
+    console.log(this.state.currentlySelectedEquipment);
     return (
       <>
         <h1>Dental Rental Request</h1>
 
+        <Form>
         Start Date:
-        <DatePicker selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
+        <DatePicker required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
 
         End Date:
-        <DatePicker selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
+        <DatePicker required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
 
         <br />
         
-
         <Select
           isMulti
           name="available-equipment"
@@ -81,7 +90,7 @@ class SubmissionForm extends Component {
           className="basic-multi-select"
           classNamePrefix="select"
           onChange={this.handleSelect}
-          value={this.state.currentlySelectedEquipment || ""}
+          value={this.state.currentlySelectedEquipment || ""} //this allows for validating date changes
           />
 
         <input
@@ -90,6 +99,7 @@ class SubmissionForm extends Component {
           placeholder="Full name"
           value={this.state.pointOfContact}
           onChange={this.handleChange}
+          required
         />
         <input
           type="text"
@@ -97,6 +107,7 @@ class SubmissionForm extends Component {
           placeholder="City"
           value={this.state.location}
           onChange={this.handleChange}
+          required
         />
 
         <br />
@@ -107,6 +118,7 @@ class SubmissionForm extends Component {
           placeholder="Phone number"
           value={this.state.phoneNumber}
           onChange={this.handleChange}
+          required
         />
         <input
           type="text"
@@ -114,6 +126,7 @@ class SubmissionForm extends Component {
           placeholder="Practice/Company"
           value={this.state.practiceCompany}
           onChange={this.handleChange}
+          required
         />
 
         <br />
@@ -124,6 +137,7 @@ class SubmissionForm extends Component {
           placeholder="Address"
           value={this.state.address}
           onChange={this.handleChange}
+          required
         />
         <input
           type="text"
@@ -131,7 +145,10 @@ class SubmissionForm extends Component {
           placeholder="Purpose for request"
           value={this.state.purposeForRequest}
           onChange={this.handleChange}
-        />
+          required
+          />
+          <Button onClick={this.handleSubmit}>Submit Request</Button>
+          </Form>
       </>
     );
   }
