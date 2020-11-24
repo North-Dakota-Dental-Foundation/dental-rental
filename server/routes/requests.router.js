@@ -63,6 +63,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     //equipment, company, address, point_of_contact, email, phone_number, city, state, zip
     // start date, end date, purpose, status
 
+    //UNCOMMENT:
     const newRequest = await pool.query(
       "INSERT INTO requests (company, address, point_of_contact, email, phone_number, city, state, zip, start_date, end_date, purpose, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
       [

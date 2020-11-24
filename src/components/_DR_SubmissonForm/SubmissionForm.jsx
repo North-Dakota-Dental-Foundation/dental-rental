@@ -10,7 +10,7 @@ class SubmissionForm extends Component {
   state = {
     pointOfContact: "",
     city: "",
-    phoneNumber: "",
+    phoneNumber: "", //TODO: NEEDS TO BE NUMBER
     practiceCompany: "",
     address: "",
     purposeForRequest: "",
@@ -18,15 +18,65 @@ class SubmissionForm extends Component {
     endDate: new Date(),
     availableEquipment: [],
     arrOptions: [],
-    currentlySelectedEquipment: "",
+    currentlySelectedEquipment: "", //will be an array of Equipment Objects
+    state: "",
+    zip: "",
+    email: ""
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log('in submit')
     if (!(this.state.currentlySelectedEquipment)) {
       alert("Error: you cannot submit a form without selected equipment.");
     }
+    // const {
+    //   company, //string
+    //   address, //string
+    //   point_of_contact, //string
+    //   email, //string
+    //   phone_number, //number
+    //   city, //string
+    //   state, //string
+    //   zip, //number
+    //   equipment_in_request, //arr of equipment in a particular request
+    // } = req.body;
+
+    // console.log(
+    //   this.state.practiceCompany,
+    //   this.state.address,
+    //   this.state.pointOfContact,
+    //   this.state.phoneNumber,
+    //   this.state.city,
+    //   this.state.startDate,
+    //   this.state.endDate,
+    //   this.state.purposeForRequest,
+    //   this.state.currentlySelectedEquipment,
+    //   this.state.email,
+    //   this.state.zip,
+    //   this.state.state
+    // );
+
+    axios
+      .post("/api/requests/", {
+        company: this.state.practiceCompany,
+        address: this.state.address,
+        point_of_contact: this.state.pointOfContact, 
+        email: this.state.email, 
+        phone_number: this.state.phoneNumber, 
+        city: this.state.city, 
+        state: this.state.state, 
+        zip: this.state.zip, 
+        start_date: this.state.startDate, 
+        end_date: this.state.endDate, 
+        purpose: this.state.purposeForRequest, 
+        equipment_in_request: this.state.currentlySelectedEquipment,
+
+      })
+      .then(() => {
+        console.log('Post successful.')
+      })
+      .catch((err) => console.log(err));
+    
   }
 
   handleChange = (event) => {
@@ -70,7 +120,6 @@ class SubmissionForm extends Component {
   };
 
   render() {
-    console.log(this.state.currentlySelectedEquipment);
     return (
       <>
         <h1>Dental Rental Request</h1>
@@ -82,7 +131,8 @@ class SubmissionForm extends Component {
         End Date:
         <DatePicker required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
 
-        <br />
+          <br />
+          <br />
         
         <Select
           isMulti
@@ -94,6 +144,8 @@ class SubmissionForm extends Component {
           value={this.state.currentlySelectedEquipment || ""} //this allows for validating date changes
           />
 
+          <br />
+
         <input
           type="text"
           name="pointOfContact"
@@ -101,36 +153,45 @@ class SubmissionForm extends Component {
           value={this.state.pointOfContact}
           onChange={this.handleChange}
           required
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          value={this.state.location}
-          onChange={this.handleChange}
-          required
-        />
-
-        <br />
-
-        <input
-          type="text"
-          name="phoneNumber"
-          placeholder="Phone number"
-          value={this.state.phoneNumber}
-          onChange={this.handleChange}
-          required
-        />
-        <input
+          />
+          
+          <input
           type="text"
           name="practiceCompany"
           placeholder="Practice/Company"
           value={this.state.practiceCompany}
           onChange={this.handleChange}
           required
-        />
+          />
 
-        <br />
+          <input
+          type="text"
+          name="purposeForRequest"
+          placeholder="Purpose for request"
+          value={this.state.purposeForRequest}
+          onChange={this.handleChange}
+          required
+          />
+
+<br />
+        <input
+          type="number"
+          name="phoneNumber"
+          placeholder="Phone number"
+          value={this.state.phoneNumber}
+          onChange={this.handleChange}
+          required
+          />
+
+          <input
+            type="text"
+            name="email"
+            placeholder="Email"
+            value={this.state.email}
+            onChange={this.handleChange}
+            required
+          />
+<br />
 
         <input
           type="text"
@@ -139,15 +200,40 @@ class SubmissionForm extends Component {
           value={this.state.address}
           onChange={this.handleChange}
           required
-        />
-        <input
+          />
+          
+          <input
           type="text"
-          name="purposeForRequest"
-          placeholder="Purpose for request"
-          value={this.state.purposeForRequest}
+          name="city"
+          placeholder="City"
+          value={this.state.location}
+          onChange={this.handleChange}
+          required
+        />
+
+        
+
+          <input
+            type="text"
+            name="state"
+            placeholder="State"
+            value={this.state.state}
+            onChange={this.handleChange}
+            required
+          />
+
+          <input
+          type="number"
+          name="zip"
+          placeholder="Zip"
+          value={this.state.zip}
           onChange={this.handleChange}
           required
           />
+          
+          <br />
+          <br />
+
           <Button type="submit">Submit Request</Button>
           </Form>
       </>
