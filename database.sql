@@ -47,6 +47,7 @@ CREATE TABLE "user" (
 "firstname" VARCHAR (80) NOT NULL,
 "lastname" VARCHAR (80) NOT NULL,
 "username" VARCHAR (80) UNIQUE NOT NULL, -- Email! --
+"phonenumber" VARCHAR (10) NOT NULL,
 "password" VARCHAR (1000) NOT NULL,
 "super_admin" BOOLEAN DEFAULT FALSE
 );

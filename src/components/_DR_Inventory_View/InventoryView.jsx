@@ -1,10 +1,22 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
+import { Modal } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
+import swal from "sweetalert";
+import { Row, Col } from "react-bootstrap";
+import "../App/App.css";
 
 class InventoryView extends Component {
   state = {
+    equipment_item: "",
+    equipment_status: "",
+    serial_number: "",
+    nddf_code: "",
     filterStatus: "",
     changeStatus: "",
-    addEquipment: false,
+    isOpen: false,
+    notes: "",
   };
 
   handleChange = (event) => {
@@ -13,10 +25,39 @@ class InventoryView extends Component {
     });
   };
 
+  //form submit to create new inventory item
+  onSubmit = (event) => {
+    event.preventDefault();
+    this.closeModal();
+
+    this.props.dispatch({
+      type: "CREATE_ITEM",
+      payload: this.state,
+    });
+
+    swal({
+      title: "New Equipment Added To Inventory",
+      text: `You have successfully added ${this.state.equipment_item}to your inventory.`,
+      icon: "success",
+      buttons: true,
+    });
+
+    this.setState({
+      equipment_item: "",
+      equipment_status: "",
+      serial_number: "",
+      nddf_code: "",
+    });
+  };
+
+  //open and closing modals
+  openModal = () => this.setState({ isOpen: true });
+  closeModal = () => this.setState({ isOpen: false });
+
   render() {
     return (
       <>
-        <h1>Inventory View</h1>
+        <h1 style={{ textAlign: "center" }}>Inventory View</h1>
 
         <br />
 
@@ -28,25 +69,133 @@ class InventoryView extends Component {
           <option>Missing</option>
         </select>
 
-        <button>Add New Equipment</button>
+        <Button
+          variant="primary"
+          className="btn-primary"
+          onClick={this.openModal}
+        >
+          Add New Equipment{" "}
+        </Button>
 
+        <Modal
+          className="modal"
+          show={this.state.isOpen}
+          onHide={this.closeModal}
+        >
+          <Modal.Header className="modalHeader" closeButton>
+            <Modal.Title
+              className="modalTitle"
+              style={{ justifyContent: "center" }}
+            >
+              Add New Equipment{" "}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            {" "}
+            <body>
+              <form
+                className="modalForm"
+                style={{ backgroundColor: "white" }}
+                onSubmit={this.onSubmit}
+              >
+                <div className="formDiv">
+                  <h2>Add New Equipment</h2>
+                  <p></p>
+                  <Row>
+                    <Col>
+                      Equipment Name:
+                      <input
+                        onChange={(e) =>
+                          this.setState({ equipment_item: e.target.value })
+                        }
+                        value={this.state.equipment_item}
+                        required
+                      />
+                    </Col>
+                    <Col>
+                      {""}
+                      Serial Number:
+                      <input
+                        onChange={(e) =>
+                          this.setState({ serial_number: e.target.value })
+                        }
+                        value={this.state.serial_number}
+                        required
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      NDDF Code:
+                      <input
+                        onChange={(e) =>
+                          this.setState({ nddf_code: e.target.value })
+                        }
+                        value={this.state.nddf_code}
+                        required
+                      />{" "}
+                    </Col>
+                    <Col>
+                      Equipment Status:{" "}
+                      <select
+                        onChange={(e) =>
+                          this.setState({ equipment_status: e.target.value })
+                        }
+                        value={this.state.equipment_status}
+                        required
+                      >
+                        <option value={"Available"}>Available</option>
+                        <option value={"Checked-Out"}>Checked Out</option>
+                        <option value={"Shipped"}>Shipped</option>
+                        <option value={"In Inspection"}>In Inspection</option>
+                        <option value={"Missing"}>Missing</option>
+                      </select>
+                    </Col>
+                  </Row>
+
+                  <br />
+                  <Row>
+                    <Col>
+                      <Button type="submit" variant="primary w-100 text-center">
+                        Add Equipment To Inventory
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+              </form>
+            </body>
+          </Modal.Body>
+          <Modal.Footer className="modalFooter">
+            <Button
+              className="footerButton"
+              variant="secondary w-100 text-center"
+              onClick={this.closeModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <br />
         <br />
 
-        <table>
-          <tr>
-            <th>Equipment</th>
-            <th>Serial #</th>
-            <th>NDDF Code</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Delete Equipment</th>
-          </tr>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Serial #</th>
+              <th>NDDF Code</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Delete Equipment</th>
+            </tr>
+          </thead>
 
           <tr>
-            <td>Chaos Emerald</td>
-            <td>1234567</td>
-            <td>CHAOSCONTROL2</td>
+            <td>{}</td>
+            <td>{}</td>
+            <td>{}</td>
             <td>
+              {" "}
               <select name="changeStatus">
                 <option>Available</option>
                 <option>Checked-Out</option>
@@ -55,17 +204,20 @@ class InventoryView extends Component {
                 <option>Missing</option>
               </select>
             </td>
+
             <td>
+              {" "}
               <button>Add Note</button>
             </td>
             <td>
+              {" "}
               <button>Delete Item</button>
             </td>
           </tr>
-        </table>
+        </Table>
       </>
     );
   }
 }
 
-export default InventoryView;
+export default connect()(InventoryView);

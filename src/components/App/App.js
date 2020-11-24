@@ -29,6 +29,7 @@ import "./App.css";
 class App extends Component {
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_USER" });
+    this.props.dispatch({ type: "FETCH_ITEM" });
   }
 
   render() {
@@ -41,7 +42,7 @@ class App extends Component {
             <Redirect exact from="/" to="/home" />
 
             {/* Visiting localhost:3000/about will show the about page. */}
-            <Route
+            <ProtectedRoute
               // shows AboutPage at all times (logged in or not)
               exact
               path="/rental_requests"
