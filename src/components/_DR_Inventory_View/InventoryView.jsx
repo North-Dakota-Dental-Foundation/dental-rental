@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { Modal } from "react-bootstrap";
-import { Button, Table } from "react-bootstrap";
+import { Button, Table, Form, FormGroup } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
@@ -17,6 +17,7 @@ class InventoryView extends Component {
     filterStatus: "",
     changeStatus: "",
     isOpen: false,
+    noteIsOpen: false,
     notes: "",
     inventory: [],
     isEdit: false,
@@ -49,6 +50,7 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
+    this.getInventory();
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
@@ -127,9 +129,21 @@ class InventoryView extends Component {
     });
   };
 
+  editNotes = (id, value) => {
+    this.props.dispatch({
+      type: "EDIT_NOTE",
+      payload: {
+        notes: value,
+        equipment_id: id,
+      },
+    });
+  };
+
   //open and closing modals
   openModal = () => this.setState({ isOpen: true });
   closeModal = () => this.setState({ isOpen: false });
+  openNoteModal = () => this.setState({ noteIsOpen: true });
+  closeNoteModal = () => this.setState({ noteIsOpen: false });
 
   render() {
     return (
@@ -239,6 +253,64 @@ class InventoryView extends Component {
         <br />
         <br />
 
+        <Modal
+          className="modal"
+          show={this.state.noteIsOpen}
+          onHide={this.closeNoteModal}
+        >
+          <Modal.Header className="modalHeader" closeButton>
+            <Modal.Title
+              className="modalTitle"
+              style={{ justifyContent: "center" }}
+            >
+              Notes{" "}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            {" "}
+            <body>
+              <form
+                className="modalForm"
+                style={{ backgroundColor: "white" }}
+                onSubmit={this.editNotes}
+              >
+                <div className="formDiv">
+                  <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
+                  <p></p>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Control
+                          onClick={(event) => {
+                            alert(event.target.value);
+                          }}
+                          as="textarea"
+                          rows={3}
+                        />
+                      </Form.Group>{" "}
+                      <br />
+                      <br />
+                      <Button type="submit" variant="primary w-100 text-center">
+                        Save Changes
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+              </form>
+            </body>
+          </Modal.Body>
+          <Modal.Footer className="modalFooter">
+            <Button
+              className="footerButton"
+              variant="secondary w-100 text-center"
+              onClick={this.closeNoteModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -264,17 +336,25 @@ class InventoryView extends Component {
                     }
                     name="changeStatus"
                   >
-                    <option value={"Available"}>Available</option>
-                    <option value={"Checked-Out"}>Checked-Out</option>
-                    <option value={"Shipped"}>Shipped</option>
-                    <option value={"In Inspection"}>In Inspection</option>
-                    <option value={"Missing"}>Missing</option>
+                    <option>{inventoryItem.equipment_status}</option>
+
+                    <option value={"Available"}>AVAILABLE</option>
+                    <option value={"Checked-Out"}>CHECKED-OUT</option>
+                    <option value={"Shipped"}>SHIPPED</option>
+                    <option value={"In Inspection"}>IN INSPECTION</option>
+                    <option value={"Missing"}>MISSING</option>
                   </select>
                 </td>
 
                 <td>
                   {" "}
-                  <button>Add Note</button>
+                  <Button
+                    variant="primary"
+                    className="btn-primary"
+                    onClick={this.openNoteModal}
+                  >
+                    Notes{" "}
+                  </Button>{" "}
                 </td>
                 <td>
                   {" "}
