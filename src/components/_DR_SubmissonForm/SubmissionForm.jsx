@@ -21,7 +21,8 @@ class SubmissionForm extends Component {
     currentlySelectedEquipment: "",
   };
 
-  handleSubmit = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     console.log('in submit')
     if (!(this.state.currentlySelectedEquipment)) {
       alert("Error: you cannot submit a form without selected equipment.");
@@ -74,7 +75,7 @@ class SubmissionForm extends Component {
       <>
         <h1>Dental Rental Request</h1>
 
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
         Start Date:
         <DatePicker required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
 
@@ -147,7 +148,7 @@ class SubmissionForm extends Component {
           onChange={this.handleChange}
           required
           />
-          <Button onClick={this.handleSubmit}>Submit Request</Button>
+          <Button type="submit">Submit Request</Button>
           </Form>
       </>
     );
