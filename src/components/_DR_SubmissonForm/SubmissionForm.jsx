@@ -17,6 +17,7 @@ class SubmissionForm extends Component {
     endDate: new Date(),
     availableEquipment: [],
     arrOptions: [],
+    currentlySelectedEquipment: [],
   };
 
   handleChange = (event) => {
@@ -25,14 +26,20 @@ class SubmissionForm extends Component {
     });
   };
 
+  handleSelect = (arrOfSelectedEquipment) => {
+    this.setState({currentlySelectedEquipment: arrOfSelectedEquipment})
+  };
+
   handleDateChange = (dateParam, date) => {
     if (dateParam === "startDate" && date <= this.state.endDate) { // if we are editing the startDate, check that the parameter is less than or equal to the endDate
       this.setState({ startDate: date });
       this.fetchAvailableEquipment(date, this.state.endDate); //due to asynchonous nature of setting state
+      this.setState({ currentlySelectedEquipment: "" }); // if the user decides to change the date, we need to remove the currently selected equipment bc it is no longer valid!
     }
     else if (dateParam === "endDate" && date >= this.state.startDate) { // if we are editing the endDate, check that the parameter is greater than the startDate
       this.setState({ endDate: date });
       this.fetchAvailableEquipment(this.state.startDate, date); //due to asynchonous nature of setting state
+      this.setState({ currentlySelectedEquipment: "" }); // if the user decides to change the date, we need to remove the currently selected equipment bc it is no longer valid!
     }
     
   };
@@ -45,17 +52,15 @@ class SubmissionForm extends Component {
       })
       .then((res) => {
         this.setState({ availableEquipment: res.data });
-        console.log(res.data);
         const options = res.data.map((equipmentObj) => {
-          return { value: equipmentObj.id, label: equipmentObj.equipment_item }
+          return { value: equipmentObj.id, label: equipmentObj.equipment_item } //value allows us to select the correct equipment by using its id
         });
-        this.setState({ arrOptions: options});
+        this.setState({ arrOptions: options}); //arrOptions needed for React-Select's Select tag
       })
       .catch((err) => console.log(err));
   };
 
   render() {
-    console.log(this.state.arrOptions);
     return (
       <>
         <h1>Dental Rental Request</h1>
@@ -68,12 +73,15 @@ class SubmissionForm extends Component {
 
         <br />
         
+
         <Select
-            isMulti
-            name="available-equipment"
-            options={this.state.arrOptions}
-            className="basic-multi-select"
-            classNamePrefix="select"
+          isMulti
+          name="available-equipment"
+          options={this.state.arrOptions}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          onChange={this.handleSelect}
+          value={this.state.currentlySelectedEquipment || ""}
           />
 
         <input
