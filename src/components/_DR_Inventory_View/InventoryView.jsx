@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { Modal } from "react-bootstrap";
-import { Button, Table } from "react-bootstrap";
+import { Button, Table, Form, FormGroup } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
@@ -17,8 +17,10 @@ class InventoryView extends Component {
     filterStatus: "",
     changeStatus: "",
     isOpen: false,
+    noteIsOpen: false,
     notes: "",
     inventory: [],
+    isEdit: false,
   };
 
   componentDidMount() {
@@ -40,9 +42,23 @@ class InventoryView extends Component {
       });
   };
 
-  deleteInventory = (inventoryId) => {
+  editStatus = (id, value) => {
+    this.props.dispatch({
+      type: "EDIT_STATUS",
+      payload: {
+        equipment_status: value,
+        equipment_id: id,
+      },
+    });
+    this.getInventory();
+  };
+
+  deleteInventory = (inventoryId, objectIndex) => {
+    console.log(this.state.inventory);
+    console.log(objectIndex);
+
     swal({
-      title: `Are you sure you want to delete ${this.props.equipment_item}?`,
+      title: `Are you sure you want to delete ${this.state.inventory[objectIndex].equipment_item}?`,
       text: "Once this item is deleted, you will have to re-add it.",
       icon: "warning",
       buttons: true,
@@ -52,16 +68,21 @@ class InventoryView extends Component {
           .delete(`/api/inventory/${inventoryId}`)
           .then((response) => {
             console.log(response.data);
-            swal(`${this.state.inventory.equipment_item} has been deleted.`, {
-              icon: "success",
-            });
+            swal(
+              `${this.state.inventory[objectIndex].equipment_item} has been deleted.`,
+              {
+                icon: "success",
+              }
+            );
             this.getInventory();
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
-        swal(`${this.state.equipment_item} has NOT been deleted.`);
+        swal(
+          `${this.state.inventory[objectIndex].equipment_item} has NOT been deleted.`
+        );
       }
     });
   };
@@ -108,9 +129,21 @@ class InventoryView extends Component {
     });
   };
 
+  editNotes = (id, value) => {
+    this.props.dispatch({
+      type: "EDIT_NOTE",
+      payload: {
+        notes: value,
+        equipment_id: id,
+      },
+    });
+  };
+
   //open and closing modals
   openModal = () => this.setState({ isOpen: true });
   closeModal = () => this.setState({ isOpen: false });
+  openNoteModal = () => this.setState({ noteIsOpen: true });
+  closeNoteModal = () => this.setState({ noteIsOpen: false });
 
   render() {
     return (
@@ -220,6 +253,64 @@ class InventoryView extends Component {
         <br />
         <br />
 
+        <Modal
+          className="modal"
+          show={this.state.noteIsOpen}
+          onHide={this.closeNoteModal}
+        >
+          <Modal.Header className="modalHeader" closeButton>
+            <Modal.Title
+              className="modalTitle"
+              style={{ justifyContent: "center" }}
+            >
+              Notes{" "}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            {" "}
+            <body>
+              <form
+                className="modalForm"
+                style={{ backgroundColor: "white" }}
+                onSubmit={this.editNotes}
+              >
+                <div className="formDiv">
+                  <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
+                  <p></p>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Control
+                          onChange={(event) => {
+                            console.log(event.target.value);
+                          }}
+                          as="textarea"
+                          rows={3}
+                        />
+                      </Form.Group>{" "}
+                      <br />
+                      <br />
+                      <Button type="submit" variant="primary w-100 text-center">
+                        Save Changes
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+              </form>
+            </body>
+          </Modal.Body>
+          <Modal.Footer className="modalFooter">
+            <Button
+              className="footerButton"
+              variant="secondary w-100 text-center"
+              onClick={this.closeNoteModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -232,31 +323,49 @@ class InventoryView extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.inventory.map((inventory) => (
+            {this.state.inventory.map((inventoryItem, index) => (
               <tr>
-                <td>{inventory.equipment_item}</td>
-                <td>{inventory.serial_number}</td>
-                <td>{inventory.nddf_code}</td>
+                <td>{inventoryItem.equipment_item}</td>
+                <td>{inventoryItem.serial_number}</td>
+                <td>{inventoryItem.nddf_code}</td>
                 <td>
                   {" "}
-                  <select name="changeStatus">
-                    <option>Available</option>
-                    <option>Checked-Out</option>
-                    <option>Shipped</option>
-                    <option>In Inspection</option>
-                    <option>Missing</option>
+                  <select
+                    onChange={(event) =>
+                      this.editStatus(inventoryItem.id, event.target.value)
+                    }
+                    name="changeStatus"
+                  >
+                    <option>{inventoryItem.equipment_status}</option>
+
+                    <option value={"Available"}>AVAILABLE</option>
+                    <option value={"Checked-Out"}>CHECKED-OUT</option>
+                    <option value={"Shipped"}>SHIPPED</option>
+                    <option value={"In Inspection"}>IN INSPECTION</option>
+                    <option value={"Missing"}>MISSING</option>
                   </select>
                 </td>
 
                 <td>
                   {" "}
-                  <button>Add Note</button>
+                  <Button
+                    variant="primary"
+                    className="btn-primary"
+                    onClick={this.openNoteModal}
+                  >
+                    Notes{" "}
+                  </Button>{" "}
                 </td>
                 <td>
                   {" "}
-                  <button onClick={() => this.deleteInventory(inventory.id)}>
+                  <Button
+                    variant="danger"
+                    onClick={() =>
+                      this.deleteInventory(inventoryItem.id, index)
+                    }
+                  >
                     Delete Item
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}

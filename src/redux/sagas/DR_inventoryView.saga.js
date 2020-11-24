@@ -27,6 +27,34 @@ function* createEquipment(action) {
   }
 }
 
+function* editStatus(action) {
+  console.log(action.payload);
+  try {
+    const response = yield axios.put(
+      `/api/inventory/${action.payload.equipment_id}`,
+      { equipment_status: action.payload.equipment_status }
+    );
+    yield put({ type: "SET_STATUS", payload: response.data });
+    console.log("Success in updating Status.");
+  } catch (error) {
+    console.log("error editing Status", error);
+  }
+}
+
+function* editNote(action) {
+  console.log(action.payload);
+  try {
+    const response = yield axios.put(
+      `/api/inventory/${action.payload.equipment_id}`,
+      { note: action.payload.notes }
+    );
+    yield put({ type: "SET_NOTE", payload: response.data });
+    console.log("Success in updating Note.");
+  } catch (error) {
+    console.log("error editing Note", error);
+  }
+}
+
 function* fetchItem() {
   try {
     const response = yield axios.get("/api/inventory");
@@ -45,6 +73,8 @@ function* fetchItem() {
 function* inventoryViewSaga() {
   yield takeLatest("CREATE_ITEM", createEquipment);
   yield takeLatest("FETCH_ITEM", fetchItem);
+  yield takeLatest("EDIT_STATUS", editStatus);
+  yield takeLatest("EDIT_NOTE", editNote);
 
   // yield takeEvery(
   //     'FETCH',
