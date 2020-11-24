@@ -23,7 +23,7 @@ export default function* rootSaga() {
 
     inventoryViewSaga(),
     rentalRequestSaga(),
-    submissionFormSaga(),
+    //submissionFormSaga(),
     userPageSaga(),
   ]);
 }

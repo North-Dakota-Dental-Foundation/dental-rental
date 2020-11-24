@@ -40,6 +40,11 @@ const Nav = (props) => {
             <Link className="nav-link" to="/users">
               Users{" "}
             </Link>
+            <Link className="nav-link" to="/rental_submission_form">
+              {" "}
+              {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
+              Client Submission Form{" "}
+            </Link>
             <LogOutButton className="nav-link" />
           </>
         )}
