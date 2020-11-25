@@ -85,12 +85,13 @@ class SubmissionForm extends Component {
   };
 
   handleDateChange = (dateParam, date) => {
-    if (dateParam === "startDate" && date <= this.state.endDate) { // if we are editing the startDate, check that the parameter is less than or equal to the endDate
+    const currentDate = new Date();
+    if (dateParam === "startDate" && date <= this.state.endDate && date >= currentDate) { // if we are editing the startDate, check that the date variable is less than or equal to the endDate
       this.setState({ startDate: date });
       this.fetchAvailableEquipment(date, this.state.endDate); //due to asynchonous nature of setting state
       this.setState({ currentlySelectedEquipment: "" }); // if the user decides to change the date, we need to remove the currently selected equipment bc it is no longer valid!
     }
-    else if (dateParam === "endDate" && date >= this.state.startDate) { // if we are editing the endDate, check that the parameter is greater than the startDate
+    else if (dateParam === "endDate" && date >= this.state.startDate && date >= currentDate) { // if we are editing the endDate, check that the date variable is greater than the startDate
       this.setState({ endDate: date });
       this.fetchAvailableEquipment(this.state.startDate, date); //due to asynchonous nature of setting state
       this.setState({ currentlySelectedEquipment: "" }); // if the user decides to change the date, we need to remove the currently selected equipment bc it is no longer valid!
