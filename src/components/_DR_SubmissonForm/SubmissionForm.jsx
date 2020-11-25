@@ -3,7 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import Select from 'react-select';
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
+import makeAnimated from 'react-select/animated';
+
+const animatedComponents = makeAnimated();
 
 class SubmissionForm extends Component {
   state = {
@@ -53,7 +56,7 @@ class SubmissionForm extends Component {
           show: true,
           pointOfContact: "",
           city: "",
-          phoneNumber: "", //TODO: NEEDS TO BE NUMBER
+          phoneNumber: "",
           practiceCompany: "",
           address: "",
           purposeForRequest: "",
@@ -121,158 +124,186 @@ class SubmissionForm extends Component {
 
   render() {
     return (
-      <>
+      <Container>
         {/* <Button onClick={this.handleShow}>Show modal</Button> */}
         <h1>Dental Rental Request</h1>
 
         <Form onSubmit={this.handleSubmit}>
-          Start Date:
-        <DatePicker required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
-          {" "}
-        End Date:
-        <DatePicker required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
-
-          <br />
-          <br />
-
-          <Select
-            isMulti
-            name="available-equipment"
-            options={this.state.arrOptions}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            onChange={this.handleSelect}
-            value={this.state.currentlySelectedEquipment || ""} //this allows for validating date changes
-          />
-
-          <br />
-
-          <input
-            type="text"
-            name="pointOfContact"
-            placeholder="Full name"
-            value={this.state.pointOfContact}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="practiceCompany"
-            placeholder="Practice/Company"
-            value={this.state.practiceCompany}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="purposeForRequest"
-            placeholder="Purpose for request"
-            value={this.state.purposeForRequest}
-            onChange={this.handleChange}
-            required
-          />
-
-          <br />
-          <input
-            type="number"
-            name="phoneNumber"
-            placeholder="Phone number"
-            value={this.state.phoneNumber}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={this.state.email}
-            onChange={this.handleChange}
-            required
-          />
-          <br />
-
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            value={this.state.address}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            value={this.state.city}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="state"
-            placeholder="State"
-            value={this.state.state}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="number"
-            name="zip"
-            placeholder="Zip"
-            value={this.state.zip}
-            onChange={this.handleChange}
-            required
-          />
-
-          <br />
-          <br />
-
+          <Form.Group controlId="formBasicInfo">
+            <Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  name="pointOfContact"
+                  value={this.state.pointOfContact}
+                  onChange={this.handleChange}
+                  required placeholder="Your Name" />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="number"
+                  name="phoneNumber"
+                  placeholder="Phone number"
+                  value={this.state.phoneNumber}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Form.Control
+              type="text"
+              name="practiceCompany"
+              placeholder="Practice/Company"
+              value={this.state.practiceCompany}
+              onChange={this.handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  name="address"
+                  placeholder="Address"
+                  value={this.state.address}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  value={this.state.city}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="text"
+                  name="state"
+                  placeholder="State"
+                  value={this.state.state}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="number"
+                  name="zip"
+                  placeholder="Zip"
+                  value={this.state.zip}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  name="purposeForRequest"
+                  placeholder="Purpose for request"
+                  value={this.state.purposeForRequest}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Label>Start Date:</Form.Label>
+                <DatePicker className="form-control" wrapperClassName="form-control" required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
+              </Col>
+              <Col>
+                <Form.Label>End Date:</Form.Label>
+                <DatePicker className="form-control" wrapperClassName="form-control" required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Select
+                  components={animatedComponents}
+                  noOptionsMessage={() => "No available equipment for the given date range"}
+                  isMulti
+                  name="available-equipment"
+                  options={this.state.arrOptions}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  onChange={this.handleSelect}
+                  value={this.state.currentlySelectedEquipment || ""} //this allows for validating date changes
+                />
+              </Col>
+            </Row>
+          </Form.Group>
           <Button type="submit">Submit Request</Button>
         </Form>
 
         {/* Modal rendering when form submitted */}
-        {this.state.formSubmissionSuccess ? <Modal
-          show={this.state.show}
-          onHide={this.handleClose}
-          backdrop="static"
-          keyboard={false}
-        >
-          <Modal.Header>
-            <Modal.Title>Successful Form Submission</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Thank you for submitting your Dental Rental request!
-             <br />
-            We will review your request and get back to you promptly.
-          </Modal.Body>
-          <Modal.Footer>
-            You will be redirected back to the ND Dental Foundation homepage in a few seconds.
-            </Modal.Footer>
-        </Modal> :
-          <Modal
+        {
+          this.state.formSubmissionSuccess ? <Modal
             show={this.state.show}
             onHide={this.handleClose}
             backdrop="static"
             keyboard={false}
           >
             <Modal.Header>
-              <Modal.Title>Form Submission Error</Modal.Title>
+              <Modal.Title>Successful Form Submission</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              Sorry - something went wrong!
-        </Modal.Body>
+              Thank you for submitting your Dental Rental request!
+             <br />
+            We will review your request and get back to you promptly.
+          </Modal.Body>
             <Modal.Footer>
               You will be redirected back to the ND Dental Foundation homepage in a few seconds.
+            </Modal.Footer>
+          </Modal> :
+            <Modal
+              show={this.state.show}
+              onHide={this.handleClose}
+              backdrop="static"
+              keyboard={false}
+            >
+              <Modal.Header>
+                <Modal.Title>Form Submission Error</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Sorry - something went wrong!
+              </Modal.Body>
+              <Modal.Footer>
+                You will be redirected back to the ND Dental Foundation homepage in a few seconds.
           </Modal.Footer>
-          </Modal>}
+            </Modal>
+        }
 
-      </>
+      </Container >
     );
   }
 }
