@@ -132,6 +132,7 @@ class SubmissionForm extends Component {
           <Form.Group controlId="formBasicInfo">
             <Row>
               <Col>
+                <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
                   name="pointOfContact"
@@ -140,20 +141,22 @@ class SubmissionForm extends Component {
                   required placeholder="Your Name" />
               </Col>
               <Col>
+                <Form.Label>Phone</Form.Label>
                 <Form.Control
                   type="number"
                   name="phoneNumber"
-                  placeholder="Phone number"
+                  placeholder="###-###-####"
                   value={this.state.phoneNumber}
                   onChange={this.handleChange}
                   required
                 />
               </Col>
               <Col>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="text"
                   name="email"
-                  placeholder="Email"
+                  placeholder="Your Email"
                   value={this.state.email}
                   onChange={this.handleChange}
                   required
@@ -162,10 +165,11 @@ class SubmissionForm extends Component {
             </Row>
           </Form.Group>
           <Form.Group>
+            <Form.Label>Practice/Company</Form.Label>
             <Form.Control
               type="text"
               name="practiceCompany"
-              placeholder="Practice/Company"
+              placeholder="Your Dental Practice/Organization"
               value={this.state.practiceCompany}
               onChange={this.handleChange}
               required
@@ -174,10 +178,11 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
+                <Form.Label>Address</Form.Label>
                 <Form.Control
                   type="text"
                   name="address"
-                  placeholder="Address"
+                  placeholder="1234 Main St."
                   value={this.state.address}
                   onChange={this.handleChange}
                   required
@@ -188,30 +193,45 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
+                <Form.Label>Address 2</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="address"
+                  placeholder="Apartment, studio, floor, etc."
+                  value={this.state.address}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Label>City</Form.Label>
                 <Form.Control
                   type="text"
                   name="city"
-                  placeholder="City"
                   value={this.state.city}
                   onChange={this.handleChange}
                   required
                 />
               </Col>
               <Col>
+                <Form.Label>State</Form.Label>
                 <Form.Control
                   type="text"
                   name="state"
-                  placeholder="State"
                   value={this.state.state}
                   onChange={this.handleChange}
                   required
                 />
               </Col>
               <Col>
+                <Form.Label>Zip</Form.Label>
                 <Form.Control
                   type="number"
                   name="zip"
-                  placeholder="Zip"
                   value={this.state.zip}
                   onChange={this.handleChange}
                   required
@@ -222,10 +242,11 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
+                <Form.Label>Dental Rental Purpose</Form.Label>
                 <Form.Control
                   type="text"
                   name="purposeForRequest"
-                  placeholder="Purpose for request"
+                  placeholder="Ex: Improve dental health of community."
                   value={this.state.purposeForRequest}
                   onChange={this.handleChange}
                   required
@@ -233,6 +254,7 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
+          <br />
           <Form.Group>
             <Row>
               <Col>
@@ -262,6 +284,7 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
+          <br />
           <Button type="submit">Submit Request</Button>
         </Form>
 
