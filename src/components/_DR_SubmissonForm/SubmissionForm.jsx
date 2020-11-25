@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import Select from 'react-select';
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Modal } from "react-bootstrap";
 
 class SubmissionForm extends Component {
   state = {
@@ -15,12 +15,13 @@ class SubmissionForm extends Component {
     purposeForRequest: "",
     startDate: new Date(),
     endDate: new Date(),
-    availableEquipment: [],
-    arrOptions: [],
-    currentlySelectedEquipment: "", //will be an array of Equipment Objects
+    availableEquipment: [], //an arr containing all equipment that is available for a given date range
+    arrOptions: [], //an arr that holds all available equipment that is valid for the react-select dropdown menu
+    currentlySelectedEquipment: "", //will be an array of equipment objects that have been selected by the user
     state: "",
     zip: "",
-    email: ""
+    email: "",
+    show: false
   };
 
   handleSubmit = (event) => {
@@ -91,9 +92,36 @@ class SubmissionForm extends Component {
       .catch((err) => console.log(err));
   };
 
+  //bootstrap modal opening/closing handlers
+  handleClose = () => this.setState({ show: false });
+  handleShow = () => this.setState({ show: true });
+  renderModal = () => {
+    return (<Modal
+      show={this.state.show}
+      onHide={this.handleClose}
+      backdrop="static"
+      keyboard={false}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Modal title</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        I will not close if you click outside me. Don't even try to press
+        escape key.
+        </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={this.handleClose}>
+          Close
+          </Button>
+        <Button variant="primary">Understood</Button>
+      </Modal.Footer>
+    </Modal>);
+  }
+
   render() {
-    return (
+    return (    
       <>
+        <Button onClick={this.handleShow}>Show modal</Button>
         <h1>Dental Rental Request</h1>
 
         <Form onSubmit={this.handleSubmit}>
@@ -207,7 +235,28 @@ class SubmissionForm extends Component {
           <br />
 
           <Button type="submit">Submit Request</Button>
-          </Form>
+        </Form>
+        
+            <Modal
+          show={this.state.show}
+          onHide={this.handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Modal title</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            I will not close if you click outside me. Don't even try to press
+            escape key.
+            </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+              </Button>
+            <Button variant="primary">Understood</Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }
