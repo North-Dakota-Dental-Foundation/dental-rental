@@ -143,7 +143,7 @@ class SubmissionForm extends Component {
               <Col>
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="tel"
                   name="phoneNumber"
                   placeholder="###-###-####"
                   value={this.state.phoneNumber}
@@ -254,7 +254,6 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
-          <br />
           <Form.Group>
             <Row>
               <Col>
@@ -284,7 +283,6 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
-          <br />
           <Button type="submit">Submit Request</Button>
         </Form>
 
