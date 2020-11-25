@@ -13,47 +13,32 @@ class UserItem extends Component {
         this.props.dispatch({ type: 'DELETE_USER', payload: this.props.user.id, });
     };
 
-    handleDeleteAdmin = () => {
-        this.setState({
-            deleteSuperAdmin: true,
-        })
-    };
+    // handleDeleteAdmin = () => {
+    //     this.setState({
+    //         deleteSuperAdmin: true,
+    //     })
+    // };
 
-    handleDontDeleteSuperAdmin = () => {
-        this.setState({
-            deleteSuperAdmin: false,
-        })
-    };
+    // handleDontDeleteSuperAdmin = () => {
+    //     this.setState({
+    //         deleteSuperAdmin: false,
+    //     })
+    // };
 
     render() {
-
-        const super_admin = String(this.props.user.super_admin) // Convert "super_admin" boolean to a string
-
         return (
             <>
 
                 <tr>
-                    <td>{this.props.user.firstname} {this.props.user.lastname}</td>
-                    <td>{this.props.user.username}</td>
-                    <td>{this.props.user.phonenumber}</td>
-                    <td>{super_admin.toUpperCase()}</td>
-
-
-
                     {this.props.user.username !== 'SuperAdmin' &&
                         <>
 
+                            <td>{this.props.user.firstname} {this.props.user.lastname}</td>
+                            <td>{this.props.user.username}</td>
+                            <td>{this.props.user.phonenumber}</td>
                             <td><Button onClick={this.handleDeleteUser} variant='danger'>Delete</Button></td>
 
                         </>}
-
-                    {this.props.user.username == 'SuperAdmin' &&
-                        <>
-
-                            <td><Button onClick={this.handleDeleteAdmin} variant='danger'>N/A</Button></td>
-
-                        </>}
-
                 </tr>
 
                 <Modal show={this.state.deleteSuperAdmin} onHide={this.handleDontDeleteSuperAdmin}>
@@ -63,7 +48,7 @@ class UserItem extends Component {
 
                     <Modal.Body>
                         <p>
-                            Who are you, and what do you think you are doing? Trying to destroy the admin above admins? 
+                            Who are you, and what do you think you are doing? Trying to destroy the admin above admins?
                             I don't know who you are but that's not very cash money of you.
                         </p>
                     </Modal.Body>

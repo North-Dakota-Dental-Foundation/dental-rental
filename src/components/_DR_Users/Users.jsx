@@ -46,7 +46,6 @@ class Users extends Component {
         username: this.state.username,
         phonenumber: this.state.phonenumber,
         password: this.state.password,
-        super_admin: this.state.super_admin,
       },
     })
     this.resetState();
@@ -65,9 +64,11 @@ class Users extends Component {
   render() {
     return (
       <div id='users'>
-        <h1>All Users</h1>
 
-        <br />
+        <h1 id="welcome">Logged in as: {this.props.user.username}</h1>
+        <p>Your ID is: {this.props.user.id}</p>
+
+        <h3>All Users</h3>
 
         <Button onClick={this.openAddUserModal}>Add User</Button>
 
@@ -79,7 +80,6 @@ class Users extends Component {
               <th>Name</th>
               <th>Email</th>
               <th>Phone Number</th>
-              <th>Super Admin</th>
               <th>Delete User</th>
             </tr>
           </thead>
@@ -106,14 +106,8 @@ class Users extends Component {
               <input type='text' onChange={this.handleChange} name='lastname' placeholder='Last Name' className='addUserInput' />
               <input type='text' onChange={this.handleChange} name='username' placeholder='Email' className='addUserInput' />
               <input type='text' onChange={this.handleChange} name='phonenumber' placeholder='Phone Number' className='addUserInput' />
-              <input type='text' onChange={this.handleChange} name='password' placeholder='Password' className='addUserInput' />
+              <input type='password' onChange={this.handleChange} name='password' placeholder='Password' className='addUserInput' />
             </div>
-
-            <p id='adminSelectDesc'>Make this user a Super Admin?</p>
-            <select onChange={this.handleChange} name='super_admin' id='superAdminSelect'>
-              <option>False</option>
-              <option>True</option>
-            </select>
           </Modal.Body>
 
           <Modal.Footer>
@@ -128,7 +122,8 @@ class Users extends Component {
 }
 
 const mapStoreToProps = (reduxState) => ({
-  users: reduxState.userPageReducer
+  users: reduxState.userPageReducer,
+  user: reduxState.user
 });
 
 export default connect(mapStoreToProps)(Users);
