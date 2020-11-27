@@ -15,6 +15,7 @@ class SubmissionForm extends Component {
     phoneNumber: "", //TODO: NEEDS TO BE NUMBER
     practiceCompany: "",
     address: "",
+    address_2: "",
     purposeForRequest: "",
     startDate: new Date(),
     endDate: new Date(),
@@ -34,13 +35,19 @@ class SubmissionForm extends Component {
       alert("Error: you cannot submit a form without selected equipment.");
       return;
     }
+
+    //remove hyphens from this.state.phoneNumber for database storage constraints
+    let phoneNumber = this.state.phoneNumber;
+    let arrPhoneNumbers = this.state.phoneNumber.split("-");
+    phoneNumber = arrPhoneNumbers.join('');
+
     axios
       .post("/api/requests/", {
         company: this.state.practiceCompany,
         address: this.state.address,
         point_of_contact: this.state.pointOfContact,
         email: this.state.email,
-        phone_number: this.state.phoneNumber,
+        phone_number: phoneNumber,
         city: this.state.city,
         state: this.state.state,
         zip: this.state.zip,
@@ -125,9 +132,8 @@ class SubmissionForm extends Component {
   render() {
     return (
       <Container>
-        <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
-
-        <Button onClick={this.handleShow}>Show modal</Button>
+        {/* <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
+        <Button onClick={this.handleShow}>Show modal</Button> */}
         <h1>Dental Rental Request</h1>
 
         <Form onSubmit={this.handleSubmit}>
@@ -151,6 +157,7 @@ class SubmissionForm extends Component {
                   value={this.state.phoneNumber}
                   onChange={this.handleChange}
                   required
+                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                 />
               </Col>
               <Col>
@@ -198,9 +205,9 @@ class SubmissionForm extends Component {
                 <Form.Label>Address 2</Form.Label>
                 <Form.Control
                   type="text"
-                  name="address"
+                  name="address_2"
                   placeholder="Apartment, studio, floor, etc."
-                  value={this.state.address}
+                  value={this.state.address_2}
                   onChange={this.handleChange}
                   required
                 />
