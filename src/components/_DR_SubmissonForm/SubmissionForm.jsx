@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../_DR_SubmissonForm/SubmissionForm.css"
 import axios from 'axios';
 import Select from 'react-select';
 import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
@@ -134,8 +135,12 @@ class SubmissionForm extends Component {
       <Container>
         {/* <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
         <Button onClick={this.handleShow}>Show modal</Button> */}
-        <h1>Dental Rental Request</h1>
-
+        <Row>
+          <Col className="text-center">
+            <h1>Dental Rental Request</h1>
+          </Col>
+        </Row>
+        <br />
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="formBasicInfo">
             <Row>
@@ -296,7 +301,7 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
-          <Button variant="success" type="submit">Submit Request</Button>
+          <Button variant="primary" type="submit">Submit Request</Button>
         </Form>
 
         {/* Modal rendering when form submitted */}
@@ -336,7 +341,6 @@ class SubmissionForm extends Component {
               </Modal.Body>
             </Modal>
         }
-
       </Container >
     );
   }
