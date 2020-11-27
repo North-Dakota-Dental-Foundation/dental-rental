@@ -18,14 +18,23 @@ class InventoryView extends Component {
     changeStatus: "",
     isOpen: false,
     noteIsOpen: false,
-    notes: "",
+    noteisOpenWithCurrentId: "",
+    note: "",
     inventory: [],
     isEdit: false,
+    itemToEdit: null,
   };
 
   componentDidMount() {
     this.getInventory();
   }
+
+  handleNoteChange = (event) => {
+    this.setState({
+      ...this.state,
+      note: event.target.value,
+    });
+  };
 
   getInventory = () => {
     console.log("In getInventory");
@@ -43,6 +52,7 @@ class InventoryView extends Component {
   };
 
   editStatus = (id, value) => {
+    console.log(id);
     this.props.dispatch({
       type: "EDIT_STATUS",
       payload: {
@@ -51,6 +61,21 @@ class InventoryView extends Component {
       },
     });
     this.getInventory();
+  };
+
+  editNotes = () => {
+    console.log(this.state.note);
+    this.props.dispatch({
+      type: "EDIT_NOTE",
+      payload: {
+        note: this.state.note,
+        equipment_id: this.state.itemToEdit.id,
+      },
+    });
+    this.getInventory();
+
+    /*     this.getInventory(); // TODO: Move this to your EDIT_NOTE saga due to async delays
+     */
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
@@ -87,12 +112,6 @@ class InventoryView extends Component {
     });
   };
 
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
-
   //form submit to create new inventory item
   onSubmit = (event) => {
     event.preventDefault();
@@ -121,29 +140,19 @@ class InventoryView extends Component {
         console.log(error);
       });
 
-    this.setState({
-      equipment_item: "",
-      equipment_status: "",
-      serial_number: "",
-      nddf_code: "",
-    });
-  };
-
-  editNotes = (id, value) => {
-    this.props.dispatch({
-      type: "EDIT_NOTE",
-      payload: {
-        notes: value,
-        equipment_id: id,
-      },
-    });
+    this.getInventory();
   };
 
   //open and closing modals
   openModal = () => this.setState({ isOpen: true });
   closeModal = () => this.setState({ isOpen: false });
-  openNoteModal = () => this.setState({ noteIsOpen: true });
-  closeNoteModal = () => this.setState({ noteIsOpen: false });
+  openNoteModal = (itemToEdit) =>
+    this.setState({
+      noteIsOpen: true,
+      itemToEdit: itemToEdit,
+      note: itemToEdit.note,
+    });
+  closeNoteModal = () => this.setState({ noteIsOpen: false, itemToEdit: null });
 
   render() {
     return (
@@ -253,64 +262,6 @@ class InventoryView extends Component {
         <br />
         <br />
 
-        <Modal
-          className="modal"
-          show={this.state.noteIsOpen}
-          onHide={this.closeNoteModal}
-        >
-          <Modal.Header className="modalHeader" closeButton>
-            <Modal.Title
-              className="modalTitle"
-              style={{ justifyContent: "center" }}
-            >
-              Notes{" "}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="modal-body">
-            {" "}
-            <body>
-              <form
-                className="modalForm"
-                style={{ backgroundColor: "white" }}
-                onSubmit={this.editNotes}
-              >
-                <div className="formDiv">
-                  <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
-                  <p></p>
-                  <Row>
-                    <Col>
-                      <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${}</Form.Label>
-                        <Form.Control
-                          onChange={(event) => {
-                            console.log(event.target.value);
-                          }}
-                          as="textarea"
-                          rows={3}
-                        />
-                      </Form.Group>{" "}
-                      <br />
-                      <br />
-                      <Button type="submit" variant="primary w-100 text-center">
-                        Save Changes
-                      </Button>
-                    </Col>
-                  </Row>
-                </div>
-              </form>
-            </body>
-          </Modal.Body>
-          <Modal.Footer className="modalFooter">
-            <Button
-              className="footerButton"
-              variant="secondary w-100 text-center"
-              onClick={this.closeNoteModal}
-            >
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -329,7 +280,6 @@ class InventoryView extends Component {
                 <td>{inventoryItem.serial_number}</td>
                 <td>{inventoryItem.nddf_code}</td>
                 <td>
-                  {" "}
                   <select
                     onChange={(event) =>
                       this.editStatus(inventoryItem.id, event.target.value)
@@ -351,7 +301,7 @@ class InventoryView extends Component {
                   <Button
                     variant="primary"
                     className="btn-primary"
-                    onClick={this.openNoteModal}
+                    onClick={(event) => this.openNoteModal(inventoryItem)}
                   >
                     Notes{" "}
                   </Button>{" "}
@@ -371,6 +321,65 @@ class InventoryView extends Component {
             ))}
           </tbody>
         </Table>
+        <Modal
+          className="modal"
+          show={this.state.noteIsOpen}
+          onHide={this.closeNoteModal}
+        >
+          <Modal.Header className="modalHeader" closeButton>
+            <Modal.Title
+              className="modalTitle"
+              style={{ justifyContent: "center" }}
+            >
+              Notes
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            <form
+              className="modalForm"
+              style={{ backgroundColor: "white" }}
+              onSubmit={(this.handleNote, this.closeNoteModal)}
+            >
+              <div className="formDiv">
+                <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
+                <p></p>
+                <Row>
+                  <Col>
+                    <Form.Group
+                      onChange={(event) => this.handleNoteChange(event, "note")}
+                      controlId="exampleForm.ControlTextarea1a"
+                    >
+                      <Form.Label>Update Notes</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={this.state.note}
+                      />
+                    </Form.Group>
+                    <br />
+                    <br />
+                    <Button
+                      type="submit"
+                      variant="primary w-100 text-center"
+                      onClick={this.editNotes}
+                    >
+                      Save Changes
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            </form>
+          </Modal.Body>
+          <Modal.Footer className="modalFooter">
+            <Button
+              className="footerButton"
+              variant="secondary w-100 text-center"
+              onClick={this.closeNoteModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }

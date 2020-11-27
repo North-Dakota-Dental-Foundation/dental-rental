@@ -87,6 +87,21 @@ router.put("/:id", (req, res) => {
     });
 });
 
+router.put("/:id/update-note", (req, res) => {
+  const { id } = req.params;
+  let { note } = req.body;
+  console.log("Updating Equipment note", id);
+  let queryText = `UPDATE "equipment" SET "note" = $1 WHERE "id" = $2;`;
+  pool
+    .query(queryText, [note, id])
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
   console.log(`Deleting Equipment with ID ${id}`);
