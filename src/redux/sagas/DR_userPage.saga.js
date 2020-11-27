@@ -22,7 +22,6 @@ function* userPageSaga() {
 
 function* fetchUsers(action) {
     try {
-        console.log('In Redux saga');
         const response = yield axios.get(`/userpage/allusers`);
         yield put({ type: 'SET_USERS', payload: response.data });
     } catch (error) {
