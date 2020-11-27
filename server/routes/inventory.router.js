@@ -33,15 +33,15 @@ router.get('/filterinv/:equipment_status?', (req, res) => { // "req.params" shou
 
   console.log(`Equipment status = ${equipmentStatus}`);
 
-  if (req.params.equipment_status == 0) { // Sets the SQL code that will be querried
+  if (req.params.equipment_status == 0) { // 0 = 'AVAILABLE
     SQLStatus = 'AVAILABLE';
-  } else if (req.params.equipment_status == 1) {
+  } else if (req.params.equipment_status == 1) { // 1 = 'CHECKED-OUT'
     SQLStatus = 'CHECKED-OUT';
-  } else if (req.params.equipment_status == 2) {
+  } else if (req.params.equipment_status == 2) { // 2 = 'SHIPPED'
     SQLStatus = 'SHIPPED';
-  } else if (req.params.equipment_status == 3) {
+  } else if (req.params.equipment_status == 3) { // 3 = 'IN-INSPECTION'
     SQLStatus = 'IN-INSPECTION';
-  } else if (req.params.equipment_status == 4) {
+  } else if (req.params.equipment_status == 4) { // 4 = 'MISSING'
     SQLStatus = 'MISSING';
   }
 

@@ -32,7 +32,7 @@ class InventoryView extends Component {
     // this.filterInv();
   }
 
-  filterInv = () => {
+  filterInv = () => { // THE FUNCTION THAT GRABS THE FILTERED DATA
     console.log('Filtering inventory...');
     axios
     .get(`/api/inventory/filterinv/${this.state.filterStatus}`)
