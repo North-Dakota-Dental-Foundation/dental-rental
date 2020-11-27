@@ -14,17 +14,38 @@ class InventoryView extends Component {
     equipment_status: "",
     serial_number: "",
     nddf_code: "",
-    filterStatus: "",
     changeStatus: "",
     isOpen: false,
     noteIsOpen: false,
     notes: "",
     inventory: [],
     isEdit: false,
+
+    filterStatus: 'N/A',
+    filterStatusInv: [],
   };
+
+  // TODO: If "filterStatus" equals "N/A", run "filterInv();"
 
   componentDidMount() {
     this.getInventory();
+    // this.filterInv();
+  }
+
+  filterInv = () => {
+    console.log('Filtering inventory...');
+    axios
+    .get(`/api/inventory/filterinv/${this.state.filterStatus}`)
+    .then((response) => {
+      this.setState({
+        filterStatusInv: response.data,
+      });
+    });
+  };
+
+  submitFilter = () => {
+    console.log(`Applying filter number... ${this.state.filterStatus}`);
+    this.filterInv();
   }
 
   getInventory = () => {
@@ -91,6 +112,7 @@ class InventoryView extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+    console.log(event.target.value);
   };
 
   //form submit to create new inventory item
@@ -152,13 +174,16 @@ class InventoryView extends Component {
 
         <br />
 
-        <select name="filterStatus">
-          <option>Available</option>
-          <option>Checked-Out</option>
-          <option>Shipped</option>
-          <option>In Inspection</option>
-          <option>Missing</option>
+        <select onChange={this.handleChange} name="filterStatus">
+          <option value='N/A'>N/A</option>
+          <option value={0}>AVAILABLE</option>
+          <option value={1}>CHECKED-OUT</option>
+          <option value={2}>SHIPPED</option>
+          <option value={3}>IN-INSPECTION</option>
+          <option value={4}>MISSING</option>
         </select>
+
+        <Button variant='primary' onClick={this.submitFilter}>Submit Filter</Button>
 
         <Button
           variant="primary"
@@ -280,7 +305,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Label>Notes for ${ }</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
