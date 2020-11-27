@@ -1,8 +1,21 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+
+import RequestItem from './RequestItem';
 
 class RentalRequests extends Component {
   state = {
     requestStatus: "",
+  };
+
+  componentDidMount() {
+    this.getRequests();
+  };
+
+  getRequests = () => {
+    this.props.dispatch({
+      type: 'FETCH_REQUESTS',
+    });
   };
 
   handleChange = (event) => {
@@ -12,6 +25,9 @@ class RentalRequests extends Component {
   };
 
   render() {
+
+    console.log(this.props.requests);
+
     return (
       <>
         <h1>Rental Requests</h1>
@@ -19,39 +35,38 @@ class RentalRequests extends Component {
         <br />
 
         <table>
-          <tr>
-            <th>Contact</th>
-            <th>Company</th>
-            <th>Address</th>
-            <th>Phone Number</th>
-            <th>Equipment</th>
-            <th>Purpose</th>
-            <th>Applied Date</th>
-            <th>Requested Dates</th>
-            <th>Application Status</th>
-          </tr>
+          <thead>
+            <tr>
+              <th>Contact</th>
+              <th>Company</th>
+              <th>Address</th>
+              <th>Phone Number</th>
+              <th>Equipment</th>
+              <th>Purpose</th>
+              <th>Applied Date</th>
+              <th>Requested Dates</th>
+              <th>Application Status</th>
+            </tr>
+          </thead>
 
-          <tr>
-            <td>Dr. Eggman</td>
-            <td>Eggman Enterprises</td>
-            <td>Space Colony Ark</td>
-            <td>1-123-NOTYOURBUSINESSSONIC</td>
-            <td>Complete Chaos Emerald Set</td>
-            <td>World Domination</td>
-            <td>11/22/2020</td>
-            <td>11/23/2020 thru 11/23/2021</td>
-            <td>
-              <select name="requestStatus">
-                <option>Pending...</option>
-                <option>Approved</option>
-                <option>Rejected</option>
-              </select>
-            </td>
-          </tr>
+          <tbody>
+
+            {this.props.requests !== undefined && this.props.requests.map((request) => {
+              return (
+                <RequestItem request={request} key={request.id} />
+              )
+            })}
+
+          </tbody>
+
         </table>
       </>
     );
   }
 }
 
-export default RentalRequests;
+const mapStoreToProps = (reduxState) => ({
+  requests: reduxState.rentalRequestsReducer,
+});
+
+export default connect(mapStoreToProps)(RentalRequests);

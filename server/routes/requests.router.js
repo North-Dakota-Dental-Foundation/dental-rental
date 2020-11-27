@@ -8,7 +8,7 @@ const {
 /**
  * GET route
  */
-router.get("/", (req, res) => {
+router.get("/", rejectUnauthenticated, (req, res) => {
   const queryText = 'SELECT * from "requests"';
   pool
     .query(queryText)

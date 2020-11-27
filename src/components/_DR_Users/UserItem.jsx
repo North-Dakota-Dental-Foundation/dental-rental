@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 class UserItem extends Component {
 
@@ -40,23 +40,6 @@ class UserItem extends Component {
 
                         </>}
                 </tr>
-
-                <Modal show={this.state.deleteSuperAdmin} onHide={this.handleDontDeleteSuperAdmin}>
-                    <Modal.Header>
-                        <Modal.Title>You can't delete the Super Admin</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <p>
-                            Who are you, and what do you think you are doing? Trying to destroy the admin above admins?
-                            I don't know who you are but that's not very cash money of you.
-                        </p>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button onClick={this.handleDontDeleteSuperAdmin} variant='danger'>Cancel</Button>
-                    </Modal.Footer>
-                </Modal>
 
             </>
         )
