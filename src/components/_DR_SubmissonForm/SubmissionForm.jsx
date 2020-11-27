@@ -125,7 +125,9 @@ class SubmissionForm extends Component {
   render() {
     return (
       <Container>
-        {/* <Button onClick={this.handleShow}>Show modal</Button> */}
+        <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
+
+        <Button onClick={this.handleShow}>Show modal</Button>
         <h1>Dental Rental Request</h1>
 
         <Form onSubmit={this.handleSubmit}>
@@ -212,6 +214,7 @@ class SubmissionForm extends Component {
                 <Form.Control
                   type="text"
                   name="city"
+                  placeholder="City"
                   value={this.state.city}
                   onChange={this.handleChange}
                   required
@@ -222,6 +225,7 @@ class SubmissionForm extends Component {
                 <Form.Control
                   type="text"
                   name="state"
+                  placeholder="State"
                   value={this.state.state}
                   onChange={this.handleChange}
                   required
@@ -232,6 +236,7 @@ class SubmissionForm extends Component {
                 <Form.Control
                   type="number"
                   name="zip"
+                  placeholder="Zip"
                   value={this.state.zip}
                   onChange={this.handleChange}
                   required
@@ -257,11 +262,11 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
-                <Form.Label>Start Date:</Form.Label>
+                <Form.Label>Start Date</Form.Label>
                 <DatePicker className="form-control" wrapperClassName="form-control" required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
               </Col>
               <Col>
-                <Form.Label>End Date:</Form.Label>
+                <Form.Label>End Date</Form.Label>
                 <DatePicker className="form-control" wrapperClassName="form-control" required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
               </Col>
             </Row>
@@ -269,9 +274,10 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
+                <Form.Label>Select Dental Rental Equipment</Form.Label>
                 <Select
                   components={animatedComponents}
-                  noOptionsMessage={() => "No available equipment for the given date range"}
+                  noOptionsMessage={() => "No available equipment for the given date range."}
                   isMulti
                   name="available-equipment"
                   options={this.state.arrOptions}
@@ -283,7 +289,7 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
-          <Button type="submit">Submit Request</Button>
+          <Button variant="success" type="submit">Submit Request</Button>
         </Form>
 
         {/* Modal rendering when form submitted */}
@@ -293,34 +299,34 @@ class SubmissionForm extends Component {
             onHide={this.handleClose}
             backdrop="static"
             keyboard={false}
+            centered
           >
             <Modal.Header>
               <Modal.Title>Successful Form Submission</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               Thank you for submitting your Dental Rental request!
-             <br />
-            We will review your request and get back to you promptly.
-          </Modal.Body>
-            <Modal.Footer>
-              You will be redirected back to the ND Dental Foundation homepage in a few seconds.
-            </Modal.Footer>
+              <br />
+              We will review your request and get back to you promptly.
+              <br />
+              <Button variant="link" href="https://nddental.org">Back to the ND Dental Foundation homepage.</Button>
+            </Modal.Body>
           </Modal> :
             <Modal
               show={this.state.show}
               onHide={this.handleClose}
               backdrop="static"
               keyboard={false}
+              centered
             >
               <Modal.Header>
                 <Modal.Title>Form Submission Error</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 Sorry - something went wrong!
+                 <br />
+                <Button variant="link" href="https://nddental.org">Back to the ND Dental Foundation homepage.</Button>
               </Modal.Body>
-              <Modal.Footer>
-                You will be redirected back to the ND Dental Foundation homepage in a few seconds.
-          </Modal.Footer>
             </Modal>
         }
 
