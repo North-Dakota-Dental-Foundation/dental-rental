@@ -4,21 +4,38 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
+const { request } = require("express");
 
 /**
  * GET route
  */
 router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
-    const allEquipmentPerRequest = '';
+    
     const allRequests = await pool.query(
       'SELECT * from "requests"'
     );
 
-    allRequests.rows.map((obj) => {
-      console.log(obj.id);
-    })
+    const allRequestIds = allRequests.rows.map((obj) => {
+      return obj.id;
+    });
+    console.log(allRequestIds);
 
+    let allRequestsObj = {};
+    for (let i = 0; i < allRequestIds.length; i++)  {
+      try {
+        const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
+      allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
+      } catch (error) {
+        console.log(error);
+      }
+      
+    }
+    console.log(allRequestsObj);
+
+
+    //query to get all equipment items for a given request
+    //const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [obj.id]);
     //console.log(allRequests.rows);
 
   } catch (error) {
