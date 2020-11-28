@@ -16,7 +16,11 @@ body {
 }
 
 #form-container {
-    border-radius: 35px;
+    border-radius: 10px;
     padding: 25px;
-    box-shadow: 5px 5px 20px #aaaaaa;
+    box-shadow: 2px 2px 10px #aaaaaa;
+}
+
+#form-header {
+    text-decoration: underline #84D3E8;
 }

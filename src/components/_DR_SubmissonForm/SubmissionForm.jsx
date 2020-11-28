@@ -138,7 +138,7 @@ class SubmissionForm extends Component {
         <Form id="form-container" onSubmit={this.handleSubmit}>
           <Row>
             <Col className="text-center">
-              <h1>Dental Rental Request</h1>
+              <h1 id="form-header">Dental Rental Request</h1>
             </Col>
           </Row>
           <br />
