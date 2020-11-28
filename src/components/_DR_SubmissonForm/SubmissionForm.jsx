@@ -135,13 +135,13 @@ class SubmissionForm extends Component {
       <Container>
         {/* <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
         <Button onClick={this.handleShow}>Show modal</Button> */}
-        <Row>
-          <Col className="text-center">
-            <h1>Dental Rental Request</h1>
-          </Col>
-        </Row>
-        <br />
-        <Form onSubmit={this.handleSubmit}>
+        <Form id="form-container" onSubmit={this.handleSubmit}>
+          <Row>
+            <Col className="text-center">
+              <h1>Dental Rental Request</h1>
+            </Col>
+          </Row>
+          <br />
           <Form.Group controlId="formBasicInfo">
             <Row>
               <Col>
@@ -301,7 +301,8 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
-          <Button variant="primary" type="submit">Submit Request</Button>
+          <br />
+          <Button size="lg" variant="primary" type="submit">Submit Request</Button>
         </Form>
 
         {/* Modal rendering when form submitted */}
