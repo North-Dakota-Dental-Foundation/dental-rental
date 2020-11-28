@@ -24,3 +24,9 @@ body {
 #form-header {
     text-decoration: underline #84D3E8;
 }
+
+#table-container {
+        border-radius: 10px;
+        padding: 55px;
+        box-shadow: 1px 1px 10px #aaaaaa;
+}

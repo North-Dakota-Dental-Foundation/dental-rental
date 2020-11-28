@@ -14,7 +14,7 @@ class RequestItem extends Component {
     };
 
     render() {
-        console.log(this.props);
+        console.log('this props!', this.props);
         console.log(this.state.requestStatus);
         return (
             <>
@@ -27,7 +27,7 @@ class RequestItem extends Component {
                     <td>[MISSING: EQUIPMENT]</td>
                     <td>{this.props.request.purpose}</td>
                     <td>[MISSING: APPLIED DATE]</td>
-                    <td>{this.props.request.start_date} thru {this.props.request.end_date}</td>
+                    <td>{this.props.request.start_date} through {this.props.request.end_date}</td>
                     <td>
                         <select name='requestStatus' onChange={this.handleChange}>
                             <option name='pending' value='pending'>Pending...</option>

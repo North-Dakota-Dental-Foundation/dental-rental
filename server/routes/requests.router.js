@@ -8,15 +8,23 @@ const {
 /**
  * GET route
  */
-router.get("/", rejectUnauthenticated, (req, res) => {
-  const queryText = 'SELECT * from "requests"';
-  pool
-    .query(queryText)
-    .then((result) => res.send(result.rows))
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500);
-    });
+router.get("/", rejectUnauthenticated, async (req, res) => {
+  try {
+    const allEquipmentPerRequest = '';
+    const allRequests = await pool.query(
+      'SELECT * from "requests"'
+    );
+
+    allRequests.rows.map((obj) => {
+      console.log(obj.id);
+    })
+
+    //console.log(allRequests.rows);
+
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(err.message);
+  }
 }); // End of GET route
 
 /**
@@ -61,10 +69,6 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 
     const status = "PENDING";
 
-    //equipment, company, address, point_of_contact, email, phone_number, city, state, zip
-    // start date, end date, purpose, status
-
-    //UNCOMMENT:
     const newRequest = await pool.query(
       "INSERT INTO requests (company, address, point_of_contact, email, phone_number, city, state, zip, start_date, end_date, purpose, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
       [

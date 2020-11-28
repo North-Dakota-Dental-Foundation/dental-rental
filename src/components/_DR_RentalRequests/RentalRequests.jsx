@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { Table, Container, Row, Col } from "react-bootstrap";
+
 
 import RequestItem from './RequestItem';
 
@@ -29,12 +31,14 @@ class RentalRequests extends Component {
     console.log(this.props.requests);
 
     return (
-      <>
-        <h1>Rental Requests</h1>
-
+      <Container>
+        <Row>
+          <Col className="text-center">
+            <h1 id="form-header">Dental Rental Requests</h1>
+          </Col>
+        </Row>
         <br />
-
-        <table>
+        <Table id="table-container" bordered hover>
           <thead>
             <tr>
               <th>Contact</th>
@@ -58,9 +62,8 @@ class RentalRequests extends Component {
             })}
 
           </tbody>
-
-        </table>
-      </>
+        </Table>
+      </Container>
     );
   }
 }
