@@ -43,26 +43,28 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       equipment_in_request, //arr of equipment in a particular request
     } = req.body;
 
-    console.log(
-      company,
-      address,
-      point_of_contact,
-      email,
-      phone_number,
-      city,
-      state,
-      zip,
-      start_date,
-      end_date,
-      purpose,
-      equipment_in_request
-    );
+    if( !(company && //string
+      address && //string
+      point_of_contact && //string
+      email && //string
+      phone_number && //number
+      city && //string
+      state && //string
+      zip && //number
+      start_date && //string
+      end_date && //string
+      purpose && //string
+      equipment_in_request)) {
+      console.log('in error if');
+      throw 'Error: there exists at least one parameter that is invalid.';
+      }
 
     const status = "PENDING";
 
     //equipment, company, address, point_of_contact, email, phone_number, city, state, zip
     // start date, end date, purpose, status
 
+    //UNCOMMENT:
     const newRequest = await pool.query(
       "INSERT INTO requests (company, address, point_of_contact, email, phone_number, city, state, zip, start_date, end_date, purpose, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
       [

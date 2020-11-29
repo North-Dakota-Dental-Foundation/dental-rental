@@ -21,6 +21,42 @@ router.get("/", (req, res) => {
     });
 });
 
+
+
+/**
+ * GET all inventory, filtered by status
+ */
+router.get('/filterinv/:equipment_status?', (req, res) => { // "req.params" should come in as a number
+  console.log("GET filtered inventory from /api/inventory/filterinv");
+
+  const equipmentStatus = req.params.equipment_status || 0;
+
+  console.log(`Equipment status = ${equipmentStatus}`);
+
+  if (req.params.equipment_status == 0) { // Sets the SQL code that will be querried
+    SQLStatus = 'Available';
+  } else if (req.params.equipment_status == 1) {
+    SQLStatus = 'Checked-Out';
+  } else if (req.params.equipment_status == 2) {
+    SQLStatus = 'Shipped';
+  } else if (req.params.equipment_status == 3) {
+    SQLStatus = 'In-Inspection';
+  } else if (req.params.equipment_status == 4) {
+    SQLStatus = 'Missing';
+  }
+
+  const queryText = 'SELECT * FROM "equipment" WHERE equipment_status = $1 ORDER BY "equipment_item";'; //Must recieve set equipment status string
+  pool
+    .query(queryText, [SQLStatus]) // Pass in "SQL" string as a search parameter
+    .then((result) => res.send(result.rows))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
+
+
+
 /**
  * GET (technically a POST) all equipment by date range
  */
