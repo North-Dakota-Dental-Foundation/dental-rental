@@ -12,8 +12,7 @@ const { request } = require("express");
 router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
     const allRequests = await pool.query(
-      `SELECT * from "requests";`
-    );
+    `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, "requests".purpose, "requests".status FROM "requests";`);
     res.send(allRequests.rows);
     // const allRequestIds = allRequests.rows.map((obj) => {
     //   return obj.id;
@@ -62,8 +61,6 @@ router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
     const allRequestIds = allRequests.rows.map((obj) => {
       return obj.id;
     });
-    //console.log(allRequestIds);
-
     // create an object of all requests with corresponding equipment items per request
     let allRequestsObj = {};
     for (let i = 0; i < allRequestIds.length; i++) {
