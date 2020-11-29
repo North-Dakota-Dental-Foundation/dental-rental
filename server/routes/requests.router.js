@@ -13,34 +13,49 @@ router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
     
     const allRequests = await pool.query(
-      'SELECT * from "requests"'
+      `SELECT "equipment".equipment_item, "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'Mon dd, yyyy') AS start_date, TO_CHAR("requests".end_date, 'Mon dd, yyyy') AS end_date, "requests".purpose, "requests".status FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";`
     );
 
-    const allRequestIds = allRequests.rows.map((obj) => {
-      return obj.id;
-    });
-    console.log(allRequestIds);
+    console.log(allRequests.rows);
 
-    let allRequestsObj = {};
-    for (let i = 0; i < allRequestIds.length; i++)  {
-      try {
-        const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
-      allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
-      } catch (error) {
-        console.log(error);
-      }
+    res.send(allRequests.rows);
+
+
+    // const allRequestIds = allRequests.rows.map((obj) => {
+    //   return obj.id;
+    // });
+    // console.log(allRequestIds);
+
+    //create an object of all requests with corresponding equipment items per request
+    // let allRequestsObj = {};
+    // for (let i = 0; i < allRequestIds.length; i++)  {
+    //   try {
+    //     const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
+    //     allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
       
-    }
-    console.log(allRequestsObj);
+    // }
+    //transform equipment_item data into a string of equipment items
+    // for (let i = 0; i < allRequestIds.length; i++){
+    //   console.log('in for', allRequestsObj[allRequestIds[i]]);
+    //   let equipmentItemsArr = [];
+    //   for (let j = 0; j < allRequestsObj[allRequestIds[i]].length; i++){
+    //     let equipment_item = allRequestsObj[allRequestIds[i]][j].equipment_item;
+    //     console.log(equipment_item);
+    //   }
+    // }
+    //insert into the objects in allRequests.rows
 
 
-    //query to get all equipment items for a given request
-    //const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [obj.id]);
+    //console.log(allRequestsObj);
     //console.log(allRequests.rows);
+
 
   } catch (error) {
     res.sendStatus(500);
-    console.error(err.message);
+    console.error(error.message);
   }
 }); // End of GET route
 
