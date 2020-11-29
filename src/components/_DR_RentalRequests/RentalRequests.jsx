@@ -4,6 +4,7 @@ import { Table, Container, Row, Col } from "react-bootstrap";
 
 
 import RequestItem from './RequestItem';
+import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga";
 
 class RentalRequests extends Component {
   state = {
@@ -12,11 +13,18 @@ class RentalRequests extends Component {
 
   componentDidMount() {
     this.getRequests();
+    this.getEquipmentInRequests();
   };
 
   getRequests = () => {
     this.props.dispatch({
       type: 'FETCH_REQUESTS',
+    });
+  };
+
+  getEquipmentInRequests = () => {
+    this.props.dispatch({
+      type: 'FETCH_EQUIPMENT_IN_REQUESTS',
     });
   };
 
@@ -28,7 +36,7 @@ class RentalRequests extends Component {
 
   render() {
 
-    console.log(this.props.requests);
+    //console.log(this.props.requests);
 
     return (
       <Container>
@@ -68,8 +76,40 @@ class RentalRequests extends Component {
   }
 }
 
-const mapStoreToProps = (reduxState) => ({
-  requests: reduxState.rentalRequestsReducer,
-});
+const mapStoreToProps = (reduxState) => {
+
+  let requests = reduxState.rentalRequestsReducer;
+
+  //console.log(reduxState.equipmentReducer);
+  //need to get all equipment_items, transform the data into a string of equipment items
+  if (reduxState.equipmentReducer && reduxState.rentalRequestsReducer) {
+    const allRequestsObj = reduxState.equipmentReducer[0];
+    //console.log(allRequestsObj);
+    for (let key in allRequestsObj) {
+      let arrEquipmentItems = allRequestsObj[key];
+      let tempArr = [];
+
+      //loop and grab every equipment item and put into an arr
+      for (let item of arrEquipmentItems) {
+        //console.log(item);
+        tempArr.push(item.equipment_item);
+      }
+
+      let strListOfEquipmentItemsPerRequest = tempArr.join(', ');
+
+      for (let requestObj of requests) {
+        //console.log(requestObj.id, key);
+        if (String(requestObj.id) === key) {
+          //console.log('in here!')
+          requestObj["equipment_in_request"] = strListOfEquipmentItemsPerRequest;
+        }
+      }
+      //console.log(requests);
+    }
+
+  }
+
+  return { requests }
+};
 
 export default connect(mapStoreToProps)(RentalRequests);

@@ -11,16 +11,10 @@ const { request } = require("express");
  */
 router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
-    
     const allRequests = await pool.query(
-      `SELECT "equipment".equipment_item, "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'Mon dd, yyyy') AS start_date, TO_CHAR("requests".end_date, 'Mon dd, yyyy') AS end_date, "requests".purpose, "requests".status FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";`
+      `SELECT * from "requests";`
     );
-
-    console.log(allRequests.rows);
-
     res.send(allRequests.rows);
-
-
     // const allRequestIds = allRequests.rows.map((obj) => {
     //   return obj.id;
     // });
@@ -58,6 +52,35 @@ router.get("/", rejectUnauthenticated, async (req, res) => {
     console.error(error.message);
   }
 }); // End of GET route
+
+router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
+  try {
+    //const allEquipmentPerRequest = await pool.query(`SELECT "equipment".equipment_item, "requests".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" ORDER BY "requests".id;`);
+    const allRequests = await pool.query(
+      `SELECT id from "requests";`
+    );
+    const allRequestIds = allRequests.rows.map((obj) => {
+      return obj.id;
+    });
+    //console.log(allRequestIds);
+
+    // create an object of all requests with corresponding equipment items per request
+    let allRequestsObj = {};
+    for (let i = 0; i < allRequestIds.length; i++) {
+      try {
+        const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
+        allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    res.send([allRequestsObj]);
+    //res.send(allEquipmentPerRequest.rows);
+  } catch (error) {
+    res.sendStatus(500);
+    console.log(error)
+  }
+});
 
 /**
  * POST route
