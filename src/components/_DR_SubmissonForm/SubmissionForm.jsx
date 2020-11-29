@@ -37,6 +37,12 @@ class SubmissionForm extends Component {
       return;
     }
 
+    //concatenate address 1 & address 2 if address 2 field is filled out
+    let address = this.state.address;
+    if (this.state.address_2) {
+      address = this.state.address.concat(" " + this.state.address_2);
+    }
+
     //remove hyphens from this.state.phoneNumber for database storage constraints
     let phoneNumber = this.state.phoneNumber;
     let arrPhoneNumbers = this.state.phoneNumber.split("-");
@@ -45,7 +51,7 @@ class SubmissionForm extends Component {
     axios
       .post("/api/requests/", {
         company: this.state.practiceCompany,
-        address: this.state.address,
+        address: address,
         point_of_contact: this.state.pointOfContact,
         email: this.state.email,
         phone_number: phoneNumber,
@@ -214,7 +220,6 @@ class SubmissionForm extends Component {
                   placeholder="Apartment, studio, floor, etc."
                   value={this.state.address_2}
                   onChange={this.handleChange}
-                  required
                 />
               </Col>
             </Row>
