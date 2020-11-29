@@ -22,7 +22,6 @@ class InventoryView extends Component {
     isEdit: false,
 
     filterStatus: 'N/A',
-    filterStatusInv: [],
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -32,29 +31,43 @@ class InventoryView extends Component {
     // this.filterInv();
   }
 
-  filterInv = () => { // THE FUNCTION THAT GRABS THE FILTERED DATA
-    console.log('Filtering inventory...');
-    axios
-    .get(`/api/inventory/filterinv/${this.state.filterStatus}`)
-    .then((response) => {
-      this.setState({
-        filterStatusInv: response.data,
-      });
-    });
-  };
-
   submitFilter = () => {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
-    this.filterInv();
-  }
+    
+    if (this.state.filterStatus === 'N/A') {
+      this.getInventory();
+    } else if (this.state.filterStatus !== 'N/A') {
+      this.getFilterInventory();
+    };
+  };
 
   getInventory = () => {
-    console.log("In getInventory");
+    console.log("Getting entire inventory");
+    this.setState({ // Reset this.state.inventory
+      inventory: []
+    });
     axios
       .get("/api/inventory")
       .then((response) => {
         console.log(response.data);
         this.setState({
+          inventory: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  getFilterInventory = () => { // Repopulates this.state.inventory with filtered data
+    console.log('Filtering inventory...');
+    this.setState({ // Reset this.state.inventory
+      inventory: []
+    });
+    axios
+      .get(`/api/inventory/filterinv/${this.state.filterStatus}`) // GET request with selected filter
+      .then((response) => {
+        this.setState({ // Sets this.state.inventory to new data
           inventory: response.data,
         });
       })
