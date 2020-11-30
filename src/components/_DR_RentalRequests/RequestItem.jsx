@@ -18,7 +18,7 @@ class RequestItem extends Component {
         //PUT request to update the specific request's status
         const changeStatusTo = event.value;
         swal({
-            title: `Are you sure you want to update this request?`,
+            title: `Are you sure you want to update this request to ${changeStatusTo.toLowerCase()}?`,
             icon: "warning",
             buttons: true,
         }).then((willUpdate) => {
@@ -62,11 +62,6 @@ class RequestItem extends Component {
                     <td>{this.props.request.applied_date}</td>
                     <td>{this.props.request.start_date} to {this.props.request.end_date}</td>
                     <td>
-                        {/* <select name='requestStatus' onChange={this.handleChange}>
-                            <option name='pending' value='PENDING' disabled selected>Pending</option>
-                            <option name='approved' value='APPROVED'>Approved</option>
-                            <option name='rejected' value='REJECTED'>Rejected</option>
-                        </select> */}
                         <Select
                             onChange={this.handleChange}
                             className="basic-single"
