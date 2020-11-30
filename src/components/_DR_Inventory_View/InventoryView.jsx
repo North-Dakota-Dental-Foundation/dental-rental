@@ -28,12 +28,15 @@ class InventoryView extends Component {
 
   componentDidMount() {
     this.getInventory();
-    // this.filterInv();
   }
 
-  submitFilter = () => {
+  submit = () => {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
-    
+
+    this.setState({
+      inventory: [],
+    });
+
     if (this.state.filterStatus === 'N/A') {
       this.getInventory();
     } else if (this.state.filterStatus !== 'N/A') {
@@ -84,7 +87,7 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
-    this.getInventory();
+    this.submit();
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
@@ -108,7 +111,7 @@ class InventoryView extends Component {
                 icon: "success",
               }
             );
-            this.getInventory();
+            this.submit();
           })
           .catch((error) => {
             console.log(error);
@@ -144,17 +147,7 @@ class InventoryView extends Component {
       icon: "success",
       buttons: true,
     });
-    axios
-      .get("/api/inventory")
-      .then((response) => {
-        console.log(response.data);
-        this.setState({
-          inventory: response.data,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.submit();
 
     this.setState({
       equipment_item: "",
@@ -196,7 +189,7 @@ class InventoryView extends Component {
           <option value={4}>MISSING</option>
         </select>
 
-        <Button variant='primary' onClick={this.submitFilter}>Submit Filter</Button>
+        <Button variant='primary' onClick={this.submit}>Submit Filter</Button>
 
         <Button
           variant="primary"
