@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { Modal } from "react-bootstrap";
-import { Button, Table, Form, FormGroup } from "react-bootstrap";
+import { Button, Table, Form, FormGroup, Spinner } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
@@ -38,6 +38,7 @@ class InventoryView extends Component {
 
   getInventory = () => {
     console.log("In getInventory");
+
     axios
       .get("/api/inventory")
       .then((response) => {
@@ -72,6 +73,13 @@ class InventoryView extends Component {
         equipment_id: this.state.itemToEdit.id,
       },
     });
+    swal({
+      title: "Notes Updated Successfully",
+      text: `Notes for this item successfully updated.`,
+      icon: "success",
+      buttons: true,
+    });
+
     this.getInventory();
 
     /*     this.getInventory(); // TODO: Move this to your EDIT_NOTE saga due to async delays
@@ -139,7 +147,11 @@ class InventoryView extends Component {
       .catch((error) => {
         console.log(error);
       });
-
+    this.setState({
+      equipment_item: "",
+      serial_number: "",
+      nddf_code: "",
+    });
     this.getInventory();
   };
 
@@ -183,10 +195,7 @@ class InventoryView extends Component {
           onHide={this.closeModal}
         >
           <Modal.Header className="modalHeader" closeButton>
-            <Modal.Title
-              className="modalTitle"
-              style={{ justifyContent: "center" }}
-            >
+            <Modal.Title className="modalTitle" style={{ textAlign: "center" }}>
               Add New Equipment{" "}
             </Modal.Title>
           </Modal.Header>
@@ -203,37 +212,61 @@ class InventoryView extends Component {
                   <p></p>
                   <Row>
                     <Col>
-                      Equipment Name:
-                      <input
+                      <Form.Group
                         onChange={(e) =>
                           this.setState({ equipment_item: e.target.value })
                         }
-                        value={this.state.equipment_item}
-                        required
-                      />
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label>Name of Equipment:</Form.Label>
+                        <Form.Control
+                          placeholder=""
+                          as="textarea"
+                          rows={1}
+                          value={this.state.equipment_item}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
+
                     <Col>
                       {""}
-                      Serial Number:
-                      <input
+                      <Form.Group
                         onChange={(e) =>
                           this.setState({ serial_number: e.target.value })
                         }
-                        value={this.state.serial_number}
-                        required
-                      />
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label>Serial Number:</Form.Label>
+                        <Form.Control
+                          placeholder=""
+                          as="textarea"
+                          rows={1}
+                          value={this.state.serial_number}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
                   </Row>
+                  <br />
                   <Row>
                     <Col>
-                      NDDF Code:
-                      <input
+                      {""}
+                      <Form.Group
                         onChange={(e) =>
                           this.setState({ nddf_code: e.target.value })
                         }
-                        value={this.state.nddf_code}
-                        required
-                      />{" "}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label> NDDF Code:</Form.Label>
+                        <Form.Control
+                          placeholder=""
+                          as="textarea"
+                          rows={1}
+                          value={this.state.nddf_code}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
                   </Row>
 
@@ -341,7 +374,6 @@ class InventoryView extends Component {
               onSubmit={(this.handleNote, this.closeNoteModal)}
             >
               <div className="formDiv">
-                <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
                 <p></p>
                 <Row>
                   <Col>
@@ -349,7 +381,10 @@ class InventoryView extends Component {
                       onChange={(event) => this.handleNoteChange(event, "note")}
                       controlId="exampleForm.ControlTextarea1a"
                     >
-                      <Form.Label>Update Notes</Form.Label>
+                      <Form.Label>
+                        {" "}
+                        <h2 style={{ textAlign: "center" }}>Update Notes</h2>
+                      </Form.Label>
                       <Form.Control
                         as="textarea"
                         rows={3}

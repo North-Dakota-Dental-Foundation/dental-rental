@@ -50,10 +50,10 @@ function* editNote(action) {
     );
     console.log("Success in updating Note.");
     // refresh list of uploads
+    yield put({ type: "FETCH_ITEM" });
   } catch (error) {
     console.log("error editing Note", error);
   }
-  yield put({ type: "FETCH_ITEM" });
 }
 
 function* fetchItem() {
