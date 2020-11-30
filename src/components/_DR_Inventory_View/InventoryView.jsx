@@ -471,9 +471,9 @@ class InventoryView extends Component {
                 <th>Equipment</th>
                 <th>Serial #</th>
                 <th>NDDF Code</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Delete Equipment</th>
+                <th style={{ textAlign: "center" }}>Status</th>
+                <th style={{ textAlign: "center" }}>Notes</th>
+                <th style={{ textAlign: "center" }}>Delete Equipment</th>
               </tr>
             </thead>
             <tbody>
