@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { Modal } from "react-bootstrap";
-import { Button, Table, Form, FormGroup } from "react-bootstrap";
+import { Button, Table, Form, FormGroup, Spinner } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
@@ -17,11 +17,14 @@ class InventoryView extends Component {
     changeStatus: "",
     isOpen: false,
     noteIsOpen: false,
-    notes: "",
+    noteisOpenWithCurrentId: "",
+    note: "",
     inventory: [],
     isEdit: false,
+    itemToEdit: null,
 
     filterStatus: 'N/A',
+
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -29,6 +32,14 @@ class InventoryView extends Component {
   componentDidMount() {
     this.getInventory();
   }
+
+
+  handleNoteChange = (event) => {
+    this.setState({
+      ...this.state,
+      note: event.target.value,
+    });
+  };
 
   submit = () => {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
@@ -80,6 +91,7 @@ class InventoryView extends Component {
   };
 
   editStatus = (id, value) => {
+    console.log(id);
     this.props.dispatch({
       type: "EDIT_STATUS",
       payload: {
@@ -88,6 +100,28 @@ class InventoryView extends Component {
       },
     });
     this.submit();
+  };
+
+  editNotes = () => {
+    console.log(this.state.note);
+    this.props.dispatch({
+      type: "EDIT_NOTE",
+      payload: {
+        note: this.state.note,
+        equipment_id: this.state.itemToEdit.id,
+      },
+    });
+    swal({
+      title: "Notes Updated Successfully",
+      text: `Notes for this item successfully updated.`,
+      icon: "success",
+      buttons: true,
+    });
+
+    this.getInventory();
+
+    /*     this.getInventory(); // TODO: Move this to your EDIT_NOTE saga due to async delays
+     */
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
@@ -147,31 +181,36 @@ class InventoryView extends Component {
       icon: "success",
       buttons: true,
     });
+    axios
+      .get("/api/inventory")
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          inventory: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     this.submit();
-
     this.setState({
       equipment_item: "",
-      equipment_status: "",
       serial_number: "",
       nddf_code: "",
     });
-  };
-
-  editNotes = (id, value) => {
-    this.props.dispatch({
-      type: "EDIT_NOTE",
-      payload: {
-        notes: value,
-        equipment_id: id,
-      },
-    });
+    this.getInventory();
   };
 
   //open and closing modals
   openModal = () => this.setState({ isOpen: true });
   closeModal = () => this.setState({ isOpen: false });
-  openNoteModal = () => this.setState({ noteIsOpen: true });
-  closeNoteModal = () => this.setState({ noteIsOpen: false });
+  openNoteModal = (itemToEdit) =>
+    this.setState({
+      noteIsOpen: true,
+      itemToEdit: itemToEdit,
+      note: itemToEdit.note,
+    });
+  closeNoteModal = () => this.setState({ noteIsOpen: false, itemToEdit: null });
 
   render() {
     return (
@@ -205,10 +244,7 @@ class InventoryView extends Component {
           onHide={this.closeModal}
         >
           <Modal.Header className="modalHeader" closeButton>
-            <Modal.Title
-              className="modalTitle"
-              style={{ justifyContent: "center" }}
-            >
+            <Modal.Title className="modalTitle" style={{ textAlign: "center" }}>
               Add New Equipment{" "}
             </Modal.Title>
           </Modal.Header>
@@ -225,37 +261,61 @@ class InventoryView extends Component {
                   <p></p>
                   <Row>
                     <Col>
-                      Equipment Name:
-                      <input
+                      <Form.Group
                         onChange={(e) =>
                           this.setState({ equipment_item: e.target.value })
                         }
-                        value={this.state.equipment_item}
-                        required
-                      />
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label>Name of Equipment:</Form.Label>
+                        <Form.Control
+                          placeholder=""
+                          as="textarea"
+                          rows={1}
+                          value={this.state.equipment_item}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
+
                     <Col>
                       {""}
-                      Serial Number:
-                      <input
+                      <Form.Group
                         onChange={(e) =>
                           this.setState({ serial_number: e.target.value })
                         }
-                        value={this.state.serial_number}
-                        required
-                      />
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label>Serial Number:</Form.Label>
+                        <Form.Control
+                          placeholder=""
+                          as="textarea"
+                          rows={1}
+                          value={this.state.serial_number}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
                   </Row>
+                  <br />
                   <Row>
                     <Col>
-                      NDDF Code:
-                      <input
+                      {""}
+                      <Form.Group
                         onChange={(e) =>
                           this.setState({ nddf_code: e.target.value })
                         }
-                        value={this.state.nddf_code}
-                        required
-                      />{" "}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label> NDDF Code:</Form.Label>
+                        <Form.Control
+                          placeholder=""
+                          as="textarea"
+                          rows={1}
+                          value={this.state.nddf_code}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
                   </Row>
 
@@ -360,7 +420,6 @@ class InventoryView extends Component {
                 <td>{inventoryItem.serial_number}</td>
                 <td>{inventoryItem.nddf_code}</td>
                 <td>
-                  {" "}
                   <select
                     onChange={(event) =>
                       this.editStatus(inventoryItem.id, event.target.value)
@@ -382,7 +441,7 @@ class InventoryView extends Component {
                   <Button
                     variant="primary"
                     className="btn-primary"
-                    onClick={this.openNoteModal}
+                    onClick={(event) => this.openNoteModal(inventoryItem)}
                   >
                     Notes{" "}
                   </Button>{" "}
@@ -402,6 +461,67 @@ class InventoryView extends Component {
             ))}
           </tbody>
         </Table>
+        <Modal
+          className="modal"
+          show={this.state.noteIsOpen}
+          onHide={this.closeNoteModal}
+        >
+          <Modal.Header className="modalHeader" closeButton>
+            <Modal.Title
+              className="modalTitle"
+              style={{ justifyContent: "center" }}
+            >
+              Notes
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            <form
+              className="modalForm"
+              style={{ backgroundColor: "white" }}
+              onSubmit={(this.handleNote, this.closeNoteModal)}
+            >
+              <div className="formDiv">
+                <p></p>
+                <Row>
+                  <Col>
+                    <Form.Group
+                      onChange={(event) => this.handleNoteChange(event, "note")}
+                      controlId="exampleForm.ControlTextarea1a"
+                    >
+                      <Form.Label>
+                        {" "}
+                        <h2 style={{ textAlign: "center" }}>Update Notes</h2>
+                      </Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={this.state.note}
+                      />
+                    </Form.Group>
+                    <br />
+                    <br />
+                    <Button
+                      type="submit"
+                      variant="primary w-100 text-center"
+                      onClick={this.editNotes}
+                    >
+                      Save Changes
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            </form>
+          </Modal.Body>
+          <Modal.Footer className="modalFooter">
+            <Button
+              className="footerButton"
+              variant="secondary w-100 text-center"
+              onClick={this.closeNoteModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }

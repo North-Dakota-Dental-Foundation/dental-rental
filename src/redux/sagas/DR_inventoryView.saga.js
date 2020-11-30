@@ -45,11 +45,12 @@ function* editNote(action) {
   console.log(action.payload);
   try {
     const response = yield axios.put(
-      `/api/inventory/${action.payload.equipment_id}`,
-      { note: action.payload.notes }
+      `/api/inventory/${action.payload.equipment_id}/update-note`,
+      { note: action.payload.note }
     );
-    yield put({ type: "SET_NOTE", payload: response.data });
     console.log("Success in updating Note.");
+    // refresh list of uploads
+    yield put({ type: "FETCH_ITEM" });
   } catch (error) {
     console.log("error editing Note", error);
   }

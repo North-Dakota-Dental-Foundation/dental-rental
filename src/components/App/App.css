@@ -49,6 +49,10 @@ select {
   border-radius: 5px;
 }
 
+.filterStatus {
+  text-align: center;
+}
+
 /* img {
   display: inline-block;
   max-width: 100%;
