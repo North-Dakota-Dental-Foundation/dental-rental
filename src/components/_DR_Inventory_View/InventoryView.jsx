@@ -9,6 +9,9 @@ import {
   FormGroup,
   Spinner,
   Container,
+  OverlayTrigger,
+  OverlayTriggerProps,
+  Tooltip,
 } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
@@ -409,14 +412,28 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <Container>
-          <Button
-            variant="primary"
-            className="btn-primary"
-            onClick={this.openModal}
-            style={{ float: "right" }}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 2000 }}
+            overlay={
+              <Tooltip id="button-tooltip-2">
+                Add new equipment to your inventory.
+              </Tooltip>
+            }
           >
-            Add New Equipment{" "}
-          </Button>
+            {({ ref, ...triggerHandler }) => (
+              <Button
+                variant="primary"
+                ref={ref}
+                {...triggerHandler}
+                className="btn-primary"
+                onClick={this.openModal}
+                style={{ float: "right" }}
+              >
+                <span>Add New Equipment</span>
+              </Button>
+            )}
+          </OverlayTrigger>
           <select onChange={this.handleChange} name="filterStatus">
             <option value="N/A">None</option>
             <option value={0}>AVAILABLE</option>
@@ -426,9 +443,26 @@ class InventoryView extends Component {
             <option value={4}>MISSING</option>
           </select>
           &nbsp; &nbsp;&nbsp;
-          <Button variant="primary" onClick={this.submit}>
-            Apply Filter
-          </Button>
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 2000 }}
+            overlay={
+              <Tooltip id="button-tooltip-2">
+                Filter the inventory table by status.
+              </Tooltip>
+            }
+          >
+            {({ ref, ...triggerHandler }) => (
+              <Button
+                variant="primary"
+                ref={ref}
+                {...triggerHandler}
+                onClick={this.submit}
+              >
+                Apply Filter
+              </Button>
+            )}
+          </OverlayTrigger>
           <br />
           <br />
           <Table id="table-container" bordered hover>
@@ -448,7 +482,7 @@ class InventoryView extends Component {
                   <td>{inventoryItem.equipment_item}</td>
                   <td>{inventoryItem.serial_number}</td>
                   <td>{inventoryItem.nddf_code}</td>
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     <select
                       onChange={(event) =>
                         this.editStatus(inventoryItem.id, event.target.value)
@@ -465,7 +499,7 @@ class InventoryView extends Component {
                     </select>
                   </td>
 
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     {" "}
                     <Button
                       variant="primary"
@@ -475,10 +509,12 @@ class InventoryView extends Component {
                       Notes{" "}
                     </Button>{" "}
                   </td>
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     {" "}
                     <Button
+                      className="deleteButton"
                       variant="danger"
+                      style={{ textAlign: "center" }}
                       onClick={() =>
                         this.deleteInventory(inventoryItem.id, index)
                       }

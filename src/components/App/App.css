@@ -53,6 +53,9 @@ select {
   text-align: center;
 }
 
+.deleteButton {
+  text-align: "right";
+}
 /* img {
   display: inline-block;
   max-width: 100%;
