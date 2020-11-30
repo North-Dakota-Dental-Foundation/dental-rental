@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import axios from 'axios';
+import swal from "sweetalert";
 
 class RequestItem extends Component {
 
@@ -16,14 +17,33 @@ class RequestItem extends Component {
         // event is an OBJECT with keys, value and label. eg event = {value: "APPROVED", label: "APPROVED"}
         //PUT request to update the specific request's status
         const changeStatusTo = event.value;
-        axios
-            .put(`/api/requests/${this.props.request.id}`, {
-                status: changeStatusTo
-            })
-            .then(() => {
-                this.setState({ currentEquipmentItemStatus: [event] });
-            })
-            .catch((err) => console.log(err));
+        swal({
+            title: `Are you sure you want to update this request?`,
+            icon: "warning",
+            buttons: true,
+        }).then((willUpdate) => {
+            if (willUpdate) {
+                axios
+                    .put(`/api/requests/${this.props.request.id}`, {
+                        status: changeStatusTo
+                    })
+                    .then(() => {
+                        this.setState({ currentEquipmentItemStatus: [event] });
+                        swal({
+                            title: "Update Successful",
+                            text: `The request was successfully updated.`,
+                            icon: "success",
+                            buttons: true,
+                        });
+                    })
+                    .catch((err) => console.log(err));
+            } else {
+                swal(
+                    `The request was NOT updated.`
+                );
+            }
+        });
+
     };
 
     render() {

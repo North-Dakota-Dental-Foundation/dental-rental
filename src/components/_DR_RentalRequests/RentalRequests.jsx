@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Table, Container, Row, Col } from "react-bootstrap";
 
-
 import RequestItem from './RequestItem';
-import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga";
+import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
 
 class RentalRequests extends Component {
 

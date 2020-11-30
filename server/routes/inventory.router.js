@@ -9,7 +9,7 @@ let moment = require("moment");
 /**
  * GET all inventory
  */
-router.get("/", (req, res) => {
+router.get("/", rejectUnauthenticated, (req, res) => {
   console.log("GET /inventory");
   const queryText = 'SELECT * from "equipment" order by equipment_item;';
   pool
@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
 /**
  * GET all inventory, filtered by status
  */
-router.get('/filterinv/:equipment_status?', (req, res) => { // "req.params" should come in as a number
+router.get('/filterinv/:equipment_status?', rejectUnauthenticated,  (req, res) => { // "req.params" should come in as a number
   console.log("GET filtered inventory from /api/inventory/filterinv");
 
   const equipmentStatus = req.params.equipment_status || 0;
@@ -60,7 +60,7 @@ router.get('/filterinv/:equipment_status?', (req, res) => { // "req.params" shou
 /**
  * GET (technically a POST) all equipment by date range
  */
-router.post("/all-inventory-by-date-range/", (req, res) => {
+router.post("/all-inventory-by-date-range/", rejectUnauthenticated, (req, res) => {
   const { endDate, startDate } = req.body; //date format: yyyy-mm-dd
   const startDateBuffered = moment(startDate).subtract(2, "week").format();
   const endDateBuffered = moment(endDate).add(2, "week").format();
@@ -107,7 +107,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
 });
 
 // FUTURE FEATURE (TODO): The ability to edit any of the equipment properties
-router.put("/:id", (req, res) => {
+router.put("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
   let { equipment_status } = req.body;
   equipment_status = equipment_status.toUpperCase();
@@ -123,7 +123,7 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.put("/:id/update-note", (req, res) => {
+router.put("/:id/update-note", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
   let { note } = req.body;
   console.log("Updating Equipment note", id);
