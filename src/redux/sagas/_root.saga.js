@@ -7,6 +7,7 @@ import inventoryViewSaga from "./DR_inventoryView.saga";
 import rentalRequestSaga from "./DR_rentalRequest.saga";
 import submissionFormSaga from "./DR_submissionForm.saga";
 import userPageSaga from "./DR_userPage.saga";
+import equipmentInRequestsSaga from "./DR_EquipmentInRequest.saga"
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -25,5 +26,6 @@ export default function* rootSaga() {
     rentalRequestSaga(),
     //submissionFormSaga(),
     userPageSaga(),
+    equipmentInRequestsSaga(),
   ]);
 }

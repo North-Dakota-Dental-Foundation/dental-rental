@@ -14,7 +14,6 @@ class InventoryView extends Component {
     equipment_status: "",
     serial_number: "",
     nddf_code: "",
-    filterStatus: "",
     changeStatus: "",
     isOpen: false,
     noteIsOpen: false,
@@ -23,11 +22,17 @@ class InventoryView extends Component {
     inventory: [],
     isEdit: false,
     itemToEdit: null,
+
+    filterStatus: 'N/A',
+
   };
+
+  // TODO: If "filterStatus" equals "N/A", run "filterInv();"
 
   componentDidMount() {
     this.getInventory();
   }
+
 
   handleNoteChange = (event) => {
     this.setState({
@@ -36,14 +41,47 @@ class InventoryView extends Component {
     });
   };
 
-  getInventory = () => {
-    console.log("In getInventory");
+  submit = () => {
+    console.log(`Applying filter number... ${this.state.filterStatus}`);
 
+    this.setState({
+      inventory: [],
+    });
+
+    if (this.state.filterStatus === 'N/A') {
+      this.getInventory();
+    } else if (this.state.filterStatus !== 'N/A') {
+      this.getFilterInventory();
+    };
+  };
+
+  getInventory = () => {
+    console.log("Getting entire inventory");
+    this.setState({ // Reset this.state.inventory
+      inventory: []
+    });
     axios
       .get("/api/inventory")
       .then((response) => {
         console.log(response.data);
         this.setState({
+          inventory: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  getFilterInventory = () => { // Repopulates this.state.inventory with filtered data
+    console.log('Filtering inventory...');
+    this.setState({ // Reset this.state.inventory
+      inventory: []
+    });
+    axios
+      .get(`/api/inventory/filterinv/${this.state.filterStatus}`) // GET request with selected filter
+      .then((response) => {
+        this.setState({ // Sets this.state.inventory to new data
           inventory: response.data,
         });
       })
@@ -61,7 +99,7 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
-    this.getInventory();
+    this.submit();
   };
 
   editNotes = () => {
@@ -107,7 +145,7 @@ class InventoryView extends Component {
                 icon: "success",
               }
             );
-            this.getInventory();
+            this.submit();
           })
           .catch((error) => {
             console.log(error);
@@ -118,6 +156,13 @@ class InventoryView extends Component {
         );
       }
     });
+  };
+
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+    console.log(event.target.value);
   };
 
   //form submit to create new inventory item
@@ -147,6 +192,7 @@ class InventoryView extends Component {
       .catch((error) => {
         console.log(error);
       });
+    this.submit();
     this.setState({
       equipment_item: "",
       serial_number: "",
@@ -173,13 +219,16 @@ class InventoryView extends Component {
 
         <br />
 
-        <select name="filterStatus">
-          <option>Available</option>
-          <option>Checked-Out</option>
-          <option>Shipped</option>
-          <option>In Inspection</option>
-          <option>Missing</option>
+        <select onChange={this.handleChange} name="filterStatus">
+          <option value='N/A'>N/A</option>
+          <option value={0}>AVAILABLE</option>
+          <option value={1}>CHECKED-OUT</option>
+          <option value={2}>SHIPPED</option>
+          <option value={3}>IN-INSPECTION</option>
+          <option value={4}>MISSING</option>
         </select>
+
+        <Button variant='primary' onClick={this.submit}>Submit Filter</Button>
 
         <Button
           variant="primary"
@@ -294,6 +343,64 @@ class InventoryView extends Component {
         </Modal>
         <br />
         <br />
+
+        <Modal
+          className="modal"
+          show={this.state.noteIsOpen}
+          onHide={this.closeNoteModal}
+        >
+          <Modal.Header className="modalHeader" closeButton>
+            <Modal.Title
+              className="modalTitle"
+              style={{ justifyContent: "center" }}
+            >
+              Notes{" "}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            {" "}
+            <body>
+              <form
+                className="modalForm"
+                style={{ backgroundColor: "white" }}
+                onSubmit={this.editNotes}
+              >
+                <div className="formDiv">
+                  <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
+                  <p></p>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Notes for ${ }</Form.Label>
+                        <Form.Control
+                          onChange={(event) => {
+                            console.log(event.target.value);
+                          }}
+                          as="textarea"
+                          rows={3}
+                        />
+                      </Form.Group>{" "}
+                      <br />
+                      <br />
+                      <Button type="submit" variant="primary w-100 text-center">
+                        Save Changes
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+              </form>
+            </body>
+          </Modal.Body>
+          <Modal.Footer className="modalFooter">
+            <Button
+              className="footerButton"
+              variant="secondary w-100 text-center"
+              onClick={this.closeNoteModal}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <Table striped bordered hover variant="dark">
           <thead>

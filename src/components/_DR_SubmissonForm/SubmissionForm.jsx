@@ -37,6 +37,12 @@ class SubmissionForm extends Component {
       return;
     }
 
+    //concatenate address 1 & address 2 if address 2 field is filled out
+    let address = this.state.address;
+    if (this.state.address_2) {
+      address = this.state.address.concat(" " + this.state.address_2);
+    }
+
     //remove hyphens from this.state.phoneNumber for database storage constraints
     let phoneNumber = this.state.phoneNumber;
     let arrPhoneNumbers = this.state.phoneNumber.split("-");
@@ -45,7 +51,7 @@ class SubmissionForm extends Component {
     axios
       .post("/api/requests/", {
         company: this.state.practiceCompany,
-        address: this.state.address,
+        address: address,
         point_of_contact: this.state.pointOfContact,
         email: this.state.email,
         phone_number: phoneNumber,
@@ -54,6 +60,7 @@ class SubmissionForm extends Component {
         zip: this.state.zip,
         start_date: this.state.startDate,
         end_date: this.state.endDate,
+        applied_date: new Date(),
         purpose: this.state.purposeForRequest,
         equipment_in_request: this.state.currentlySelectedEquipment,
 
@@ -135,13 +142,13 @@ class SubmissionForm extends Component {
       <Container>
         {/* <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
         <Button onClick={this.handleShow}>Show modal</Button> */}
-        <Row>
-          <Col className="text-center">
-            <h1>Dental Rental Request</h1>
-          </Col>
-        </Row>
-        <br />
-        <Form onSubmit={this.handleSubmit}>
+        <Form id="form-container" onSubmit={this.handleSubmit}>
+          <Row>
+            <Col className="text-center">
+              <h1 id="form-header">Dental Rental Request</h1>
+            </Col>
+          </Row>
+          <br />
           <Form.Group controlId="formBasicInfo">
             <Row>
               <Col>
@@ -214,7 +221,6 @@ class SubmissionForm extends Component {
                   placeholder="Apartment, studio, floor, etc."
                   value={this.state.address_2}
                   onChange={this.handleChange}
-                  required
                 />
               </Col>
             </Row>
@@ -301,7 +307,8 @@ class SubmissionForm extends Component {
               </Col>
             </Row>
           </Form.Group>
-          <Button variant="primary" type="submit">Submit Request</Button>
+          <br />
+          <Button size="lg" variant="primary" type="submit">Submit Request</Button>
         </Form>
 
         {/* Modal rendering when form submitted */}

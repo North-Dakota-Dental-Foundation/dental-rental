@@ -40,6 +40,21 @@ SELECT * FROM "requests";
 
 SELECT * FROM "equipment_requests";
 
+SELECT "requests".id,
+"requests".company,
+"requests".address,
+"requests".point_of_contact,
+"requests".email,
+"requests".phone_number,
+"requests".city,
+"requests".state,
+"requests".zip,
+TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date,
+TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date,
+"requests".purpose,
+"requests".status
+FROM "requests";
+
 -- CREATE TABLES --
 
 CREATE TABLE "user" (
@@ -72,7 +87,8 @@ CREATE TABLE "requests" (
 "state" VARCHAR (80) NOT NULL,
 "zip" INTEGER NOT NULL, 
 "start_date" DATE NOT NULL, -- format YYYY-MM-DD --
-"end_date" DATE NOT NULL, 
+"end_date" DATE NOT NULL,
+"applied_date" DATE NOT NULL, 
 "purpose" VARCHAR (255) NOT NULL, 
 "status" VARCHAR (40) NOT NULL
 );  
