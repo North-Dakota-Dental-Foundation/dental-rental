@@ -60,6 +60,7 @@ class SubmissionForm extends Component {
         zip: this.state.zip,
         start_date: this.state.startDate,
         end_date: this.state.endDate,
+        applied_date: new Date(),
         purpose: this.state.purposeForRequest,
         equipment_in_request: this.state.currentlySelectedEquipment,
 
