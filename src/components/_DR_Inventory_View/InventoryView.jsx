@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { Modal } from "react-bootstrap";
-import { Button, Table, Form, FormGroup, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Table,
+  Form,
+  FormGroup,
+  Spinner,
+  Container,
+} from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
@@ -23,8 +30,7 @@ class InventoryView extends Component {
     isEdit: false,
     itemToEdit: null,
 
-    filterStatus: 'N/A',
-
+    filterStatus: "N/A",
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -32,7 +38,6 @@ class InventoryView extends Component {
   componentDidMount() {
     this.getInventory();
   }
-
 
   handleNoteChange = (event) => {
     this.setState({
@@ -48,17 +53,18 @@ class InventoryView extends Component {
       inventory: [],
     });
 
-    if (this.state.filterStatus === 'N/A') {
+    if (this.state.filterStatus === "N/A") {
       this.getInventory();
-    } else if (this.state.filterStatus !== 'N/A') {
+    } else if (this.state.filterStatus !== "N/A") {
       this.getFilterInventory();
-    };
+    }
   };
 
   getInventory = () => {
     console.log("Getting entire inventory");
-    this.setState({ // Reset this.state.inventory
-      inventory: []
+    this.setState({
+      // Reset this.state.inventory
+      inventory: [],
     });
     axios
       .get("/api/inventory")
@@ -73,15 +79,18 @@ class InventoryView extends Component {
       });
   };
 
-  getFilterInventory = () => { // Repopulates this.state.inventory with filtered data
-    console.log('Filtering inventory...');
-    this.setState({ // Reset this.state.inventory
-      inventory: []
+  getFilterInventory = () => {
+    // Repopulates this.state.inventory with filtered data
+    console.log("Filtering inventory...");
+    this.setState({
+      // Reset this.state.inventory
+      inventory: [],
     });
     axios
       .get(`/api/inventory/filterinv/${this.state.filterStatus}`) // GET request with selected filter
       .then((response) => {
-        this.setState({ // Sets this.state.inventory to new data
+        this.setState({
+          // Sets this.state.inventory to new data
           inventory: response.data,
         });
       })
@@ -215,28 +224,10 @@ class InventoryView extends Component {
   render() {
     return (
       <>
-        <h1 style={{ textAlign: "center" }}>Inventory View</h1>
-
+        <Col className="text-center">
+          <h1 id="form-header">Inventory Management</h1>
+        </Col>
         <br />
-
-        <select onChange={this.handleChange} name="filterStatus">
-          <option value='N/A'>N/A</option>
-          <option value={0}>AVAILABLE</option>
-          <option value={1}>CHECKED-OUT</option>
-          <option value={2}>SHIPPED</option>
-          <option value={3}>IN-INSPECTION</option>
-          <option value={4}>MISSING</option>
-        </select>
-
-        <Button variant='primary' onClick={this.submit}>Submit Filter</Button>
-
-        <Button
-          variant="primary"
-          className="btn-primary"
-          onClick={this.openModal}
-        >
-          Add New Equipment{" "}
-        </Button>
 
         <Modal
           className="modal"
@@ -368,10 +359,11 @@ class InventoryView extends Component {
                 <div className="formDiv">
                   <h2 style={{ textAlign: "center" }}>Edit Notes</h2>
                   <p></p>
+
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${ }</Form.Label>
+                        <Form.Label>Notes for ${}</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -401,66 +393,90 @@ class InventoryView extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+        <Container>
+          <Button
+            variant="primary"
+            className="btn-primary"
+            onClick={this.openModal}
+            style={{ float: "right" }}
+          >
+            Add New Equipment{" "}
+          </Button>
+          <select onChange={this.handleChange} name="filterStatus">
+            <option value="N/A">None</option>
+            <option value={0}>AVAILABLE</option>
+            <option value={1}>CHECKED-OUT</option>
+            <option value={2}>SHIPPED</option>
+            <option value={3}>IN-INSPECTION</option>
+            <option value={4}>MISSING</option>
+          </select>
 
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>Equipment</th>
-              <th>Serial #</th>
-              <th>NDDF Code</th>
-              <th>Status</th>
-              <th>Notes</th>
-              <th>Delete Equipment</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.inventory.map((inventoryItem, index) => (
+          <Button variant="primary" onClick={this.submit}>
+            Submit Filter
+          </Button>
+          <br />
+          <br />
+
+          <Table id="table-container" bordered hover>
+            <thead>
               <tr>
-                <td>{inventoryItem.equipment_item}</td>
-                <td>{inventoryItem.serial_number}</td>
-                <td>{inventoryItem.nddf_code}</td>
-                <td>
-                  <select
-                    onChange={(event) =>
-                      this.editStatus(inventoryItem.id, event.target.value)
-                    }
-                    name="changeStatus"
-                  >
-                    <option>{inventoryItem.equipment_status}</option>
-
-                    <option value={"Available"}>AVAILABLE</option>
-                    <option value={"Checked-Out"}>CHECKED-OUT</option>
-                    <option value={"Shipped"}>SHIPPED</option>
-                    <option value={"In Inspection"}>IN INSPECTION</option>
-                    <option value={"Missing"}>MISSING</option>
-                  </select>
-                </td>
-
-                <td>
-                  {" "}
-                  <Button
-                    variant="primary"
-                    className="btn-primary"
-                    onClick={(event) => this.openNoteModal(inventoryItem)}
-                  >
-                    Notes{" "}
-                  </Button>{" "}
-                </td>
-                <td>
-                  {" "}
-                  <Button
-                    variant="danger"
-                    onClick={() =>
-                      this.deleteInventory(inventoryItem.id, index)
-                    }
-                  >
-                    Delete Item
-                  </Button>
-                </td>
+                <th>Equipment</th>
+                <th>Serial #</th>
+                <th>NDDF Code</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Delete Equipment</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {this.state.inventory.map((inventoryItem, index) => (
+                <tr>
+                  <td>{inventoryItem.equipment_item}</td>
+                  <td>{inventoryItem.serial_number}</td>
+                  <td>{inventoryItem.nddf_code}</td>
+                  <td>
+                    <select
+                      onChange={(event) =>
+                        this.editStatus(inventoryItem.id, event.target.value)
+                      }
+                      name="changeStatus"
+                    >
+                      <option>{inventoryItem.equipment_status}</option>
+
+                      <option value={"Available"}>AVAILABLE</option>
+                      <option value={"Checked-Out"}>CHECKED-OUT</option>
+                      <option value={"Shipped"}>SHIPPED</option>
+                      <option value={"In Inspection"}>IN INSPECTION</option>
+                      <option value={"Missing"}>MISSING</option>
+                    </select>
+                  </td>
+
+                  <td>
+                    {" "}
+                    <Button
+                      variant="primary"
+                      className="btn-primary"
+                      onClick={(event) => this.openNoteModal(inventoryItem)}
+                    >
+                      Notes{" "}
+                    </Button>{" "}
+                  </td>
+                  <td>
+                    {" "}
+                    <Button
+                      variant="danger"
+                      onClick={() =>
+                        this.deleteInventory(inventoryItem.id, index)
+                      }
+                    >
+                      Delete Item
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Container>
         <Modal
           className="modal"
           show={this.state.noteIsOpen}
