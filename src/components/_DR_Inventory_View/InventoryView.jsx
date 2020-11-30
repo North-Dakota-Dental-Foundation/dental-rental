@@ -9,6 +9,9 @@ import {
   FormGroup,
   Spinner,
   Container,
+  OverlayTrigger,
+  OverlayTriggerProps,
+  Tooltip,
 } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
@@ -30,7 +33,7 @@ class InventoryView extends Component {
     isEdit: false,
     itemToEdit: null,
 
-    filterStatus: 'N/A',
+    filterStatus: "N/A",
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -108,6 +111,7 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
+    this.getInventory();
     this.submit();
   };
 
@@ -174,17 +178,19 @@ class InventoryView extends Component {
     console.log(event.target.value);
   };
 
-
-
   handleFilterChange = (event) => {
-    console.log(`Handle filter change ${event.target.name} ${event.target.value}`)
-    this.setState({
-      [event.target.name]: event.target.value
-    }, () => {this.submit()}
+    console.log(
+      `Handle filter change ${event.target.name} ${event.target.value}`
+    );
+    this.setState(
+      {
+        [event.target.name]: event.target.value,
+      },
+      () => {
+        this.submit();
+      }
     );
   };
-
-
 
   //form submit to create new inventory item
   onSubmit = (event) => {
@@ -240,23 +246,6 @@ class InventoryView extends Component {
           <h1 id="form-header">Inventory Management</h1>
         </Col>
         <br />
-
-        <select onChange={this.handleFilterChange} name="filterStatus">
-          <option value='N/A'>N/A</option>
-          <option value={0}>AVAILABLE</option>
-          <option value={1}>CHECKED-OUT</option>
-          <option value={2}>SHIPPED</option>
-          <option value={3}>IN-INSPECTION</option>
-          <option value={4}>MISSING</option>
-        </select>
-
-        <Button
-          variant="primary"
-          className="btn-primary"
-          onClick={this.openModal}
-        >
-          Add New Equipment{" "}
-        </Button>
 
         <Modal
           className="modal"
@@ -423,14 +412,28 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <Container>
-          <Button
-            variant="primary"
-            className="btn-primary"
-            onClick={this.openModal}
-            style={{ float: "right" }}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 2000 }}
+            overlay={
+              <Tooltip id="button-tooltip-2">
+                Add new equipment to your inventory.
+              </Tooltip>
+            }
           >
-            Add New Equipment{" "}
-          </Button>
+            {({ ref, ...triggerHandler }) => (
+              <Button
+                variant="primary"
+                ref={ref}
+                {...triggerHandler}
+                className="btn-primary"
+                onClick={this.openModal}
+                style={{ float: "right" }}
+              >
+                <span>Add New Equipment</span>
+              </Button>
+            )}
+          </OverlayTrigger>
           <select onChange={this.handleChange} name="filterStatus">
             <option value="N/A">None</option>
             <option value={0}>AVAILABLE</option>
@@ -439,31 +442,53 @@ class InventoryView extends Component {
             <option value={3}>IN-INSPECTION</option>
             <option value={4}>MISSING</option>
           </select>
-
-          <Button variant="primary" onClick={this.submit}>
-            Submit Filter
-          </Button>
+          &nbsp; &nbsp;&nbsp;
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 2000 }}
+            overlay={
+              <Tooltip id="button-tooltip-2">
+                Filter the inventory table by status.
+              </Tooltip>
+            }
+          >
+            {({ ref, ...triggerHandler }) => (
+              <Button
+                variant="primary"
+                ref={ref}
+                {...triggerHandler}
+                onClick={this.submit}
+              >
+                Apply Filter
+              </Button>
+            )}
+          </OverlayTrigger>
           <br />
           <br />
-
           <Table id="table-container" bordered hover>
             <thead>
               <tr>
                 <th>Equipment</th>
                 <th>Serial #</th>
                 <th>NDDF Code</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Delete Equipment</th>
+                <th style={{ textAlign: "center" }}>Status</th>
+                <th style={{ textAlign: "center" }}>Notes</th>
+                <th style={{ textAlign: "center" }}>Delete Equipment</th>
               </tr>
             </thead>
             <tbody>
               {this.state.inventory.map((inventoryItem, index) => (
                 <tr>
-                  <td>{inventoryItem.equipment_item}</td>
-                  <td>{inventoryItem.serial_number}</td>
-                  <td>{inventoryItem.nddf_code}</td>
-                  <td>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {inventoryItem.equipment_item}
+                  </td>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {inventoryItem.serial_number}
+                  </td>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {inventoryItem.nddf_code}
+                  </td>
+                  <td style={{ textAlign: "center", verticalAlign: "middle" }}>
                     <select
                       onChange={(event) =>
                         this.editStatus(inventoryItem.id, event.target.value)
@@ -480,7 +505,7 @@ class InventoryView extends Component {
                     </select>
                   </td>
 
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     {" "}
                     <Button
                       variant="primary"
@@ -490,10 +515,12 @@ class InventoryView extends Component {
                       Notes{" "}
                     </Button>{" "}
                   </td>
-                  <td>
+                  <td style={{ textAlign: "center" }}>
                     {" "}
                     <Button
+                      className="deleteButton"
                       variant="danger"
+                      style={{ textAlign: "center" }}
                       onClick={() =>
                         this.deleteInventory(inventoryItem.id, index)
                       }
