@@ -138,6 +138,7 @@ class SubmissionForm extends Component {
   handleShow = () => this.setState({ show: true });
 
   render() {
+    console.log(this.state.currentlySelectedEquipment);
     return (
       <Container>
         {/* <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>

@@ -7,9 +7,6 @@ import RequestItem from './RequestItem';
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga";
 
 class RentalRequests extends Component {
-  state = {
-    requestStatus: "",
-  };
 
   componentDidMount() {
     this.getRequests();
@@ -39,19 +36,19 @@ class RentalRequests extends Component {
     //console.log(this.props.requests);
 
     return (
-      <Container>
+      <Container id="table-col-increase-padding" fluid>
         <Row>
           <Col className="text-center">
             <h1 id="form-header">Dental Rental Requests</h1>
           </Col>
         </Row>
         <br />
-        <Table id="table-container" bordered hover>
+        <Table id="table-container" bordered hover responsive>
           <thead>
             <tr>
               <th>Contact</th>
-              <th>Company</th>
-              <th>Address</th>
+              <th>Practice/Company</th>
+              <th style={{ width: "15%" }}>Address</th>
               <th>Phone Number</th>
               <th>Equipment</th>
               <th>Purpose</th>
@@ -65,7 +62,7 @@ class RentalRequests extends Component {
 
             {this.props.requests !== undefined && this.props.requests.map((request) => {
               return (
-                <RequestItem request={request} key={request.id} />
+                <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
               )
             })}
 
@@ -106,6 +103,11 @@ const mapStoreToProps = (reduxState) => {
       }
       //console.log(requests);
     }
+
+    //IMPLEMENT THIS ALGORITHM!
+    //for loop through [{id:x, equipment:'y'}, {id:x, equipment:'z'}] to transform data to {x: 'y, z'}
+    //for loop through request array [{request1}, {request2}]
+    // --> for each request, use id to get values in the object in step 1 and put into current request object with the key value "equipment_in_request"
 
   }
 

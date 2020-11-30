@@ -12,7 +12,7 @@ const { request } = require("express");
 router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
     const allRequests = await pool.query(
-    `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, TO_CHAR("requests".applied_date, 'mm/dd/yyyy') AS applied_date, "requests".purpose, "requests".status FROM "requests";`);
+    `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, TO_CHAR("requests".applied_date, 'mm/dd/yyyy') AS applied_date, "requests".purpose, "requests".status FROM "requests" ORDER BY "requests".status;`);
     res.send(allRequests.rows);
   } catch (error) {
     res.sendStatus(500);
@@ -22,7 +22,6 @@ router.get("/", rejectUnauthenticated, async (req, res) => {
 
 router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
   try {
-    //const allEquipmentPerRequest = await pool.query(`SELECT "equipment".equipment_item, "requests".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" ORDER BY "requests".id;`);
     const allRequests = await pool.query(
       `SELECT id from "requests";`
     );
@@ -40,7 +39,6 @@ router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
       }
     }
     res.send([allRequestsObj]);
-    //res.send(allEquipmentPerRequest.rows);
   } catch (error) {
     res.sendStatus(500);
     console.log(error)
