@@ -479,10 +479,16 @@ class InventoryView extends Component {
             <tbody>
               {this.state.inventory.map((inventoryItem, index) => (
                 <tr>
-                  <td>{inventoryItem.equipment_item}</td>
-                  <td>{inventoryItem.serial_number}</td>
-                  <td>{inventoryItem.nddf_code}</td>
-                  <td style={{ textAlign: "center" }}>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {inventoryItem.equipment_item}
+                  </td>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {inventoryItem.serial_number}
+                  </td>
+                  <td style={{ verticalAlign: "middle" }}>
+                    {inventoryItem.nddf_code}
+                  </td>
+                  <td style={{ textAlign: "center", verticalAlign: "middle" }}>
                     <select
                       onChange={(event) =>
                         this.editStatus(inventoryItem.id, event.target.value)
