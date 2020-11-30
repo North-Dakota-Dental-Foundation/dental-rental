@@ -14,38 +14,6 @@ router.get("/", rejectUnauthenticated, async (req, res) => {
     const allRequests = await pool.query(
     `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, "requests".purpose, "requests".status FROM "requests";`);
     res.send(allRequests.rows);
-    // const allRequestIds = allRequests.rows.map((obj) => {
-    //   return obj.id;
-    // });
-    // console.log(allRequestIds);
-
-    //create an object of all requests with corresponding equipment items per request
-    // let allRequestsObj = {};
-    // for (let i = 0; i < allRequestIds.length; i++)  {
-    //   try {
-    //     const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
-    //     allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-      
-    // }
-    //transform equipment_item data into a string of equipment items
-    // for (let i = 0; i < allRequestIds.length; i++){
-    //   console.log('in for', allRequestsObj[allRequestIds[i]]);
-    //   let equipmentItemsArr = [];
-    //   for (let j = 0; j < allRequestsObj[allRequestIds[i]].length; i++){
-    //     let equipment_item = allRequestsObj[allRequestIds[i]][j].equipment_item;
-    //     console.log(equipment_item);
-    //   }
-    // }
-    //insert into the objects in allRequests.rows
-
-
-    //console.log(allRequestsObj);
-    //console.log(allRequests.rows);
-
-
   } catch (error) {
     res.sendStatus(500);
     console.error(error.message);
