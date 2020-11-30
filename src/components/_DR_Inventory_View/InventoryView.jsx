@@ -24,7 +24,6 @@ class InventoryView extends Component {
     itemToEdit: null,
 
     filterStatus: 'N/A',
-
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -165,6 +164,18 @@ class InventoryView extends Component {
     console.log(event.target.value);
   };
 
+
+
+  handleFilterChange = (event) => {
+    console.log(`Handle filter change ${event.target.name} ${event.target.value}`)
+    this.setState({
+      [event.target.name]: event.target.value
+    }, () => {this.submit()}
+    );
+  };
+
+
+
   //form submit to create new inventory item
   onSubmit = (event) => {
     event.preventDefault();
@@ -198,7 +209,7 @@ class InventoryView extends Component {
       serial_number: "",
       nddf_code: "",
     });
-    this.getInventory();
+    this.submit();
   };
 
   //open and closing modals
@@ -219,7 +230,7 @@ class InventoryView extends Component {
 
         <br />
 
-        <select onChange={this.handleChange} name="filterStatus">
+        <select onChange={this.handleFilterChange} name="filterStatus">
           <option value='N/A'>N/A</option>
           <option value={0}>AVAILABLE</option>
           <option value={1}>CHECKED-OUT</option>
@@ -227,8 +238,6 @@ class InventoryView extends Component {
           <option value={3}>IN-INSPECTION</option>
           <option value={4}>MISSING</option>
         </select>
-
-        <Button variant='primary' onClick={this.submit}>Submit Filter</Button>
 
         <Button
           variant="primary"
