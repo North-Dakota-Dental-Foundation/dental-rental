@@ -4,20 +4,48 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
+const { request } = require("express");
 
 /**
  * GET route
  */
-router.get("/", rejectUnauthenticated, (req, res) => {
-  const queryText = 'SELECT * from "requests"';
-  pool
-    .query(queryText)
-    .then((result) => res.send(result.rows))
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500);
-    });
+router.get("/", rejectUnauthenticated, async (req, res) => {
+  try {
+    const allRequests = await pool.query(
+    `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, TO_CHAR("requests".applied_date, 'mm/dd/yyyy') AS applied_date, "requests".purpose, "requests".status FROM "requests";`);
+    res.send(allRequests.rows);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error.message);
+  }
 }); // End of GET route
+
+router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
+  try {
+    //const allEquipmentPerRequest = await pool.query(`SELECT "equipment".equipment_item, "requests".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" ORDER BY "requests".id;`);
+    const allRequests = await pool.query(
+      `SELECT id from "requests";`
+    );
+    const allRequestIds = allRequests.rows.map((obj) => {
+      return obj.id;
+    });
+    // create an object of all requests with corresponding equipment items per request
+    let allRequestsObj = {};
+    for (let i = 0; i < allRequestIds.length; i++) {
+      try {
+        const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
+        allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    res.send([allRequestsObj]);
+    //res.send(allEquipmentPerRequest.rows);
+  } catch (error) {
+    res.sendStatus(500);
+    console.log(error)
+  }
+});
 
 /**
  * POST route
@@ -39,6 +67,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       zip, //number
       start_date, //string
       end_date, //string
+      applied_date,
       purpose, //string
       equipment_in_request, //arr of equipment in a particular request
     } = req.body;
@@ -54,6 +83,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       start_date && //string
       end_date && //string
       purpose && //string
+      applied_date && //string
       equipment_in_request)) {
       console.log('in error if');
       throw 'Error: there exists at least one parameter that is invalid.';
@@ -61,12 +91,8 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
 
     const status = "PENDING";
 
-    //equipment, company, address, point_of_contact, email, phone_number, city, state, zip
-    // start date, end date, purpose, status
-
-    //UNCOMMENT:
     const newRequest = await pool.query(
-      "INSERT INTO requests (company, address, point_of_contact, email, phone_number, city, state, zip, start_date, end_date, purpose, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+      "INSERT INTO requests (company, address, point_of_contact, email, phone_number, city, state, zip, start_date, end_date, applied_date, purpose, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *",
       [
         company,
         address,
@@ -78,6 +104,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
         zip,
         start_date,
         end_date,
+        applied_date,
         purpose,
         status,
       ]
@@ -89,7 +116,6 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     // for each equipment item in the equipment_in_request variable, link the request and each equipment item
     // by inserting into the equipment_requests junction table
     equipment_in_request.map(async (equipmentObj) => {
-      console.log(equipmentObj.id);
       const newEquipmentRequest = await pool.query(
         "INSERT INTO equipment_requests (equipment_id, request_id) VALUES ($1,$2) RETURNING *",
         [equipmentObj.id, requestId]
