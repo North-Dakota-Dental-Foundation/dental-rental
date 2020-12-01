@@ -20,11 +20,12 @@ import UserItem from "./UserItem";
 
 class Users extends Component {
   state = {
-    firstname: "",
-    lastname: "",
-    username: "",
-    phonenumber: "N/A",
-    password: "",
+    firstname: 'N/A',
+    lastname: 'N/A',
+    username: 'N/A',
+    phonenumber: 'N/A',
+    password: 'N/A',
+
     super_admin: false,
     addUser: false,
   };
@@ -39,20 +40,25 @@ class Users extends Component {
     });
   };
 
-  resetState = () =>
-    this.setState({
-      firstname: "",
-      lastname: "",
-      username: "",
-      phonenumber: "N/A",
-      password: "",
-      super_admin: false,
-      addUser: false,
-    });
+
+  resetState = () => this.setState({
+    firstname: 'N/A',
+    lastname: 'N/A',
+    username: 'N/A',
+    phonenumber: 'N/A',
+    password: 'N/A',
+    super_admin: false,
+    addUser: false,
+  });
 
   onSubmit = () => {
-    this.props.dispatch({
-      type: "REGISTER",
+
+    // if (this.state.firstname === 'N/A') 
+    // { return }
+
+    const myPromise = (new Promise(this.props.dispatch({
+      type: 'REGISTER',
+
       payload: {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
@@ -60,6 +66,12 @@ class Users extends Component {
         phonenumber: this.state.phonenumber,
         password: this.state.password,
       },
+
+    })).then(() => {
+      this.getUsers();
+      this.resetState();
+    }))
+
     });
     swal({
       title: "User Successfully Added",
@@ -69,7 +81,11 @@ class Users extends Component {
     this.getUsers();
 
     this.resetState();
+
   };
+
+  // this.resetState();
+  // this.getUsers();
 
   openAddUserModal = () => this.setState({ addUser: true });
   closeAddUserModal = () => this.setState({ addUser: false });

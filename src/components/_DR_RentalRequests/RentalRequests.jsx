@@ -7,6 +7,10 @@ import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.sag
 import ThreeDots from "../../components/_DR_ThreeDots/ThreeDots";
 
 class RentalRequests extends Component {
+  state = {
+    requestFilterStatus: 'NONE',
+  }
+
   componentDidMount() {
     this.props.dispatch({ type: "LOADING" });
     this.getRequests();
@@ -14,9 +18,19 @@ class RentalRequests extends Component {
   }
 
   getRequests = () => {
-    this.props.dispatch({
-      type: "FETCH_REQUESTS",
-    });
+
+    if (this.state.requestFilterStatus === 'NONE') { // If filter = NONE, run "FETCH_REQUESTS"
+      this.props.dispatch({
+        type: 'FETCH_REQUESTS',
+      });
+    };
+
+    if (this.state.requestFilterStatus !== 'NONE') { // If filter != NONE, run "FETCH FILTERED_REQUESTS"
+      this.props.dispatch({
+        type: 'FETCH_FILTERED_REQUESTS',
+        payload: this.state.requestFilterStatus,
+      });
+    };
   };
 
   getEquipmentInRequests = () => {
@@ -31,12 +45,27 @@ class RentalRequests extends Component {
     });
   };
 
+  handleFilterChange = (event) => { // For specifically handling the filter dropdown 
+    this.setState({
+      requestFilterStatus: event.target.value,
+    }, () => { this.getRequests() });
+  };
+
   render() {
     //console.log(this.props.requests);
 
     return (
       <>
+
+
+        <select onChange={this.handleFilterChange} name="filterStatus">
+          <option value={'NONE'}>NO FILTER</option>
+          <option value={'PENDING'}>PENDING</option>
+          <option value={'APPROVED'}>APPROVED</option>
+          <option value={'REJECTED'}>REJECTED</option>
+        </select>
         <br />
+
         <Container id="table-col-increase-padding" fluid>
           <Row>
             <Col className="text-center">
@@ -44,7 +73,9 @@ class RentalRequests extends Component {
             </Col>
           </Row>
           <br />
+
           {this.props.isLoading ? (
+
             <>
               <br />
               <br />
@@ -71,21 +102,17 @@ class RentalRequests extends Component {
               </thead>
 
               <tbody>
-                {this.props.requests !== undefined &&
-                  this.props.requests.map((request) => {
-                    return (
-                      <RequestItem
-                        request={request}
-                        key={request.id}
-                        getRequests={this.getRequests}
-                        getEquipmentInRequests={this.getEquipmentInRequests}
-                      />
-                    );
-                  })}
+                {this.props.requests !== undefined && this.props.requests.map((request) => {
+                  return (
+                    <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
+                  )
+                })}
+
               </tbody>
             </Table>
-          )}
-        </Container>
+          }
+        </Container >
+
       </>
     );
   }
