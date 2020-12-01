@@ -42,11 +42,17 @@ class RentalRequests extends Component {
             <h1 id="form-header">Dental Rental Requests</h1>
           </Col>
         </Row>
-        {this.props.isLoading ? <Row>
-          <Col className="text-center">
-            <Spinner animation="grow" size="lg" />
-          </Col>
-        </Row> :
+        <br />
+        {this.props.isLoading ?
+          <>
+            <br />
+            <Row>
+              <Col className="text-center">
+                <Spinner animation="grow" size="lg" />
+              </Col>
+            </Row>
+          </>
+          :
           <Table id="table-container" bordered hover responsive>
             <thead>
               <tr>
