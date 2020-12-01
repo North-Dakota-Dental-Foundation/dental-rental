@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "../_DR_SubmissonForm/SubmissionForm.css"
+import "./SubmissionForm.css"
 import axios from 'axios';
 import Select from 'react-select';
-import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Modal, Container, Row, Col, Alert } from "react-bootstrap";
 import makeAnimated from 'react-select/animated';
+
 
 const animatedComponents = makeAnimated();
 
@@ -74,6 +75,7 @@ class SubmissionForm extends Component {
           phoneNumber: "",
           practiceCompany: "",
           address: "",
+          address_2: "",
           purposeForRequest: "",
           availableEquipment: [], //an arr containing all equipment that is available for a given date range
           arrOptions: [], //an arr that holds all available equipment that is valid for the react-select dropdown menu
@@ -81,7 +83,6 @@ class SubmissionForm extends Component {
           state: "",
           zip: "",
           email: "",
-
         });
         console.log('Post successful.');
       })
@@ -138,15 +139,33 @@ class SubmissionForm extends Component {
   handleShow = () => this.setState({ show: true });
 
   render() {
-    console.log(this.state.currentlySelectedEquipment);
     return (
       <Container>
+        {/* <Button onClick={this.handleShow}>Show Modal</Button>
+        <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Form success</Button> */}
         <Form id="form-container" onSubmit={this.handleSubmit}>
           <Row>
             <Col className="text-center">
-              <h1 id="form-header">Dental Rental Request</h1>
+              <h1 id="form-header">Dental Rental Request Form</h1>
             </Col>
           </Row>
+          <Alert variant="light">
+            <Row>
+              <Col className="text-center">
+                Ready to contribute to those in need of dental care?
+            </Col>
+            </Row>
+            <Row>
+              <Col className="text-center">
+                Please begin by filling out this rental request form by giving your contact and practice/organization information,
+            </Col>
+            </Row>
+            <Row>
+              <Col className="text-center">
+                purpose for request, dates to rent equipment, and the equipment items you wish to rent for the given date range.
+            </Col>
+            </Row>
+          </Alert>
           <br />
           <Form.Group controlId="formBasicInfo">
             <Row>
@@ -296,6 +315,7 @@ class SubmissionForm extends Component {
                   components={animatedComponents}
                   noOptionsMessage={() => "No available equipment for the given date range."}
                   isMulti
+                  placeholder="Select one or many pieces of equipment for the given date range."
                   name="available-equipment"
                   options={this.state.arrOptions}
                   className="basic-multi-select"
@@ -318,8 +338,8 @@ class SubmissionForm extends Component {
             keyboard={false}
             centered
           >
-            <Modal.Header>
-              <Modal.Title>Successful Form Submission</Modal.Title>
+            <Modal.Header className="d-block">
+              <Modal.Title className="text-center">Successful Form Submission</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               Thank you for submitting your Dental Rental request!
@@ -336,8 +356,8 @@ class SubmissionForm extends Component {
               keyboard={false}
               centered
             >
-              <Modal.Header>
-                <Modal.Title>Form Submission Error</Modal.Title>
+              <Modal.Header className="d-block">
+                <Modal.Title className="text-center">Form Submission Error</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 Sorry - something went wrong!

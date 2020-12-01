@@ -20,8 +20,8 @@ import LandingPage from "../LandingPage/LandingPage";
 import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import InventoryView from "../_DR_Inventory_View/InventoryView";
-import RentalRequest from "../_DR_RentalRequests/RentalRequests";
-import SubmissionForm from "../_DR_SubmissonForm/SubmissionForm";
+import RentalRequest from "../RentalRequests/RentalRequests";
+import SubmissionForm from "../SubmissonForm/SubmissionForm";
 import Users from "../_DR_Users/Users";
 
 import "./App.css";
