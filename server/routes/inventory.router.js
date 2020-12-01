@@ -10,7 +10,6 @@ let moment = require("moment");
  * GET all inventory
  */
 router.get("/", rejectUnauthenticated, (req, res) => {
-  console.log("GET /inventory");
   const queryText = 'SELECT * from "equipment" order by equipment_item;';
   pool
     .query(queryText)
@@ -27,11 +26,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
  * GET all inventory, filtered by status
  */
 router.get('/filterinv/:equipment_status?', rejectUnauthenticated,  (req, res) => { // "req.params" should come in as a number
-  console.log("GET filtered inventory from /api/inventory/filterinv");
-
   const equipmentStatus = req.params.equipment_status || 0;
-
-  console.log(`Equipment status = ${equipmentStatus}`);
 
   if (req.params.equipment_status == 0) { // 0 = 'AVAILABLE
     SQLStatus = 'AVAILABLE';
@@ -64,8 +59,7 @@ router.post("/all-inventory-by-date-range/", rejectUnauthenticated, (req, res) =
   const { endDate, startDate } = req.body; //date format: yyyy-mm-dd
   const startDateBuffered = moment(startDate).subtract(2, "week").format();
   const endDateBuffered = moment(endDate).add(2, "week").format();
-  console.log(startDateBuffered, endDateBuffered);
-
+  
   const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2) AND "requests".status IN ('PENDING', 'APPROVED') )`;
   pool
     .query(queryText, [endDateBuffered, startDateBuffered])
@@ -80,7 +74,6 @@ router.post("/all-inventory-by-date-range/", rejectUnauthenticated, (req, res) =
  * POST an inventory item
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
-  console.log("POST /inventory");
 
   const { equipment_item, serial_number, nddf_code } = req.body;
   const equipment_status = "AVAILABLE";
@@ -111,7 +104,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
   let { equipment_status } = req.body;
   equipment_status = equipment_status.toUpperCase();
-  console.log("Updating Status of Equipment", id);
+  
   let queryText = `UPDATE "equipment" SET "equipment_status" = $1 WHERE "id" = $2;`;
   pool
     .query(queryText, [equipment_status, id])
@@ -126,7 +119,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
 router.put("/:id/update-note", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
   let { note } = req.body;
-  console.log("Updating Equipment note", id);
+  
   let queryText = `UPDATE "equipment" SET "note" = $1 WHERE "id" = $2;`;
   pool
     .query(queryText, [note, id])
@@ -140,7 +133,7 @@ router.put("/:id/update-note", rejectUnauthenticated, (req, res) => {
 
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
-  console.log(`Deleting Equipment with ID ${id}`);
+  
   let queryText = `DELETE FROM "equipment" WHERE "id" = $1;`;
   pool
     .query(queryText, [id])
