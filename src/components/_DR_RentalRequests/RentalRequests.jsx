@@ -8,6 +8,10 @@ import ThreeDots from "../../components/_DR_ThreeDots/ThreeDots";
 
 class RentalRequests extends Component {
 
+  state = {
+    requestFilterStatus: 'NONE',
+  }
+
   componentDidMount() {
     this.props.dispatch({ type: "LOADING" });
     this.getRequests();
@@ -15,9 +19,19 @@ class RentalRequests extends Component {
   };
 
   getRequests = () => {
-    this.props.dispatch({
-      type: 'FETCH_REQUESTS',
-    });
+
+    if (this.state.requestFilterStatus === 'NONE') { // If filter = NONE, run "FETCH_REQUESTS"
+      this.props.dispatch({
+        type: 'FETCH_REQUESTS',
+      });
+    };
+
+    if (this.state.requestFilterStatus !== 'NONE') { // If filter != NONE, run "FETCH FILTERED_REQUESTS"
+      this.props.dispatch({
+        type: 'FETCH_FILTERED_REQUESTS',
+        payload: this.state.requestFilterStatus,
+      });
+    };
   };
 
   getEquipmentInRequests = () => {
@@ -32,56 +46,72 @@ class RentalRequests extends Component {
     });
   };
 
+  handleFilterChange = (event) => { // For specifically handling the filter dropdown 
+    this.setState({
+      requestFilterStatus: event.target.value,
+    }, () => { this.getRequests() });
+  };
+
   render() {
 
     //console.log(this.props.requests);
 
     return (
-      <Container id="table-col-increase-padding" fluid>
-        <Row>
-          <Col className="text-center">
-            <h1 id="form-header">Dental Rental Requests</h1>
-          </Col>
-        </Row>
-        <br />
-        {this.props.isLoading ?
-          <>
-            <br />
-            <br />
-            <Row>
-              <Col className="text-center">
-                <ThreeDots />
-              </Col>
-            </Row>
-          </>
-          :
-          <Table id="table-container" bordered hover responsive>
-            <thead>
-              <tr>
-                <th>Contact</th>
-                <th>Practice/Company</th>
-                <th style={{ width: "15%" }}>Address</th>
-                <th>Phone Number</th>
-                <th>Equipment</th>
-                <th style={{ width: "5%" }}>Purpose</th>
-                <th style={{ width: "5%" }}>Applied Date</th>
-                <th style={{ width: "5%" }}>Requested Dates</th>
-                <th>Application Status</th>
-              </tr>
-            </thead>
+      <>
 
-            <tbody>
+        <select onChange={this.handleFilterChange} name="filterStatus">
+          <option value={'NONE'}>NO FILTER</option>
+          <option value={'PENDING'}>PENDING</option>
+          <option value={'APPROVED'}>APPROVED</option>
+          <option value={'REJECTED'}>REJECTED</option>
+        </select>
 
-              {this.props.requests !== undefined && this.props.requests.map((request) => {
-                return (
-                  <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
-                )
-              })}
+        <Container id="table-col-increase-padding" fluid>
+          <Row>
+            <Col className="text-center">
+              <h1 id="form-header">Dental Rental Requests</h1>
+            </Col>
+          </Row>
+          <br />
+          {this.props.isLoading ?
+            <>
+              <br />
+              <br />
+              <Row>
+                <Col className="text-center">
+                  <ThreeDots />
+                </Col>
+              </Row>
+            </>
+            :
+            <Table id="table-container" bordered hover responsive>
+              <thead>
+                <tr>
+                  <th>Contact</th>
+                  <th>Practice/Company</th>
+                  <th style={{ width: "15%" }}>Address</th>
+                  <th>Phone Number</th>
+                  <th>Equipment</th>
+                  <th style={{ width: "5%" }}>Purpose</th>
+                  <th style={{ width: "5%" }}>Applied Date</th>
+                  <th style={{ width: "5%" }}>Requested Dates</th>
+                  <th>Application Status</th>
+                </tr>
+              </thead>
 
-            </tbody>
-          </Table>
-        }
-      </Container >
+              <tbody>
+
+                {this.props.requests !== undefined && this.props.requests.map((request) => {
+                  return (
+                    <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
+                  )
+                })}
+
+              </tbody>
+            </Table>
+          }
+        </Container >
+      </>
     );
   }
 }

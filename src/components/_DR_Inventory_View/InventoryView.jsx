@@ -40,11 +40,7 @@ class InventoryView extends Component {
 
   componentDidMount() {
     this.getInventory();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) { this.submit() }
-  }
+  };
 
   handleNoteChange = (event) => {
     this.setState({
@@ -56,9 +52,9 @@ class InventoryView extends Component {
   submit = () => {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
 
-    this.setState({
-      inventory: [],
-    });
+    // this.setState({
+    //   inventory: [],
+    // });
 
     if (this.state.filterStatus === "N/A") {
       this.getInventory();
@@ -69,10 +65,6 @@ class InventoryView extends Component {
 
   getInventory = () => {
     console.log("Getting entire inventory");
-    this.setState({
-      // Reset this.state.inventory
-      inventory: [],
-    });
     axios
       .get("/api/inventory")
       .then((response) => {
@@ -430,7 +422,7 @@ class InventoryView extends Component {
 
 
           <select onChange={this.handleFilterChange} name="filterStatus">
-            <option value="N/A">None</option>
+            <option value='N/A'>NO FILTER</option>
             <option value={0}>AVAILABLE</option>
             <option value={1}>CHECKED-OUT</option>
             <option value={2}>SHIPPED</option>

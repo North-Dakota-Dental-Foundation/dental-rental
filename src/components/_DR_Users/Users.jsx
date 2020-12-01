@@ -8,11 +8,11 @@ import UserItem from './UserItem';
 
 class Users extends Component {
   state = {
-    firstname: '',
-    lastname: '',
-    username: '',
+    firstname: 'N/A',
+    lastname: 'N/A',
+    username: 'N/A',
     phonenumber: 'N/A',
-    password: '',
+    password: 'N/A',
     super_admin: false,
     addUser: false,
   };
@@ -28,17 +28,21 @@ class Users extends Component {
   };
 
   resetState = () => this.setState({
-    firstname: '',
-    lastname: '',
-    username: '',
+    firstname: 'N/A',
+    lastname: 'N/A',
+    username: 'N/A',
     phonenumber: 'N/A',
-    password: '',
+    password: 'N/A',
     super_admin: false,
     addUser: false,
   });
 
   onSubmit = () => {
-    this.props.dispatch({
+
+    // if (this.state.firstname === 'N/A') 
+    // { return }
+
+    const myPromise = (new Promise(this.props.dispatch({
       type: 'REGISTER',
       payload: {
         firstname: this.state.firstname,
@@ -47,10 +51,14 @@ class Users extends Component {
         phonenumber: this.state.phonenumber,
         password: this.state.password,
       },
-    })
-    this.resetState();
-    this.getUsers();
+    })).then(() => {
+      this.getUsers();
+      this.resetState();
+    }))
   };
+
+  // this.resetState();
+  // this.getUsers();
 
   openAddUserModal = () => this.setState({ addUser: true });
   closeAddUserModal = () => this.setState({ addUser: false });
