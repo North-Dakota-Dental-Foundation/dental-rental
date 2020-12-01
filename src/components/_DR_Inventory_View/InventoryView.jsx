@@ -206,7 +206,6 @@ class InventoryView extends Component {
       title: "New Equipment Added To Inventory",
       text: `You have successfully added ${this.state.equipment_item}to your inventory.`,
       icon: "success",
-      buttons: true,
     });
     axios
       .get("/api/inventory")
@@ -414,7 +413,7 @@ class InventoryView extends Component {
         <Container>
           <OverlayTrigger
             placement="top"
-            delay={{ show: 2000 }}
+            delay={{ show: 1000 }}
             overlay={
               <Tooltip id="button-tooltip-2">
                 Add new equipment to your inventory.
@@ -445,7 +444,7 @@ class InventoryView extends Component {
           &nbsp; &nbsp;&nbsp;
           <OverlayTrigger
             placement="top"
-            delay={{ show: 2000 }}
+            delay={{ show: 1000 }}
             overlay={
               <Tooltip id="button-tooltip-2">
                 Filter the inventory table by status.
