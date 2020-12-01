@@ -304,7 +304,7 @@ class SubmissionForm extends Component {
                 <Form.Label>Select Dental Rental Equipment</Form.Label>
                 <Select
                   components={animatedComponents}
-                  noOptionsMessage={() => "Ops! No available equipment for this given date range."}
+                  noOptionsMessage={() => "Ops! There is no available equipment for the given date range."}
                   isMulti
                   placeholder="Please select one or multiple pieces of equipment for the given date range."
                   name="available-equipment"
