@@ -36,58 +36,62 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form
-        className="formPanel"
-        style={{
-          backgroundColor: "#9DBCD9",
-          borderRadius: "10px",
-          width: "27%",
-          justifyContent: "center",
-          margin: "0 auto",
-          display: "block",
-          opacity: "0.9",
-        }}
-        onSubmit={this.login}
-      >
+      <>
         <br />
-        <h2>Login</h2>
-        {this.props.store.errors.loginMessage && (
-          <h3 className="alert" role="alert">
-            {this.props.store.errors.loginMessage}
-          </h3>
-        )}
-        <div>
-          <label htmlFor="username">
-            Username:
-            <input
-              type="text"
-              name="username"
-              required
-              value={this.state.username}
-              onChange={this.handleInputChangeFor("username")}
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="password">
-            Password:
-            <input
-              type="password"
-              name="password"
-              required
-              value={this.state.password}
-              onChange={this.handleInputChangeFor("password")}
-            />
-          </label>
-        </div>
-        <div>
-          <Button className="btn" type="submit" value="Log In">
-            Log In
-          </Button>
+        <br />
+        <form
+          className="formPanel"
+          style={{
+            backgroundColor: "#9DBCD9",
+            borderRadius: "10px",
+            width: "27%",
+            justifyContent: "center",
+            margin: "0 auto",
+            display: "block",
+            opacity: "0.9",
+          }}
+          onSubmit={this.login}
+        >
           <br />
-          <br />
-        </div>
-      </form>
+          <h2>Login</h2>
+          {this.props.store.errors.loginMessage && (
+            <h3 className="alert" role="alert">
+              {this.props.store.errors.loginMessage}
+            </h3>
+          )}
+          <div>
+            <label htmlFor="username">
+              Username:
+              <input
+                type="text"
+                name="username"
+                required
+                value={this.state.username}
+                onChange={this.handleInputChangeFor("username")}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="password">
+              Password:
+              <input
+                type="password"
+                name="password"
+                required
+                value={this.state.password}
+                onChange={this.handleInputChangeFor("password")}
+              />
+            </label>
+          </div>
+          <div>
+            <Button className="btn" type="submit" value="Log In">
+              Log In
+            </Button>
+            <br />
+            <br />
+          </div>
+        </form>
+      </>
     );
   }
 }
