@@ -149,24 +149,15 @@ class SubmissionForm extends Component {
               <h1 id="form-header">Dental Rental Request Form</h1>
             </Col>
           </Row>
-          <Alert variant="light">
+          <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
             <Row>
               <Col className="text-center">
-                Ready to contribute to those in need of dental care?
-            </Col>
-            </Row>
-            <Row>
-              <Col className="text-center">
-                Please begin by filling out this rental request form by giving your contact and practice/organization information,
-            </Col>
-            </Row>
-            <Row>
-              <Col className="text-center">
-                purpose for request, dates to rent equipment, and the equipment items you wish to rent for the given date range.
+                Please fill out the form by giving your contact and practice/organization information,
+                <br />
+                purpose, rental request date range, and all requested dental equipment.
             </Col>
             </Row>
           </Alert>
-          <br />
           <Form.Group controlId="formBasicInfo">
             <Row>
               <Col>
@@ -204,7 +195,7 @@ class SubmissionForm extends Component {
             </Row>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Practice/Company</Form.Label>
+            <Form.Label>Practice/Organization</Form.Label>
             <Form.Control
               type="text"
               name="practiceCompany"
@@ -298,11 +289,11 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
-                <Form.Label>Start Date</Form.Label>
+                <Form.Label>Rental Start Date</Form.Label>
                 <DatePicker className="form-control" wrapperClassName="form-control" required selected={this.state.startDate} onChange={(date) => this.handleDateChange("startDate", date)} />
               </Col>
               <Col>
-                <Form.Label>End Date</Form.Label>
+                <Form.Label>Rental End Date</Form.Label>
                 <DatePicker className="form-control" wrapperClassName="form-control" required selected={this.state.endDate} onChange={(date) => this.handleDateChange("endDate", date)} />
               </Col>
             </Row>
@@ -313,9 +304,9 @@ class SubmissionForm extends Component {
                 <Form.Label>Select Dental Rental Equipment</Form.Label>
                 <Select
                   components={animatedComponents}
-                  noOptionsMessage={() => "No available equipment for the given date range."}
+                  noOptionsMessage={() => "Ops! No available equipment for this given date range."}
                   isMulti
-                  placeholder="Select one or many pieces of equipment for the given date range."
+                  placeholder="Please select one or multiple pieces of equipment for the given date range."
                   name="available-equipment"
                   options={this.state.arrOptions}
                   className="basic-multi-select"

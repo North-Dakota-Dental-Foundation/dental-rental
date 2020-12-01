@@ -109,7 +109,6 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     );
 
     const requestId = newRequest.rows[0].id;
-    console.log("new request id", requestId);
 
     // for each equipment item in the equipment_in_request variable, link the request and each equipment item
     // by inserting into the equipment_requests junction table

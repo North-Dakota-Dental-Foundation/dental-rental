@@ -9,7 +9,7 @@ class RequestItem extends Component {
     state = {
         requestStatusSubmitted: false,
         selectOptions: [{ value: 'APPROVED', label: 'APPROVED' },
-        { value: 'REJECTED', label: 'REJECTED' }],
+        { value: 'REJECTED', label: 'REJECTED' }, { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PROCESSED', label: 'PROCESSED' }],
         currentEquipmentItemStatus: [{ label: `${this.props.request.status}`, value: `${this.props.request.status}` }] //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
     };
 
@@ -47,8 +47,6 @@ class RequestItem extends Component {
     };
 
     render() {
-        // console.log('this props!', this.props);
-        // n.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
         console.log(typeof this.props.request.phone_number);
         return (
             <>
