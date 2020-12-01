@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Table, Container, Row, Col, Spinner } from "react-bootstrap";
+import { Table, Container, Row, Col } from "react-bootstrap";
 
 import RequestItem from './RequestItem';
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
+import ThreeDots from "../../components/_DR_ThreeDots/ThreeDots";
 
 class RentalRequests extends Component {
 
@@ -46,9 +47,10 @@ class RentalRequests extends Component {
         {this.props.isLoading ?
           <>
             <br />
+            <br />
             <Row>
               <Col className="text-center">
-                <Spinner animation="grow" size="lg" />
+                <ThreeDots />
               </Col>
             </Row>
           </>
