@@ -6,24 +6,13 @@ function* rentalRequestSaga() {
         'FETCH_REQUESTS',
         fetchRequests,
     );
-    // yield takeEvery(
-    //     'POST',
-    //     postItem,
-    // );
-    // yield takeEvery(
-    //     'DELETE',
-    //     deleteItem,
-    // );
-    // yield takeEvery(
-    //     'EDIT',
-    //     editItem,
-    // )
 };
 
 function* fetchRequests(action) {
     try {
         const response = yield axios.get(`/api/requests`);
         yield put({ type: 'SET_REQUESTS', payload: response.data });
+        yield put({ type: "NOT_LOADING" }); //this removes the spinner effect
     } catch (error) {
         console.log('Failed to get user info from /api/requests', error);
     };

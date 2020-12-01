@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Table, Container, Row, Col } from "react-bootstrap";
+import { Table, Container, Row, Col, Spinner } from "react-bootstrap";
 
 import RequestItem from './RequestItem';
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
@@ -8,6 +8,7 @@ import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.sag
 class RentalRequests extends Component {
 
   componentDidMount() {
+    this.props.dispatch({ type: "LOADING" });
     this.getRequests();
     this.getEquipmentInRequests();
   };
@@ -41,33 +42,38 @@ class RentalRequests extends Component {
             <h1 id="form-header">Dental Rental Requests</h1>
           </Col>
         </Row>
-        <br />
-        <Table id="table-container" bordered hover responsive>
-          <thead>
-            <tr>
-              <th>Contact</th>
-              <th>Practice/Company</th>
-              <th style={{ width: "15%" }}>Address</th>
-              <th>Phone Number</th>
-              <th>Equipment</th>
-              <th>Purpose</th>
-              <th>Applied Date</th>
-              <th>Requested Dates</th>
-              <th>Application Status</th>
-            </tr>
-          </thead>
+        {this.props.isLoading ? <Row>
+          <Col className="text-center">
+            <Spinner animation="grow" size="lg" />
+          </Col>
+        </Row> :
+          <Table id="table-container" bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Contact</th>
+                <th>Practice/Company</th>
+                <th style={{ width: "15%" }}>Address</th>
+                <th>Phone Number</th>
+                <th>Equipment</th>
+                <th style={{ width: "5%" }}>Purpose</th>
+                <th style={{ width: "5%" }}>Applied Date</th>
+                <th style={{ width: "5%" }}>Requested Dates</th>
+                <th>Application Status</th>
+              </tr>
+            </thead>
 
-          <tbody>
+            <tbody>
 
-            {this.props.requests !== undefined && this.props.requests.map((request) => {
-              return (
-                <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
-              )
-            })}
+              {this.props.requests !== undefined && this.props.requests.map((request) => {
+                return (
+                  <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
+                )
+              })}
 
-          </tbody>
-        </Table>
-      </Container>
+            </tbody>
+          </Table>
+        }
+      </Container >
     );
   }
 }
@@ -110,7 +116,7 @@ const mapStoreToProps = (reduxState) => {
 
   }
 
-  return { requests }
+  return { requests, isLoading: reduxState.isLoadingReducer }
 };
 
 export default connect(mapStoreToProps)(RentalRequests);
