@@ -4,7 +4,7 @@ import { Table, Container, Row, Col } from "react-bootstrap";
 
 import RequestItem from "./RequestItem";
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
-import ThreeDots from "../../components/_DR_ThreeDots/ThreeDots";
+import ThreeDots from "../_DR_ThreeDots/ThreeDots";
 
 class RentalRequests extends Component {
   state = {
