@@ -71,7 +71,7 @@ CREATE TABLE "equipment" (
 "id" SERIAL PRIMARY KEY,
 "equipment_item" VARCHAR (160) NOT NULL,
 "equipment_status" VARCHAR (40) NOT NULL,
-"note" VARCHAR (255),
+"note" character varying(255) NOT NULL DEFAULT ''::character varying,
 "serial_number" VARCHAR (40) NOT NULL,
 "nddf_code" VARCHAR (40)
 );
@@ -166,3 +166,11 @@ JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";
 -- DROP TABLE "requests" CASCADE;
 
 -- DROP TABLE "equipment_requests";
+
+-- UPDATE TABLE COLUMN -- 
+
+UPDATE "equipment" SET "note" = '' WHERE "note" is NULL;
+
+ALTER TABLE "public"."equipment"
+ALTER COLUMN "note" SET DEFAULT '',
+ALTER COLUMN "note" SET NOT NULL;

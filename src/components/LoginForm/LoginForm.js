@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import mapStoreToProps from '../../redux/mapStoreToProps';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import mapStoreToProps from "../../redux/mapStoreToProps";
+import { Button, Row, Col } from "react-bootstrap";
 
 class LoginForm extends Component {
   state = {
-    firstName: '',
-    lastName: '',
-    username: '',
-    password: '',
-    superAdmin: '',
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+    superAdmin: "",
   };
 
   login = (event) => {
@@ -16,14 +17,14 @@ class LoginForm extends Component {
 
     if (this.state.username && this.state.password) {
       this.props.dispatch({
-        type: 'LOGIN',
+        type: "LOGIN",
         payload: {
           username: this.state.username,
           password: this.state.password,
         },
       });
     } else {
-      this.props.dispatch({ type: 'LOGIN_INPUT_ERROR' });
+      this.props.dispatch({ type: "LOGIN_INPUT_ERROR" });
     }
   }; // end login
 
@@ -35,7 +36,20 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form className="formPanel" onSubmit={this.login}>
+      <form
+        className="formPanel"
+        style={{
+          backgroundColor: "#9DBCD9",
+          borderRadius: "10px",
+          width: "27%",
+          justifyContent: "center",
+          margin: "0 auto",
+          display: "block",
+          opacity: "0.9",
+        }}
+        onSubmit={this.login}
+      >
+        <br />
         <h2>Login</h2>
         {this.props.store.errors.loginMessage && (
           <h3 className="alert" role="alert">
@@ -50,7 +64,7 @@ class LoginForm extends Component {
               name="username"
               required
               value={this.state.username}
-              onChange={this.handleInputChangeFor('username')}
+              onChange={this.handleInputChangeFor("username")}
             />
           </label>
         </div>
@@ -62,12 +76,16 @@ class LoginForm extends Component {
               name="password"
               required
               value={this.state.password}
-              onChange={this.handleInputChangeFor('password')}
+              onChange={this.handleInputChangeFor("password")}
             />
           </label>
         </div>
         <div>
-          <input className="btn" type="submit" name="submit" value="Log In" />
+          <Button className="btn" type="submit" value="Log In">
+            Log In
+          </Button>
+          <br />
+          <br />
         </div>
       </form>
     );
