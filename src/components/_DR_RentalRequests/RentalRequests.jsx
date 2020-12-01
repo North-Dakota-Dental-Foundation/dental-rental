@@ -2,16 +2,14 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Table, Container, Row, Col } from "react-bootstrap";
 
-
 import RequestItem from './RequestItem';
-import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga";
+import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
+import ThreeDots from "../../components/_DR_ThreeDots/ThreeDots";
 
 class RentalRequests extends Component {
-  state = {
-    requestStatus: "",
-  };
 
   componentDidMount() {
+    this.props.dispatch({ type: "LOADING" });
     this.getRequests();
     this.getEquipmentInRequests();
   };
@@ -39,39 +37,51 @@ class RentalRequests extends Component {
     //console.log(this.props.requests);
 
     return (
-      <Container>
+      <Container id="table-col-increase-padding" fluid>
         <Row>
           <Col className="text-center">
             <h1 id="form-header">Dental Rental Requests</h1>
           </Col>
         </Row>
         <br />
-        <Table id="table-container" bordered hover>
-          <thead>
-            <tr>
-              <th>Contact</th>
-              <th>Company</th>
-              <th>Address</th>
-              <th>Phone Number</th>
-              <th>Equipment</th>
-              <th>Purpose</th>
-              <th>Applied Date</th>
-              <th>Requested Dates</th>
-              <th>Application Status</th>
-            </tr>
-          </thead>
+        {this.props.isLoading ?
+          <>
+            <br />
+            <br />
+            <Row>
+              <Col className="text-center">
+                <ThreeDots />
+              </Col>
+            </Row>
+          </>
+          :
+          <Table id="table-container" bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Contact</th>
+                <th>Practice/Company</th>
+                <th style={{ width: "15%" }}>Address</th>
+                <th>Phone Number</th>
+                <th>Equipment</th>
+                <th style={{ width: "5%" }}>Purpose</th>
+                <th style={{ width: "5%" }}>Applied Date</th>
+                <th style={{ width: "5%" }}>Requested Dates</th>
+                <th>Application Status</th>
+              </tr>
+            </thead>
 
-          <tbody>
+            <tbody>
 
-            {this.props.requests !== undefined && this.props.requests.map((request) => {
-              return (
-                <RequestItem request={request} key={request.id} />
-              )
-            })}
+              {this.props.requests !== undefined && this.props.requests.map((request) => {
+                return (
+                  <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
+                )
+              })}
 
-          </tbody>
-        </Table>
-      </Container>
+            </tbody>
+          </Table>
+        }
+      </Container >
     );
   }
 }
@@ -107,9 +117,14 @@ const mapStoreToProps = (reduxState) => {
       //console.log(requests);
     }
 
+    //IMPLEMENT THIS ALGORITHM!
+    //for loop through [{id:x, equipment:'y'}, {id:x, equipment:'z'}] to transform data to {x: 'y, z'}
+    //for loop through request array [{request1}, {request2}]
+    // --> for each request, use id to get values in the object in step 1 and put into current request object with the key value "equipment_in_request"
+
   }
 
-  return { requests }
+  return { requests, isLoading: reduxState.isLoadingReducer }
 };
 
 export default connect(mapStoreToProps)(RentalRequests);

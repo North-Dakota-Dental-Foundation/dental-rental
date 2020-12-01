@@ -138,10 +138,9 @@ class SubmissionForm extends Component {
   handleShow = () => this.setState({ show: true });
 
   render() {
+    console.log(this.state.currentlySelectedEquipment);
     return (
       <Container>
-        {/* <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Set Form Success</Button>
-        <Button onClick={this.handleShow}>Show modal</Button> */}
         <Form id="form-container" onSubmit={this.handleSubmit}>
           <Row>
             <Col className="text-center">
@@ -310,7 +309,6 @@ class SubmissionForm extends Component {
           <br />
           <Button size="lg" variant="primary" type="submit">Submit Request</Button>
         </Form>
-
         {/* Modal rendering when form submitted */}
         {
           this.state.formSubmissionSuccess ? <Modal

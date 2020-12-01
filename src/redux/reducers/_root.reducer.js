@@ -5,7 +5,8 @@ import inventoryReducer from "./inventory.reducer";
 
 import userPageReducer from './DR_userPage.reducer';
 import rentalRequestsReducer from './DR_rentalRequests.reducer';
-import equipmentReducer from "./DR_EquipmentReducer";
+import equipmentReducer from "./DR_Equipment.reducer";
+import isLoadingReducer from "./DR_IsLoading.reducer";
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   rentalRequestsReducer,
   inventoryReducer,
   equipmentReducer,
+  isLoadingReducer,
 });
 
 export default rootReducer;
