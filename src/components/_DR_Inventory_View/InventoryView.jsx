@@ -172,7 +172,11 @@ class InventoryView extends Component {
     this.setState(
       {
         [event.target.name]: event.target.value,
-      },() => {this.submit()});
+      },
+      () => {
+        this.submit();
+      }
+    );
   };
 
   //form submit to create new inventory item
@@ -189,7 +193,6 @@ class InventoryView extends Component {
       title: "New Equipment Added To Inventory",
       text: `You have successfully added ${this.state.equipment_item}to your inventory.`,
       icon: "success",
-      buttons: true,
     });
     axios
       .get("/api/inventory")
@@ -207,7 +210,6 @@ class InventoryView extends Component {
       serial_number: "",
       nddf_code: "",
     });
-   
   };
 
   //open and closing modals
@@ -224,6 +226,7 @@ class InventoryView extends Component {
   render() {
     return (
       <>
+        <br />
         <Col className="text-center">
           <h1 id="form-header">Inventory Management</h1>
         </Col>
@@ -396,7 +399,7 @@ class InventoryView extends Component {
         <Container>
           <OverlayTrigger
             placement="top"
-            delay={{ show: 2000 }}
+            delay={{ show: 1000 }}
             overlay={
               <Tooltip id="button-tooltip-2">
                 Add new equipment to your inventory.
@@ -416,11 +419,6 @@ class InventoryView extends Component {
               </Button>
             )}
           </OverlayTrigger>
-
-
-
-
-
           <select onChange={this.handleFilterChange} name="filterStatus">
             <option value='N/A'>NO FILTER</option>
             <option value={0}>AVAILABLE</option>
@@ -429,15 +427,10 @@ class InventoryView extends Component {
             <option value={3}>IN-INSPECTION</option>
             <option value={4}>MISSING</option>
           </select>
-
-
-
-
-
           &nbsp; &nbsp;&nbsp;
           <OverlayTrigger
             placement="top"
-            delay={{ show: 2000 }}
+            delay={{ show: 1000 }}
             overlay={
               <Tooltip id="button-tooltip-2">
                 Filter the inventory table by status.
@@ -445,11 +438,6 @@ class InventoryView extends Component {
             }
           >
             {({ ref, ...triggerHandler }) => (
-
-
-
-
-
               <Button
                 variant="primary"
                 ref={ref}
@@ -457,12 +445,7 @@ class InventoryView extends Component {
                 onClick={this.submit}
               >
                 Refresh Table
-                </Button>
-
-
-
-
-
+              </Button>
             )}
           </OverlayTrigger>
           <br />

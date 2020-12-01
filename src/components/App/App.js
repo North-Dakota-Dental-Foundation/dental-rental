@@ -37,8 +37,7 @@ class App extends Component {
         <div>
           <Nav />
           <Switch>
-            {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
-            <Redirect exact from="/" to="/home" />
+            <Redirect exact from="/" to="/rental_requests" />
 
             {/* Visiting localhost:3000/about will show the about page. */}
             <ProtectedRoute
@@ -84,15 +83,6 @@ class App extends Component {
               exact
               path="/login"
               component={LoginPage}
-              authRedirect="/user"
-            />
-            <ProtectedRoute
-              // with authRedirect:
-              // - if logged in, redirects to "/user"
-              // - else shows RegisterPage at "/registration"
-              exact
-              path="/registration"
-              component={RegisterPage}
               authRedirect="/user"
             />
 

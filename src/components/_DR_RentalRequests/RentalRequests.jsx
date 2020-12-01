@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import { Table, Container, Row, Col } from "react-bootstrap";
 
-import RequestItem from './RequestItem';
+import RequestItem from "./RequestItem";
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
 import ThreeDots from "../../components/_DR_ThreeDots/ThreeDots";
 
 class RentalRequests extends Component {
-
   state = {
     requestFilterStatus: 'NONE',
   }
@@ -16,7 +15,7 @@ class RentalRequests extends Component {
     this.props.dispatch({ type: "LOADING" });
     this.getRequests();
     this.getEquipmentInRequests();
-  };
+  }
 
   getRequests = () => {
 
@@ -36,7 +35,7 @@ class RentalRequests extends Component {
 
   getEquipmentInRequests = () => {
     this.props.dispatch({
-      type: 'FETCH_EQUIPMENT_IN_REQUESTS',
+      type: "FETCH_EQUIPMENT_IN_REQUESTS",
     });
   };
 
@@ -53,11 +52,11 @@ class RentalRequests extends Component {
   };
 
   render() {
-
     //console.log(this.props.requests);
 
     return (
       <>
+
 
         <select onChange={this.handleFilterChange} name="filterStatus">
           <option value={'NONE'}>NO FILTER</option>
@@ -65,6 +64,7 @@ class RentalRequests extends Component {
           <option value={'APPROVED'}>APPROVED</option>
           <option value={'REJECTED'}>REJECTED</option>
         </select>
+        <br />
 
         <Container id="table-col-increase-padding" fluid>
           <Row>
@@ -73,7 +73,9 @@ class RentalRequests extends Component {
             </Col>
           </Row>
           <br />
-          {this.props.isLoading ?
+
+          {this.props.isLoading ? (
+
             <>
               <br />
               <br />
@@ -83,7 +85,7 @@ class RentalRequests extends Component {
                 </Col>
               </Row>
             </>
-            :
+          ) : (
             <Table id="table-container" bordered hover responsive>
               <thead>
                 <tr>
@@ -100,7 +102,6 @@ class RentalRequests extends Component {
               </thead>
 
               <tbody>
-
                 {this.props.requests !== undefined && this.props.requests.map((request) => {
                   return (
                     <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
@@ -111,13 +112,13 @@ class RentalRequests extends Component {
             </Table>
           }
         </Container >
+
       </>
     );
   }
 }
 
 const mapStoreToProps = (reduxState) => {
-
   let requests = reduxState.rentalRequestsReducer;
 
   //console.log(reduxState.equipmentReducer);
@@ -135,13 +136,15 @@ const mapStoreToProps = (reduxState) => {
         tempArr.push(item.equipment_item);
       }
 
-      let strListOfEquipmentItemsPerRequest = tempArr.join(', ');
+      let strListOfEquipmentItemsPerRequest = tempArr.join(", ");
 
       for (let requestObj of requests) {
         //console.log(requestObj.id, key);
         if (String(requestObj.id) === key) {
           //console.log('in here!')
-          requestObj["equipment_in_request"] = strListOfEquipmentItemsPerRequest;
+          requestObj[
+            "equipment_in_request"
+          ] = strListOfEquipmentItemsPerRequest;
         }
       }
       //console.log(requests);
@@ -151,10 +154,9 @@ const mapStoreToProps = (reduxState) => {
     //for loop through [{id:x, equipment:'y'}, {id:x, equipment:'z'}] to transform data to {x: 'y, z'}
     //for loop through request array [{request1}, {request2}]
     // --> for each request, use id to get values in the object in step 1 and put into current request object with the key value "equipment_in_request"
-
   }
 
-  return { requests, isLoading: reduxState.isLoadingReducer }
+  return { requests, isLoading: reduxState.isLoadingReducer };
 };
 
 export default connect(mapStoreToProps)(RentalRequests);
