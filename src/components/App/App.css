@@ -53,9 +53,10 @@ select {
   text-align: center;
 }
 
-.deleteButton {
-  text-align: "right";
+.btn-outline-primary {
+  color: #1a7696 !important;
 }
+
 /* img {
   display: inline-block;
   max-width: 100%;
