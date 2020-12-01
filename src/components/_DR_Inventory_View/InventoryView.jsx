@@ -180,11 +180,7 @@ class InventoryView extends Component {
     this.setState(
       {
         [event.target.name]: event.target.value,
-      },
-      () => {
-        this.submit();
-      }
-    );
+      },() => {this.submit()});
   };
 
   //form submit to create new inventory item
@@ -214,13 +210,12 @@ class InventoryView extends Component {
       .catch((error) => {
         console.log(error);
       });
-    this.submit();
     this.setState({
       equipment_item: "",
       serial_number: "",
       nddf_code: "",
     });
-    this.submit();
+   
   };
 
   //open and closing modals
