@@ -42,6 +42,10 @@ class InventoryView extends Component {
     this.getInventory();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) { this.submit() }
+  }
+
   handleNoteChange = (event) => {
     this.setState({
       ...this.state,
@@ -85,10 +89,6 @@ class InventoryView extends Component {
   getFilterInventory = () => {
     // Repopulates this.state.inventory with filtered data
     console.log("Filtering inventory...");
-    this.setState({
-      // Reset this.state.inventory
-      inventory: [],
-    });
     axios
       .get(`/api/inventory/filterinv/${this.state.filterStatus}`) // GET request with selected filter
       .then((response) => {
@@ -111,8 +111,6 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
-    this.getInventory();
-    this.submit();
   };
 
   editNotes = () => {
@@ -130,9 +128,6 @@ class InventoryView extends Component {
       icon: "success",
       buttons: true,
     });
-
-    this.getInventory();
-
     /*     this.getInventory(); // TODO: Move this to your EDIT_NOTE saga due to async delays
      */
   };
@@ -434,7 +429,12 @@ class InventoryView extends Component {
               </Button>
             )}
           </OverlayTrigger>
-          <select onChange={this.handleChange} name="filterStatus">
+
+
+
+
+
+          <select onChange={this.handleFilterChange} name="filterStatus">
             <option value="N/A">None</option>
             <option value={0}>AVAILABLE</option>
             <option value={1}>CHECKED-OUT</option>
@@ -442,6 +442,11 @@ class InventoryView extends Component {
             <option value={3}>IN-INSPECTION</option>
             <option value={4}>MISSING</option>
           </select>
+
+
+
+
+
           &nbsp; &nbsp;&nbsp;
           <OverlayTrigger
             placement="top"
@@ -453,14 +458,24 @@ class InventoryView extends Component {
             }
           >
             {({ ref, ...triggerHandler }) => (
+
+
+
+
+
               <Button
                 variant="primary"
                 ref={ref}
                 {...triggerHandler}
                 onClick={this.submit}
               >
-                Apply Filter
-              </Button>
+                Refresh Table
+                </Button>
+
+
+
+
+
             )}
           </OverlayTrigger>
           <br />
