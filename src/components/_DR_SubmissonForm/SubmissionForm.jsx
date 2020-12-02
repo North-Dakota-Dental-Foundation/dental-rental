@@ -143,6 +143,7 @@ class SubmissionForm extends Component {
       <Container>
         {/* <Button onClick={this.handleShow}>Show Modal</Button>
         <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Form success</Button> */}
+        <br />
         <Form id="form-container" onSubmit={this.handleSubmit}>
           <Row>
             <Col className="text-center">

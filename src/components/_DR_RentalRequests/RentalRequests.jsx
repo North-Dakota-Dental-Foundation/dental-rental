@@ -9,8 +9,9 @@ import Select from 'react-select';
 
 class RentalRequests extends Component {
   state = {
-    filterOptions: [{ value: 'NONE', label: 'NONE' }, { value: 'PENDING', label: 'PENDING' }, { value: 'APPROVED', label: 'APPROVED' },
-    { value: 'REJECTED', label: 'REJECTED' }, { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PROCESSED', label: 'PROCESSED' }],
+    numberOfPendingRequests: 0,
+    filterOptions: [{ value: 'NONE', label: 'NONE' }, { value: 'APPROVED', label: 'APPROVED' },
+    { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PENDING', label: 'PENDING' }, { value: 'PROCESSED', label: 'PROCESSED' }, { value: 'REJECTED', label: 'REJECTED' }],
     requestFilterStatus: [{ label: `NONE`, value: `NONE` }] //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
   }
 
@@ -61,8 +62,6 @@ class RentalRequests extends Component {
   }
 
   render() {
-    console.log(this.props.requests);
-    console.log(this.state.requestFilterStatus);
     return (
       <>
         <br />
@@ -75,7 +74,7 @@ class RentalRequests extends Component {
           </Row>
           <Row>
             <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-              Status Filter Applied:
+              Status Filter:
               <Select
                 onChange={this.handleFilterChange}
                 className="basic-single"
@@ -89,7 +88,7 @@ class RentalRequests extends Component {
             <Col> {/*This extra column allows for right alignment*/}
             </Col>
             {/* if the number of PENDING is greater than 0 AND if the filter is set to PENDING or NONE, then show the alert */}
-            {this.props.requests.length > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
+            {this.getNumberOfPendingRequests() > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
               <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
                 <Alert variant="danger">
                   Current Number of Pending Requests: {this.getNumberOfPendingRequests()} {/*length of this array corresponds to the number of requests*/}
