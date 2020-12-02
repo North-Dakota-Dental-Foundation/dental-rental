@@ -1,14 +1,16 @@
 #users {
+    text-align: center;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-#addUserInputs {
-   padding: 20px;
+#addUserButton {
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
-#userTable {
-    justify-content: center;
+#addUserInputs {
+   padding: 20px;
 }
 
 #adminSelectdesc {
