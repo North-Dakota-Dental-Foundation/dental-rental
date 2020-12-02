@@ -1,34 +1,37 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Table, Container, Row, Col } from "react-bootstrap";
-
+import { Alert, Table, Container, Row, Col } from "react-bootstrap";
 import RequestItem from "./RequestItem";
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
 import ThreeDots from "../_DR_ThreeDots/ThreeDots";
+import Select from 'react-select';
+
 
 class RentalRequests extends Component {
   state = {
-    requestFilterStatus: 'NONE',
+    filterOptions: [{ value: 'NONE', label: 'NONE' }, { value: 'PENDING', label: 'PENDING' }, { value: 'APPROVED', label: 'APPROVED' },
+    { value: 'REJECTED', label: 'REJECTED' }, { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PROCESSED', label: 'PROCESSED' }],
+    requestFilterStatus: [{ label: `NONE`, value: `NONE` }] //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
   }
 
   componentDidMount() {
-    this.props.dispatch({ type: "LOADING" });
+    this.props.dispatch({ type: "LOADING" }); //activates spinner effect
     this.getRequests();
     this.getEquipmentInRequests();
   }
 
   getRequests = () => {
 
-    if (this.state.requestFilterStatus === 'NONE') { // If filter = NONE, run "FETCH_REQUESTS"
+    if (this.state.requestFilterStatus[0].value === 'NONE') { // If filter = NONE, run "FETCH_REQUESTS"
       this.props.dispatch({
         type: 'FETCH_REQUESTS',
       });
     };
 
-    if (this.state.requestFilterStatus !== 'NONE') { // If filter != NONE, run "FETCH FILTERED_REQUESTS"
+    if (this.state.requestFilterStatus[0].value !== 'NONE') { // If filter != NONE, run "FETCH FILTERED_REQUESTS"
       this.props.dispatch({
         type: 'FETCH_FILTERED_REQUESTS',
-        payload: this.state.requestFilterStatus,
+        payload: this.state.requestFilterStatus[0].value,
       });
     };
   };
@@ -47,34 +50,55 @@ class RentalRequests extends Component {
 
   handleFilterChange = (event) => { // For specifically handling the filter dropdown 
     this.setState({
-      requestFilterStatus: event.target.value,
+      requestFilterStatus: [event],
     }, () => { this.getRequests() });
   };
 
-  render() {
-    //console.log(this.props.requests);
+  getNumberOfPendingRequests = () => {
+    return this.props.requests.filter(requestObj => {
+      return requestObj.status === 'PENDING';
+    }).length;
+  }
 
+  render() {
+    console.log(this.props.requests);
+    console.log(this.state.requestFilterStatus);
     return (
       <>
-
-
-        <select onChange={this.handleFilterChange} name="filterStatus">
-          <option value={'NONE'}>NO FILTER</option>
-          <option value={'PENDING'}>PENDING</option>
-          <option value={'APPROVED'}>APPROVED</option>
-          <option value={'REJECTED'}>REJECTED</option>
-        </select>
         <br />
-
         <Container id="table-col-increase-padding" fluid>
           <Row>
             <Col className="text-center">
               <h1 id="form-header">Dental Rental Requests</h1>
+              <br />
             </Col>
           </Row>
+          <Row>
+            <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+              Status Filter Applied:
+              <Select
+                onChange={this.handleFilterChange}
+                className="basic-single"
+                classNamePrefix="select"
+                value={this.state.requestFilterStatus}
+                name="requestFilterStatus"
+                options={this.state.filterOptions}
+                placeholder="Filter by Status"
+              />
+            </Col>
+            <Col> {/*This extra column allows for right alignment*/}
+            </Col>
+            {/* if the number of PENDING is greater than 0 AND if the filter is set to PENDING or NONE, then show the alert */}
+            {this.props.requests.length > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
+              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                <Alert variant="danger">
+                  Current Number of Pending Requests: {this.getNumberOfPendingRequests()} {/*length of this array corresponds to the number of requests*/}
+                </Alert>
+              </Col>
+            }
+          </Row>
           <br />
-
-          {this.props.isLoading ? (
+          {this.props.isLoading ?
 
             <>
               <br />
@@ -85,7 +109,7 @@ class RentalRequests extends Component {
                 </Col>
               </Row>
             </>
-          ) : (
+            :
             <Table id="table-container" bordered hover responsive>
               <thead>
                 <tr>

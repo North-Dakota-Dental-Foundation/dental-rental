@@ -66,13 +66,11 @@ class Users extends Component {
         phonenumber: this.state.phonenumber,
         password: this.state.password,
       },
-
     })).then(() => {
       this.getUsers();
       this.resetState();
-    }))
+    }));
 
-    });
     swal({
       title: "User Successfully Added",
       text: `${this.state.username} has been successfully added to the system`,
