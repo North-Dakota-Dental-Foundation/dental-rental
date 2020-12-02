@@ -1,0 +1,12 @@
+#table-col-increase-padding {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+#table-container {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 12px #aaaaaa;
+    margin-bottom: 10rem !important; 
+    /* margin bottom is important for allowing enough room for dropdown menu */
+}

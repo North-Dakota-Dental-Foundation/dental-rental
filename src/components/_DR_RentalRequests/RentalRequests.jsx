@@ -1,34 +1,45 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Table, Container, Row, Col } from "react-bootstrap";
-
+import { Alert, Table, Container, Row, Col } from "react-bootstrap";
 import RequestItem from "./RequestItem";
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
 import ThreeDots from "../_DR_ThreeDots/ThreeDots";
+import Select from 'react-select';
+import "./RentalRequest.css"
+
 
 class RentalRequests extends Component {
   state = {
-    requestFilterStatus: 'NONE',
+    numberOfPendingRequests: 0,
+
+    noFilterOption: [{ value: 'NONE', label: 'NONE' }],
+
+    currentFilterOptions: [{ value: 'APPROVED', label: 'APPROVED' }, { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PENDING', label: 'PENDING' }],
+
+    requestFilterStatus: [{ label: `NONE`, value: `NONE` }], //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
+
+    archivedFilterOptions: [{ value: 'PROCESSED', label: 'PROCESSED' }, { value: 'REJECTED', label: 'REJECTED' }],
+
   }
 
   componentDidMount() {
-    this.props.dispatch({ type: "LOADING" });
+    this.props.dispatch({ type: "LOADING" }); //activates spinner effect
     this.getRequests();
     this.getEquipmentInRequests();
   }
 
   getRequests = () => {
 
-    if (this.state.requestFilterStatus === 'NONE') { // If filter = NONE, run "FETCH_REQUESTS"
+    if (this.state.requestFilterStatus[0].value === 'NONE') { // If filter = NONE, run "FETCH_REQUESTS"
       this.props.dispatch({
         type: 'FETCH_REQUESTS',
       });
     };
 
-    if (this.state.requestFilterStatus !== 'NONE') { // If filter != NONE, run "FETCH FILTERED_REQUESTS"
+    if (this.state.requestFilterStatus[0].value !== 'NONE') { // If filter != NONE, run "FETCH FILTERED_REQUESTS"
       this.props.dispatch({
         type: 'FETCH_FILTERED_REQUESTS',
-        payload: this.state.requestFilterStatus,
+        payload: this.state.requestFilterStatus[0].value,
       });
     };
   };
@@ -47,35 +58,72 @@ class RentalRequests extends Component {
 
   handleFilterChange = (event) => { // For specifically handling the filter dropdown 
     this.setState({
-      requestFilterStatus: event.target.value,
+      requestFilterStatus: [event],
     }, () => { this.getRequests() });
   };
 
-  render() {
-    //console.log(this.props.requests);
+  getNumberOfRequestsByStatus = (strStatus) => {
+    return this.props.requests.filter(requestObj => {
+      return requestObj.status === strStatus;
+    }).length;
+  }
 
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  render() {
     return (
       <>
-
-
-        <select onChange={this.handleFilterChange} name="filterStatus">
-          <option value={'NONE'}>NO FILTER</option>
-          <option value={'PENDING'}>PENDING</option>
-          <option value={'APPROVED'}>APPROVED</option>
-          <option value={'REJECTED'}>REJECTED</option>
-        </select>
         <br />
-
-        <Container id="table-col-increase-padding" fluid>
+        <Container className="mb-5" id="table-col-increase-padding" fluid>
           <Row>
             <Col className="text-center">
               <h1 id="form-header">Dental Rental Requests</h1>
+              <br />
             </Col>
           </Row>
+          <Row>
+            <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+              <strong>Status Filter:</strong>
+              <Select
+                onChange={this.handleFilterChange}
+                className="basic-single"
+                classNamePrefix="select"
+                value={this.state.requestFilterStatus}
+                name="requestFilterStatus"
+                options={[{ label: '', options: this.state.noFilterOption }, { label: `Current`, options: this.state.currentFilterOptions }, { label: `Archived`, options: this.state.archivedFilterOptions }]}
+                placeholder="Filter by Status"
+              />
+            </Col>
+            <Col> {/*This extra column allows for right alignment*/}
+            </Col>
+
+            {/* if the number of PENDING is greater than 0 AND if the filter is set to a CERTAIN STATUS, then show the alert */}
+            {this.getNumberOfRequestsByStatus('PENDING') > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
+              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                <Alert variant="danger">
+                  <strong>Current Number of Pending Requests: {this.getNumberOfRequestsByStatus('PENDING')}</strong> {/*length of this array corresponds to the number of requests*/}
+                </Alert>
+              </Col>
+            }
+            {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'APPROVED' || this.state.requestFilterStatus[0].value === 'ACTIVE') &&
+              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                <Alert variant="success">
+                  <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
+                </Alert>
+              </Col>
+            }
+            {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'REJECTED' || this.state.requestFilterStatus[0].value === 'PROCESSED') &&
+              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                <Alert variant="dark">
+                  <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
+                </Alert>
+              </Col>
+            }
+          </Row>
           <br />
-
-          {this.props.isLoading ? (
-
+          {this.props.isLoading ?
             <>
               <br />
               <br />
@@ -85,19 +133,19 @@ class RentalRequests extends Component {
                 </Col>
               </Row>
             </>
-          ) : (
-            <Table id="table-container" bordered hover responsive>
+            :
+            <Table className="mb-5" id="table-container" bordered hover responsive>
               <thead>
                 <tr>
-                  <th>Contact</th>
+                  <th > Contact</th>
                   <th>Practice/Company</th>
-                  <th style={{ width: "15%" }}>Address</th>
+                  <th>Address</th>
                   <th>Phone Number</th>
                   <th>Equipment</th>
-                  <th style={{ width: "5%" }}>Purpose</th>
-                  <th style={{ width: "5%" }}>Applied Date</th>
-                  <th style={{ width: "5%" }}>Requested Dates</th>
-                  <th>Application Status</th>
+                  <th>Purpose</th>
+                  <th>Applied Date</th>
+                  <th>Requested Dates</th>
+                  <th style={{ width: "15%" }}>Application Status</th>
                 </tr>
               </thead>
 
