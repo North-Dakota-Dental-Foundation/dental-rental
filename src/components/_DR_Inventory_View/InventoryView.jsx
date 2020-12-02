@@ -201,7 +201,7 @@ class InventoryView extends Component {
 
     swal({
       title: "New Equipment Added To Inventory",
-      text: `You have successfully added ${this.state.equipment_item}to your inventory.`,
+      text: `You have successfully added ${this.state.equipment_item} to your inventory.`,
       icon: "success",
     });
     axios

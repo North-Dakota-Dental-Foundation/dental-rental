@@ -173,7 +173,7 @@ class Users extends Component {
                         onChange={this.handleChange}
                         controlId="exampleForm.ControlTextarea1a"
                       >
-                        <Form.Label>Username(email):</Form.Label>
+                        <Form.Label>Username (Email):</Form.Label>
                         <Form.Control
                           placeholder=""
                           as="textarea"
