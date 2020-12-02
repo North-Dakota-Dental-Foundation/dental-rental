@@ -11,9 +11,15 @@ import "./RentalRequest.css"
 class RentalRequests extends Component {
   state = {
     numberOfPendingRequests: 0,
-    filterOptions: [{ value: 'NONE', label: 'NONE' }, { value: 'APPROVED', label: 'APPROVED' },
-    { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PENDING', label: 'PENDING' }, { value: 'PROCESSED', label: 'PROCESSED' }, { value: 'REJECTED', label: 'REJECTED' }],
-    requestFilterStatus: [{ label: `NONE`, value: `NONE` }] //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
+
+    noFilterOption: [{ value: 'NONE', label: 'NONE' }],
+
+    currentFilterOptions: [{ value: 'APPROVED', label: 'APPROVED' }, { value: 'ACTIVE', label: 'ACTIVE' }, { value: 'PENDING', label: 'PENDING' }],
+
+    requestFilterStatus: [{ label: `NONE`, value: `NONE` }], //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
+
+    archivedFilterOptions: [{ value: 'PROCESSED', label: 'PROCESSED' }, { value: 'REJECTED', label: 'REJECTED' }],
+
   }
 
   componentDidMount() {
@@ -66,7 +72,6 @@ class RentalRequests extends Component {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-
   render() {
     return (
       <>
@@ -87,7 +92,7 @@ class RentalRequests extends Component {
                 classNamePrefix="select"
                 value={this.state.requestFilterStatus}
                 name="requestFilterStatus"
-                options={this.state.filterOptions}
+                options={[{ label: '', options: this.state.noFilterOption }, { label: `Current`, options: this.state.currentFilterOptions }, { label: `Archived`, options: this.state.archivedFilterOptions }]}
                 placeholder="Filter by Status"
               />
             </Col>
