@@ -495,7 +495,7 @@ class InventoryView extends Component {
                       <option value={"Available"}>AVAILABLE</option>
                       <option value={"Checked-Out"}>CHECKED-OUT</option>
                       <option value={"Shipped"}>SHIPPED</option>
-                      <option value={"In Inspection"}>IN INSPECTION</option>
+                      <option value={"In-Inspection"}>IN-INSPECTION</option>
                       <option value={"Missing"}>MISSING</option>
                     </select>
                   </td>
