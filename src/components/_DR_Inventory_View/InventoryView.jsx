@@ -18,6 +18,9 @@ import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 import axios from "axios";
 
+import Select from 'react-select';
+
+
 class InventoryView extends Component {
   state = {
     equipment_item: "",
@@ -34,6 +37,9 @@ class InventoryView extends Component {
     itemToEdit: null,
 
     filterStatus: "N/A",
+    selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'SHIPPED', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
+    // currentEquipmentItemStatus: [{ label: `${this.props.request.status}`, value: `${this.props.request.status}` }] //This will be an array of objects [{value: x, label: "y"}]. This is necessary for react-select
+
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -52,9 +58,7 @@ class InventoryView extends Component {
   submit = () => {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
 
-    // this.setState({
-    //   inventory: [],
-    // });
+    //hi
 
     if (this.state.filterStatus === "N/A") {
       this.getInventory();
@@ -94,15 +98,16 @@ class InventoryView extends Component {
       });
   };
 
-  editStatus = (id, value) => {
-    console.log(id);
+  editStatus = (valueObj, id) => {
+    console.log(valueObj.value, id);
     this.props.dispatch({
       type: "EDIT_STATUS",
       payload: {
-        equipment_status: value,
+        equipment_status: valueObj.value,
         equipment_id: id,
       },
     });
+    this.getInventory();
   };
 
   editNotes = () => {
@@ -366,7 +371,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Label>Notes for ${ }</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -474,7 +479,7 @@ class InventoryView extends Component {
                     {inventoryItem.nddf_code}
                   </td>
                   <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-                    <select
+                    {/* <select
                       onChange={(event) =>
                         this.editStatus(inventoryItem.id, event.target.value)
                       }
@@ -487,7 +492,16 @@ class InventoryView extends Component {
                       <option value={"Shipped"}>SHIPPED</option>
                       <option value={"In-Inspection"}>IN-INSPECTION</option>
                       <option value={"Missing"}>MISSING</option>
-                    </select>
+                    </select> */}
+
+                    <Select
+                      onChange={(e) => this.editStatus(e, inventoryItem.id)}
+                      className="basic-single"
+                      classNamePrefix="select"
+                      value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                      name="requestStatus"
+                      options={this.state.selectOptions}
+                    />
                   </td>
 
                   <td style={{ textAlign: "center" }}>
