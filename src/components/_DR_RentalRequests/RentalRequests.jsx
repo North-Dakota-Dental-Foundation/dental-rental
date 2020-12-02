@@ -92,7 +92,7 @@ class RentalRequests extends Component {
                 classNamePrefix="select"
                 value={this.state.requestFilterStatus}
                 name="requestFilterStatus"
-                options={[{ label: '', options: this.state.noFilterOption }, { label: `Current`, options: this.state.currentFilterOptions }, { label: `Archived`, options: this.state.archivedFilterOptions }]}
+                options={[{ label: '', options: this.state.noFilterOption }, { label: `Current Requests`, options: this.state.currentFilterOptions }, { label: `Archived Requests`, options: this.state.archivedFilterOptions }]}
                 placeholder="Filter by Status"
               />
             </Col>
