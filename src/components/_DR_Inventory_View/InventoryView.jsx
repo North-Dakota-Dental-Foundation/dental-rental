@@ -19,6 +19,9 @@ import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 import axios from "axios";
 
+import Select from 'react-select';
+
+
 class InventoryView extends Component {
   state = {
     equipment_item: "",
@@ -34,7 +37,9 @@ class InventoryView extends Component {
     isEdit: false,
     itemToEdit: null,
 
-    filterStatus: "N/A",
+    filterStatus: [{ label: `NONE`, value: "N/A" }],
+    filterOptions: [{ label: `NONE`, value: "N/A" }, { value: 0, label: 'AVAILABLE' }, { value: 4, label: 'MISSING' }, { value: 1, label: 'CHECKED-OUT' }, { value: 2, label: 'SHIPPED' }, { value: 3, label: 'IN-INSPECTION' }],
+    selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'MISSING', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -53,13 +58,9 @@ class InventoryView extends Component {
   submit = () => {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
 
-    // this.setState({
-    //   inventory: [],
-    // });
-
-    if (this.state.filterStatus === "N/A") {
+    if (this.state.filterStatus[0].value === "N/A") {
       this.getInventory();
-    } else if (this.state.filterStatus !== "N/A") {
+    } else if (this.state.filterStatus[0].value !== "N/A") {
       this.getFilterInventory();
     }
   };
@@ -83,7 +84,7 @@ class InventoryView extends Component {
     // Repopulates this.state.inventory with filtered data
     console.log("Filtering inventory...");
     axios
-      .get(`/api/inventory/filterinv/${this.state.filterStatus}`) // GET request with selected filter
+      .get(`/api/inventory/filterinv/${this.state.filterStatus[0].value}`) // GET request with selected filter
       .then((response) => {
         this.setState({
           // Sets this.state.inventory to new data
@@ -95,15 +96,16 @@ class InventoryView extends Component {
       });
   };
 
-  editStatus = (id, value) => {
-    console.log(id);
+  editStatus = (valueObj, id) => {
+    console.log(valueObj.value, id);
     this.props.dispatch({
       type: "EDIT_STATUS",
       payload: {
-        equipment_status: value,
+        equipment_status: valueObj.value,
         equipment_id: id,
       },
     });
+    this.getInventory();
   };
 
   editNotes = () => {
@@ -128,6 +130,7 @@ class InventoryView extends Component {
   deleteInventory = (inventoryId, objectIndex) => {
     console.log(this.state.inventory);
     console.log(objectIndex);
+    console.log(inventoryId);
 
     swal({
       title: `Are you sure you want to delete ${this.state.inventory[objectIndex].equipment_item}?`,
@@ -167,12 +170,9 @@ class InventoryView extends Component {
   };
 
   handleFilterChange = (event) => {
-    console.log(
-      `Handle filter change ${event.target.name} ${event.target.value}`
-    );
     this.setState(
       {
-        [event.target.name]: event.target.value,
+        filterStatus: [event],
       },
       () => {
         this.submit();
@@ -432,15 +432,15 @@ class InventoryView extends Component {
           </OverlayTrigger>
 
           <strong>App Status Filter:</strong> <br />
-          <select onChange={this.handleFilterChange} name="filterStatus">
-            <option value='N/A'>NO FILTER</option>
-            <option value={0}>AVAILABLE</option>
-            <option value={1}>CHECKED-OUT</option>
-            <option value={2}>SHIPPED</option>
-            <option value={3}>IN-INSPECTION</option>
-            <option value={4}>MISSING</option>
-          </select>
-
+          <Select
+            onChange={this.handleFilterChange}
+            className="basic-single"
+            classNamePrefix="select"
+            value={this.state.filterStatus}
+            name="filterStatus"
+            options={this.state.filterOptions}
+            placeholder="Filter by Status"
+          />
           &nbsp; &nbsp;&nbsp;
           <OverlayTrigger
             placement="top"
@@ -488,20 +488,14 @@ class InventoryView extends Component {
                     {inventoryItem.nddf_code}
                   </td>
                   <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-                    <select
-                      onChange={(event) =>
-                        this.editStatus(inventoryItem.id, event.target.value)
-                      }
-                      name="changeStatus"
-                    >
-                      <option>{inventoryItem.equipment_status}</option>
-
-                      <option value={"Available"}>AVAILABLE</option>
-                      <option value={"Checked-Out"}>CHECKED-OUT</option>
-                      <option value={"Shipped"}>SHIPPED</option>
-                      <option value={"In-Inspection"}>IN-INSPECTION</option>
-                      <option value={"Missing"}>MISSING</option>
-                    </select>
+                    <Select
+                      onChange={(e) => this.editStatus(e, inventoryItem.id)}
+                      className="basic-single"
+                      classNamePrefix="select"
+                      value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                      name="requestStatus"
+                      options={this.state.selectOptions}
+                    />
                   </td>
 
                   <td style={{ textAlign: "center" }}>

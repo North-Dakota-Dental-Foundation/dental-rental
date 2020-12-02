@@ -105,6 +105,8 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
   let { equipment_status } = req.body;
   equipment_status = equipment_status.toUpperCase();
+
+  console.log('id: ', id, 'status: ', equipment_status);
   
   let queryText = `UPDATE "equipment" SET "equipment_status" = $1 WHERE "id" = $2;`;
   pool
@@ -134,10 +136,23 @@ router.put("/:id/update-note", rejectUnauthenticated, (req, res) => {
 
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
-  
-  let queryText = `DELETE FROM "equipment" WHERE "id" = $1;`;
+
+  let queryText_1 = `DELETE FROM "equipment_requests" WHERE "equipment_id" = $1;`;
   pool
-    .query(queryText, [id])
+    .query(queryText_1, [id])
+    .then((result) => {
+      console.log(
+        "Successfully deleted equipment reference in equipment_requests junction table"
+      );
+    })
+    .catch((error) => {
+      console.log("Error in deleting equipment,", error);
+      res.sendStatus(500);
+    });
+  
+  let queryText_2 = `DELETE FROM "equipment" WHERE "id" = $1;`;
+  pool
+    .query(queryText_2, [id])
     .then((result) => {
       res.sendStatus(200);
     })
