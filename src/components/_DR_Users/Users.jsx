@@ -10,7 +10,7 @@ import {
   OverlayTrigger,
   Tooltip,
   Form,
-  FormGroup,
+  Alert,
 } from "react-bootstrap";
 import swal from "sweetalert";
 
@@ -20,11 +20,11 @@ import UserItem from "./UserItem";
 
 class Users extends Component {
   state = {
-    firstname: 'N/A',
-    lastname: 'N/A',
-    username: 'N/A', // USERNAME IS EMAIL
+    firstname: '',
+    lastname: '',
+    username: '', // USERNAME IS EMAIL
     phonenumber: 'N/A',
-    password: 'N/A',
+    password: '',
 
     super_admin: false,
     addUser: false,
@@ -42,19 +42,19 @@ class Users extends Component {
 
 
   resetState = () => this.setState({
-    firstname: 'N/A',
-    lastname: 'N/A',
-    username: 'N/A', // USERNAME IS EMAIL
+    firstname: '',
+    lastname: '',
+    username: '', // USERNAME IS EMAIL
     phonenumber: 'N/A',
-    password: 'N/A',
+    password: '',
     super_admin: false,
     addUser: false,
   });
 
   onSubmit = () => {
 
-    if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A') 
-    { return }
+    // if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A') 
+    // { return }
 
     this.props.dispatch({
       type: 'REGISTER',
@@ -91,13 +91,27 @@ class Users extends Component {
       <>
         <br />
         <div id="users">
-          <h1 id="welcome">Logged in as: {this.props.user.username}</h1>
 
           <Row>
             <Col className="text-center">
-              <h1 id="form-header">All Users</h1>
+              <h1 id="form-header">User Management</h1>
             </Col>
           </Row>
+
+          
+
+          <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+            <Row>
+              <Col className="text-center">
+                Browse through all users, and add new users to the system.
+                <br />
+                All users will have access too all Dental Rental functionality.
+            </Col>
+            </Row>
+          </Alert>
+
+          <h5 id="welcome">Logged in as: {this.props.user.username}</h5>
+
           <Container>
             <OverlayTrigger
               placement="top"
@@ -112,7 +126,7 @@ class Users extends Component {
             </OverlayTrigger>
 
             <Table id="table-container" bordered hover>
-              
+
               <thead>
                 <tr>
                   <th>Name</th>
@@ -130,11 +144,7 @@ class Users extends Component {
               </tbody>
 
             </Table>
-            <Modal
-              className="modal"
-              show={this.state.addUser}
-              onHide={this.closeAddUserModal}
-            >
+            <Modal className="modal" show={this.state.addUser} onHide={this.closeAddUserModal}>
               <Modal.Header className="modalHeader">
                 <Modal.Title className="modalTitle">Add User</Modal.Title>
               </Modal.Header>
@@ -208,7 +218,6 @@ class Users extends Component {
                           rows={1}
                           name="phonenumber"
                           className="addUserInput"
-                          required
                         />
                       </Form.Group>
                     </Col>

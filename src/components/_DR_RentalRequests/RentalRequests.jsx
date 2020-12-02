@@ -83,9 +83,20 @@ class RentalRequests extends Component {
               <br />
             </Col>
           </Row>
+
+          <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+            <Row>
+              <Col className="text-center">
+                Browse through all clients equipment requests.
+                <br />
+                Change, and filter by the request status. 
+            </Col>
+            </Row>
+          </Alert>
+
           <Row>
             <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-              <strong>Status Filter:</strong>
+              <strong>Application Status Filter:</strong>
               <Select
                 onChange={this.handleFilterChange}
                 className="basic-single"

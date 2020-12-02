@@ -12,6 +12,7 @@ import {
   OverlayTrigger,
   OverlayTriggerProps,
   Tooltip,
+  Alert,
 } from "react-bootstrap";
 import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
@@ -232,6 +233,16 @@ class InventoryView extends Component {
         </Col>
         <br />
 
+        <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+          <Row>
+            <Col className="text-center">
+              Browse through all of the inventory.
+                <br />
+                Add new equipment to the inventory, and change/filter by the equipment status.
+            </Col>
+          </Row>
+        </Alert>
+
         <Modal
           className="modal"
           show={this.state.isOpen}
@@ -366,7 +377,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Label>Notes for ${ }</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -419,6 +430,8 @@ class InventoryView extends Component {
               </Button>
             )}
           </OverlayTrigger>
+
+          <strong>App Status Filter:</strong> <br />
           <select onChange={this.handleFilterChange} name="filterStatus">
             <option value='N/A'>NO FILTER</option>
             <option value={0}>AVAILABLE</option>
@@ -427,6 +440,7 @@ class InventoryView extends Component {
             <option value={3}>IN-INSPECTION</option>
             <option value={4}>MISSING</option>
           </select>
+
           &nbsp; &nbsp;&nbsp;
           <OverlayTrigger
             placement="top"
