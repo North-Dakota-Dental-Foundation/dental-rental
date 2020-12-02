@@ -25,8 +25,8 @@ const Nav = (props) => {
           <img
             alt=""
             src={logo}
-            width="100"
-            height="40"
+            width="180"
+            height="60"
             className="d-inline-block align-top"
           />{" "}
           <Link className="nav-link" to={loginLinkData.path}>
@@ -41,7 +41,7 @@ const Nav = (props) => {
               <Link
                 className="nav-link"
                 to="/inventory_view"
-                style={{ color: "white" }}
+                style={{ color: "white", justifyContent: "center" }}
               >
                 Inventory Management{" "}
               </Link>
@@ -57,7 +57,9 @@ const Nav = (props) => {
                 {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
                 Client Submission Form{" "}
               </Link>
-              <LogOutButton className="logout-button" />
+              <span>
+                <LogOutButton className="logout-button" />
+              </span>
             </>
           )}
           {/* Always show this link since the about page is not protected */}

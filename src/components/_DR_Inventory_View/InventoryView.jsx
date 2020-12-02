@@ -191,7 +191,7 @@ class InventoryView extends Component {
 
     swal({
       title: "New Equipment Added To Inventory",
-      text: `You have successfully added ${this.state.equipment_item}to your inventory.`,
+      text: `You have successfully added ${this.state.equipment_item} to your inventory.`,
       icon: "success",
     });
     axios
@@ -485,7 +485,7 @@ class InventoryView extends Component {
                       <option value={"Available"}>AVAILABLE</option>
                       <option value={"Checked-Out"}>CHECKED-OUT</option>
                       <option value={"Shipped"}>SHIPPED</option>
-                      <option value={"In Inspection"}>IN INSPECTION</option>
+                      <option value={"In-Inspection"}>IN-INSPECTION</option>
                       <option value={"Missing"}>MISSING</option>
                     </select>
                   </td>
