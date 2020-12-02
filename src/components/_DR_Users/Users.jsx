@@ -56,7 +56,7 @@ class Users extends Component {
     // if (this.state.firstname === 'N/A') 
     // { return }
 
-    const myPromise = (new Promise(this.props.dispatch({
+    this.props.dispatch({
       type: 'REGISTER',
 
       payload: {
@@ -66,24 +66,16 @@ class Users extends Component {
         phonenumber: this.state.phonenumber,
         password: this.state.password,
       },
-    })).then(() => {
-      this.getUsers();
-      this.resetState();
-    }));
+    });
+
+    this.resetState();
 
     swal({
       title: "User Successfully Added",
       text: `${this.state.username} has been successfully added to the system`,
       icon: "success",
     });
-    this.getUsers();
-
-    this.resetState();
-
   };
-
-  // this.resetState();
-  // this.getUsers();
 
   openAddUserModal = () => this.setState({ addUser: true });
   closeAddUserModal = () => this.setState({ addUser: false });
@@ -133,7 +125,7 @@ class Users extends Component {
                 {this.props.users !== undefined &&
                   this.props.users.map((user) => {
                     return <UserItem user={user} key={user.id} />;
-                  })}
+                  })};
               </tbody>
             </Table>
             <Modal
@@ -247,8 +239,8 @@ class Users extends Component {
         </div>
       </>
     );
-  }
-}
+  };
+};
 
 const mapStoreToProps = (reduxState) => ({
   users: reduxState.userPageReducer,
