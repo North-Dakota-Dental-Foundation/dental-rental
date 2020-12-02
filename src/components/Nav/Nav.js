@@ -29,7 +29,11 @@ const Nav = (props) => {
             height="60"
             className="d-inline-block align-top"
           />{" "}
-          <Link className="nav-link" to={loginLinkData.path}>
+          <Link
+            style={{ color: "white" }}
+            className="nav-link"
+            to={loginLinkData.path}
+          >
             {/* Show this link if they are logged in or not,
           but call this link 'Home' if they are logged in,
           and call this link 'Login / Register' if they are not */}
