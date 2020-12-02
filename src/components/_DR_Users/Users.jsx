@@ -20,11 +20,12 @@ import UserItem from "./UserItem";
 
 class Users extends Component {
   state = {
-    firstname: "",
-    lastname: "",
-    username: "",
-    phonenumber: "N/A",
-    password: "",
+    firstname: 'N/A',
+    lastname: 'N/A',
+    username: 'N/A', // USERNAME IS EMAIL
+    phonenumber: 'N/A',
+    password: 'N/A',
+
     super_admin: false,
     addUser: false,
   };
@@ -39,36 +40,41 @@ class Users extends Component {
     });
   };
 
-  resetState = () =>
-    this.setState({
-      firstname: "",
-      lastname: "",
-      username: "",
-      phonenumber: "N/A",
-      password: "",
-      super_admin: false,
-      addUser: false,
-    });
+
+  resetState = () => this.setState({
+    firstname: 'N/A',
+    lastname: 'N/A',
+    username: 'N/A', // USERNAME IS EMAIL
+    phonenumber: 'N/A',
+    password: 'N/A',
+    super_admin: false,
+    addUser: false,
+  });
 
   onSubmit = () => {
+
+    if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A') 
+    { return }
+
     this.props.dispatch({
-      type: "REGISTER",
+      type: 'REGISTER',
+
       payload: {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
-        username: this.state.username,
+        username: this.state.username, // USERNAME IS EMAIL
         phonenumber: this.state.phonenumber,
         password: this.state.password,
       },
     });
+
+    this.resetState();
+
     swal({
       title: "User Successfully Added",
       text: `${this.state.username} has been successfully added to the system`,
       icon: "success",
     });
-    this.getUsers();
-
-    this.resetState();
   };
 
   openAddUserModal = () => this.setState({ addUser: true });
@@ -102,11 +108,11 @@ class Users extends Component {
                 </Tooltip>
               }
             >
-              <Button onClick={this.openAddUserModal}>Add User</Button>
+              <Button id='addUserButton' onClick={this.openAddUserModal}>Add User</Button>
             </OverlayTrigger>
-            <br /> <br />
+
             <Table id="table-container" bordered hover>
-              {" "}
+              
               <thead>
                 <tr>
                   <th>Name</th>
@@ -115,12 +121,14 @@ class Users extends Component {
                   <th style={{ textAlign: "center" }}>Delete User</th>
                 </tr>
               </thead>
+
               <tbody>
                 {this.props.users !== undefined &&
                   this.props.users.map((user) => {
-                    return <UserItem user={user} key={user.id} />;
+                    return <UserItem user={user} key={user.id} />
                   })}
               </tbody>
+
             </Table>
             <Modal
               className="modal"
@@ -135,10 +143,7 @@ class Users extends Component {
                 <div id="addUserInputs">
                   <Row>
                     <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
+                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
                         <Form.Label>First Name:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -151,10 +156,7 @@ class Users extends Component {
                       </Form.Group>
                     </Col>
                     <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
+                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
                         <Form.Label>Last Name:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -169,11 +171,9 @@ class Users extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
-                        <Form.Label>Username (Email):</Form.Label>
+
+                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                        <Form.Label>Username(email):</Form.Label>
                         <Form.Control
                           placeholder=""
                           as="textarea"
@@ -185,10 +185,7 @@ class Users extends Component {
                       </Form.Group>
                     </Col>
                     <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
+                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
                         <Form.Label>Password:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -203,10 +200,7 @@ class Users extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
+                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
                         <Form.Label>Phone Number:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -233,8 +227,8 @@ class Users extends Component {
         </div>
       </>
     );
-  }
-}
+  };
+};
 
 const mapStoreToProps = (reduxState) => ({
   users: reduxState.userPageReducer,

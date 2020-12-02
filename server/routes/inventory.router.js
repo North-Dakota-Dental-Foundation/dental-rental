@@ -60,7 +60,8 @@ router.post("/all-inventory-by-date-range/", rejectUnauthenticated, (req, res) =
   const startDateBuffered = moment(startDate).subtract(2, "week").format();
   const endDateBuffered = moment(endDate).add(2, "week").format();
   
-  const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2) AND "requests".status IN ('PENDING', 'APPROVED') )`;
+  console.log('in get inv by date range');
+  const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2) AND "requests".status IN ('PENDING', 'APPROVED', 'ACTIVE') )`;
   pool
     .query(queryText, [endDateBuffered, startDateBuffered])
     .then((result) => res.send(result.rows))

@@ -12,13 +12,32 @@ const { request } = require("express");
 router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
     const allRequests = await pool.query(
-    `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, TO_CHAR("requests".applied_date, 'mm/dd/yyyy') AS applied_date, "requests".purpose, "requests".status FROM "requests" ORDER BY "requests".status;`);
+      `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, TO_CHAR("requests".applied_date, 'mm/dd/yyyy') AS applied_date, "requests".purpose, "requests".status FROM "requests" ORDER BY "requests".status;`);
     res.send(allRequests.rows);
   } catch (error) {
     res.sendStatus(500);
     console.error(error.message);
   }
 }); // End of GET route
+
+/**
+ * GET filter route
+ */
+router.get('/filterrequests/:requeststatus?', rejectUnauthenticated, async (req, res) => {
+  try {
+    const requestFilterStatus = req.params.requeststatus || 'PENDING';
+    const filterRequests = await pool.query(
+      `SELECT "requests".id, "requests".company, "requests".address, "requests".point_of_contact, "requests".email, "requests".phone_number, "requests".city, "requests".state, "requests".zip, TO_CHAR("requests".start_date, 'mm/dd/yyyy') AS start_date, TO_CHAR("requests".end_date, 'mm/dd/yyyy') AS end_date, TO_CHAR("requests".applied_date, 'mm/dd/yyyy') AS applied_date, "requests".purpose, "requests".status 
+      FROM "requests"
+      WHERE "requests".status = $1 
+      ORDER BY "requests".applied_date;`,
+      [requestFilterStatus]);
+    res.send(filterRequests.rows);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error.message);
+  }
+}); // End of GET filter route
 
 router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
   try {
@@ -70,7 +89,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       equipment_in_request, //arr of equipment in a particular request
     } = req.body;
 
-    if( !(company && //string
+    if (!(company && //string
       address && //string
       point_of_contact && //string
       email && //string
@@ -85,7 +104,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
       equipment_in_request)) {
       console.log('in error if');
       throw 'Error: there exists at least one parameter that is invalid.';
-      }
+    }
 
     const status = "PENDING";
 
@@ -109,7 +128,6 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     );
 
     const requestId = newRequest.rows[0].id;
-    console.log("new request id", requestId);
 
     // for each equipment item in the equipment_in_request variable, link the request and each equipment item
     // by inserting into the equipment_requests junction table
