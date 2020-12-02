@@ -5,6 +5,7 @@ import RequestItem from "./RequestItem";
 import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
 import ThreeDots from "../_DR_ThreeDots/ThreeDots";
 import Select from 'react-select';
+import "./RentalRequest.css"
 
 
 class RentalRequests extends Component {
@@ -55,17 +56,22 @@ class RentalRequests extends Component {
     }, () => { this.getRequests() });
   };
 
-  getNumberOfPendingRequests = () => {
+  getNumberOfRequestsByStatus = (strStatus) => {
     return this.props.requests.filter(requestObj => {
-      return requestObj.status === 'PENDING';
+      return requestObj.status === strStatus;
     }).length;
   }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 
   render() {
     return (
       <>
         <br />
-        <Container id="table-col-increase-padding" fluid>
+        <Container className="mb-5" id="table-col-increase-padding" fluid>
           <Row>
             <Col className="text-center">
               <h1 id="form-header">Dental Rental Requests</h1>
@@ -74,7 +80,7 @@ class RentalRequests extends Component {
           </Row>
           <Row>
             <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-              Status Filter:
+              <strong>Status Filter:</strong>
               <Select
                 onChange={this.handleFilterChange}
                 className="basic-single"
@@ -87,18 +93,32 @@ class RentalRequests extends Component {
             </Col>
             <Col> {/*This extra column allows for right alignment*/}
             </Col>
-            {/* if the number of PENDING is greater than 0 AND if the filter is set to PENDING or NONE, then show the alert */}
-            {this.getNumberOfPendingRequests() > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
+
+            {/* if the number of PENDING is greater than 0 AND if the filter is set to a CERTAIN STATUS, then show the alert */}
+            {this.getNumberOfRequestsByStatus('PENDING') > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
               <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
                 <Alert variant="danger">
-                  Current Number of Pending Requests: {this.getNumberOfPendingRequests()} {/*length of this array corresponds to the number of requests*/}
+                  <strong>Current Number of Pending Requests: {this.getNumberOfRequestsByStatus('PENDING')}</strong> {/*length of this array corresponds to the number of requests*/}
+                </Alert>
+              </Col>
+            }
+            {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'APPROVED' || this.state.requestFilterStatus[0].value === 'ACTIVE') &&
+              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                <Alert variant="success">
+                  <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
+                </Alert>
+              </Col>
+            }
+            {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'REJECTED' || this.state.requestFilterStatus[0].value === 'PROCESSED') &&
+              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                <Alert variant="dark">
+                  <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
                 </Alert>
               </Col>
             }
           </Row>
           <br />
           {this.props.isLoading ?
-
             <>
               <br />
               <br />
@@ -109,18 +129,18 @@ class RentalRequests extends Component {
               </Row>
             </>
             :
-            <Table id="table-container" bordered hover responsive>
+            <Table className="mb-5" id="table-container" bordered hover responsive>
               <thead>
                 <tr>
-                  <th>Contact</th>
+                  <th > Contact</th>
                   <th>Practice/Company</th>
-                  <th style={{ width: "15%" }}>Address</th>
+                  <th>Address</th>
                   <th>Phone Number</th>
                   <th>Equipment</th>
-                  <th style={{ width: "5%" }}>Purpose</th>
-                  <th style={{ width: "5%" }}>Applied Date</th>
-                  <th style={{ width: "5%" }}>Requested Dates</th>
-                  <th>Application Status</th>
+                  <th>Purpose</th>
+                  <th>Applied Date</th>
+                  <th>Requested Dates</th>
+                  <th style={{ width: "15%" }}>Application Status</th>
                 </tr>
               </thead>
 
