@@ -28,6 +28,8 @@ body,
 
 .modalTitle {
   background-color: rgb(199, 199, 198);
+  text-align: center;
+  width: 100%;
 }
 
 .modalForm {

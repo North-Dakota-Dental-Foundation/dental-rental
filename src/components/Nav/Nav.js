@@ -10,7 +10,7 @@ import logo from "./Nav.png";
 const Nav = (props) => {
   let loginLinkData = {
     path: "/login",
-    text: "Login / Register",
+    text: "Login",
   };
 
   if (props.store.user.id != null) {
@@ -29,41 +29,46 @@ const Nav = (props) => {
             height="60"
             className="d-inline-block align-top"
           />{" "}
-          <Link className="nav-link" to={loginLinkData.path}>
-            {/* Show this link if they are logged in or not,
+        </Navbar.Brand>
+
+        <Link
+          style={{ color: "white" }}
+          className="nav-link"
+          to={loginLinkData.path}
+        >
+          {/* Show this link if they are logged in or not,
           but call this link 'Home' if they are logged in,
           and call this link 'Login / Register' if they are not */}
-            {loginLinkData.text}
-          </Link>
-          {/* Show the link to the info page and the logout button if the user is logged in */}
-          {props.store.user.id && (
-            <>
-              <Link
-                className="nav-link"
-                to="/inventory_view"
-                style={{ color: "white", justifyContent: "center" }}
-              >
-                Inventory Management
-              </Link>
-              <Link className="nav-link" to="/users" style={{ color: "white" }}>
-                User Management
-              </Link>
-              <Link
-                className="nav-link"
-                to="/rental_submission_form"
-                style={{ color: "white" }}
-              >
-                {" "}
-                {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
-                Client Submission Form
-              </Link>
-              <span>
-                <LogOutButton className="logout-button" />
-              </span>
-            </>
-          )}
-          {/* Always show this link since the about page is not protected */}
-        </Navbar.Brand>
+          {loginLinkData.text}
+        </Link>
+        {/* Show the link to the info page and the logout button if the user is logged in */}
+        {props.store.user.id && (
+          <>
+            <Link
+              className="nav-link"
+              to="/inventory_view"
+              style={{ color: "white", justifyContent: "center" }}
+            >
+              Inventory Management{" "}
+            </Link>
+            <Link className="nav-link" to="/users" style={{ color: "white" }}>
+              User Management{" "}
+            </Link>
+            <Link
+              className="nav-link"
+              to="/rental_submission_form"
+              style={{ color: "white" }}
+            >
+              {" "}
+              {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
+              Client Submission Form{" "}
+            </Link>
+          </>
+        )}
+        {/* Always show this link since the about page is not protected */}
+        <ul className="nav navbar-nav ml-auto">
+          <LogOutButton className="logout-button" />
+        </ul>
       </Navbar>
     </div>
   );

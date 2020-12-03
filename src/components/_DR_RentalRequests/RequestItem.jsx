@@ -47,6 +47,7 @@ class RequestItem extends Component {
     };
 
     render() {
+        console.log(this.props.request.equipment_in_request);
         return (
             <>
                 <tr>

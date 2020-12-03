@@ -38,7 +38,10 @@ router.get('/filterinv/:equipment_status?', rejectUnauthenticated,  (req, res) =
     SQLStatus = 'IN-INSPECTION';
   } else if (req.params.equipment_status == 4) { // 4 = 'MISSING'
     SQLStatus = 'MISSING';
-  }
+  } else if (req.params.equipment_status == 5) { // 4 = 'MISSING'
+  SQLStatus = 'RETIRED';
+}
+
 
   const queryText = 'SELECT * FROM "equipment" WHERE equipment_status = $1 ORDER BY "equipment_item";'; //Must recieve set equipment status string
   pool
@@ -60,7 +63,6 @@ router.post("/all-inventory-by-date-range/", rejectUnauthenticated, (req, res) =
   const startDateBuffered = moment(startDate).subtract(2, "week").format();
   const endDateBuffered = moment(endDate).add(2, "week").format();
   
-  console.log('in get inv by date range');
   const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2) AND "requests".status IN ('PENDING', 'APPROVED', 'ACTIVE') )`;
   pool
     .query(queryText, [endDateBuffered, startDateBuffered])
@@ -136,28 +138,19 @@ router.put("/:id/update-note", rejectUnauthenticated, (req, res) => {
 
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
+  const status = "RETIRED";
 
-  let queryText_1 = `DELETE FROM "equipment_requests" WHERE "equipment_id" = $1;`;
+  let queryText = `UPDATE "equipment" SET "equipment_status" = $1 WHERE "id" = $2;`;
   pool
-    .query(queryText_1, [id])
+    .query(queryText, [status, id])
     .then((result) => {
       console.log(
-        "Successfully deleted equipment reference in equipment_requests junction table"
+        "Successfully retired equipment item."
       );
-    })
-    .catch((error) => {
-      console.log("Error in deleting equipment,", error);
-      res.sendStatus(500);
-    });
-  
-  let queryText_2 = `DELETE FROM "equipment" WHERE "id" = $1;`;
-  pool
-    .query(queryText_2, [id])
-    .then((result) => {
       res.sendStatus(200);
     })
     .catch((error) => {
-      console.log("Error in deleting inventory,", error);
+      console.log("Error in retiring equipment,", error);
       res.sendStatus(500);
     });
 });
