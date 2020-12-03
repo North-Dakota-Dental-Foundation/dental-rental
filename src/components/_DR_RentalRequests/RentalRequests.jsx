@@ -87,47 +87,6 @@ class RentalRequests extends Component {
             </Col>
             </Row>
           </Alert>
-
-          <Row>
-            <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-              <strong>Filter by Status:</strong>
-              <Select
-                onChange={this.handleFilterChange}
-                className="basic-single"
-                classNamePrefix="select"
-                value={this.state.requestFilterStatus}
-                name="requestFilterStatus"
-                options={[{ label: '', options: this.state.noFilterOption }, { label: `Current`, options: this.state.currentFilterOptions }, { label: `Archived`, options: this.state.archivedFilterOptions }]}
-                placeholder="Filter by Status"
-              />
-            </Col>
-            <Col> {/*This extra column allows for right alignment*/}
-            </Col>
-
-            {/* if the number of PENDING is greater than 0 AND if the filter is set to a CERTAIN STATUS, then show the alert */}
-            {this.getNumberOfRequestsByStatus('PENDING') > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
-              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
-                <Alert variant="danger">
-                  <strong>Current Number of Pending Requests: {this.getNumberOfRequestsByStatus('PENDING')}</strong> {/*length of this array corresponds to the number of requests*/}
-                </Alert>
-              </Col>
-            }
-            {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'APPROVED' || this.state.requestFilterStatus[0].value === 'ACTIVE') &&
-              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
-                <Alert variant="success">
-                  <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
-                </Alert>
-              </Col>
-            }
-            {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'REJECTED' || this.state.requestFilterStatus[0].value === 'PROCESSED') &&
-              <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
-                <Alert variant="dark">
-                  <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
-                </Alert>
-              </Col>
-            }
-          </Row>
-          <br />
           {this.props.isLoading ?
             <>
               <br />
@@ -139,30 +98,71 @@ class RentalRequests extends Component {
               </Row>
             </>
             :
-            <Table className="mb-5" id="table-container" bordered hover responsive>
-              <thead>
-                <tr>
-                  <th > Contact</th>
-                  <th>Practice/Company</th>
-                  <th>Address</th>
-                  <th>Phone Number</th>
-                  <th>Equipment</th>
-                  <th>Purpose</th>
-                  <th>Applied Date</th>
-                  <th>Requested Dates</th>
-                  <th style={{ width: "15%" }}>Application Status</th>
-                </tr>
-              </thead>
+            <>
+              <Row>
+                <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+                  <strong>Filter by Status:</strong>
+                  <Select
+                    onChange={this.handleFilterChange}
+                    className="basic-single"
+                    classNamePrefix="select"
+                    value={this.state.requestFilterStatus}
+                    name="requestFilterStatus"
+                    options={[{ label: '', options: this.state.noFilterOption }, { label: `Current`, options: this.state.currentFilterOptions }, { label: `Archived`, options: this.state.archivedFilterOptions }]}
+                    placeholder="Filter by Status"
+                  />
+                </Col>
+                <Col> {/*This extra column allows for right alignment*/}
+                </Col>
 
-              <tbody>
-                {this.props.requests !== undefined && this.props.requests.map((request) => {
-                  return (
-                    <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
-                  )
-                })}
+                {/* if the number of PENDING is greater than 0 AND if the filter is set to a CERTAIN STATUS, then show the alert */}
+                {this.getNumberOfRequestsByStatus('PENDING') > 0 && (this.state.requestFilterStatus[0].value === 'PENDING' || this.state.requestFilterStatus[0].value === 'NONE') &&
+                  <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                    <Alert variant="danger">
+                      <strong>Current Number of Pending Requests: {this.getNumberOfRequestsByStatus('PENDING')}</strong> {/*length of this array corresponds to the number of requests*/}
+                    </Alert>
+                  </Col>
+                }
+                {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'APPROVED' || this.state.requestFilterStatus[0].value === 'ACTIVE') &&
+                  <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                    <Alert variant="success">
+                      <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
+                    </Alert>
+                  </Col>
+                }
+                {this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value) > 0 && (this.state.requestFilterStatus[0].value === 'REJECTED' || this.state.requestFilterStatus[0].value === 'PROCESSED') &&
+                  <Col md="auto" xs="auto" sm="auto" lg="auto" xl="auto">
+                    <Alert variant="dark">
+                      <strong>{`Total Number of ${this.capitalizeFirstLetter(this.state.requestFilterStatus[0].value.toLowerCase())} Requests: `}{this.getNumberOfRequestsByStatus(this.state.requestFilterStatus[0].value)}</strong>
+                    </Alert>
+                  </Col>
+                }
+              </Row>
+              <br />
+              <Table className="mb-5" id="table-container" bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th > Contact</th>
+                    <th>Practice/Company</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Equipment</th>
+                    <th>Purpose</th>
+                    <th>Applied Date</th>
+                    <th>Requested Dates</th>
+                    <th style={{ width: "15%" }}>Application Status</th>
+                  </tr>
+                </thead>
 
-              </tbody>
-            </Table>
+                <tbody>
+                  {this.props.requests !== undefined && this.props.requests.map((request) => {
+                    return (
+                      <RequestItem request={request} key={request.id} getRequests={this.getRequests} getEquipmentInRequests={this.getEquipmentInRequests} />
+                    )
+                  })}
+                </tbody>
+              </Table>
+            </>
           }
         </Container >
 

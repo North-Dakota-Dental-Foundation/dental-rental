@@ -39,7 +39,9 @@ router.get('/filterrequests/:requeststatus?', rejectUnauthenticated, async (req,
   }
 }); // End of GET filter route
 
-// GET all equipment items per request with associated request id
+/*
+ * GET all equipment items per request with associated request id
+*/
 router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
   try {
     const allEquipmentInARequest = await pool.query(
@@ -50,7 +52,7 @@ router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
     console.log(error)
   }
-});
+}); // End of GET all equipment items per request with associated request id route
 
 /**
  * POST route
