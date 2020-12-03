@@ -249,9 +249,8 @@ class InventoryView extends Component {
           <Row>
             <Col className="text-center">
               Browse through all of the inventory.
-              <br />
-              Add new equipment to the inventory, and change/filter by the
-              equipment status.
+                <br />
+                Add new equipment to the inventory, and change or filter by the equipment status.
             </Col>
           </Row>
         </Alert>
