@@ -136,28 +136,19 @@ router.put("/:id/update-note", rejectUnauthenticated, (req, res) => {
 
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   const { id } = req.params;
+  const status = "RETIRED";
 
-  let queryText_1 = `DELETE FROM "equipment_requests" WHERE "equipment_id" = $1;`;
+  let queryText = `UPDATE "equipment" SET "equipment_status" = $1 WHERE "id" = $2;`;
   pool
-    .query(queryText_1, [id])
+    .query(queryText, [status, id])
     .then((result) => {
       console.log(
-        "Successfully deleted equipment reference in equipment_requests junction table"
+        "Successfully retired equipment item."
       );
-    })
-    .catch((error) => {
-      console.log("Error in deleting equipment,", error);
-      res.sendStatus(500);
-    });
-  
-  let queryText_2 = `DELETE FROM "equipment" WHERE "id" = $1;`;
-  pool
-    .query(queryText_2, [id])
-    .then((result) => {
       res.sendStatus(200);
     })
     .catch((error) => {
-      console.log("Error in deleting inventory,", error);
+      console.log("Error in retiring equipment,", error);
       res.sendStatus(500);
     });
 });
