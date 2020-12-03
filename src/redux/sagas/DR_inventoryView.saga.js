@@ -35,7 +35,7 @@ function* editStatus(action) {
       { equipment_status: action.payload.equipment_status }
     );
     yield put({ type: "SET_STATUS", payload: response.data });
-    yield put({ type: "FETCH_USERS" });
+    yield put({ type: "FETCH_ITEM" });
 
     console.log("Success in updating Status.");
   } catch (error) {

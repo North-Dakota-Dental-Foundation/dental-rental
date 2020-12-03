@@ -15,7 +15,7 @@ body,
   border-radius: 5px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) !important;
+  transform: translate(-50%, -50%) !important; /* Causing a wierd glitch inside user text inputs! */
 }
 
 .modal-body {
@@ -56,6 +56,10 @@ select {
 .btn-outline-primary {
   color: #1a7696 !important;
 }
+
+
+
+
 
 /* img {
   display: inline-block;

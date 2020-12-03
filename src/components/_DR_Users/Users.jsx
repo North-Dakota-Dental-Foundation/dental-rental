@@ -51,10 +51,13 @@ class Users extends Component {
     addUser: false,
   });
 
-  onSubmit = () => {
+  onSubmit = (event) => {
 
-    // if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A') 
-    // { return }
+    event.preventDefault(); // Prevents page from reloading, which is a default function for when a (type='submit') is used on a form button
+
+    let phonenumber = this.state.phonenumber; // Take phone number from state
+    let arrPhoneNumber = phonenumber.split("-"); // Slice it into an array, sliced by "-"
+    phonenumber = arrPhoneNumber.join(''); // Join the array back into one variable for DB 
 
     this.props.dispatch({
       type: 'REGISTER',
@@ -63,7 +66,7 @@ class Users extends Component {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
         username: this.state.username, // USERNAME IS EMAIL
-        phonenumber: this.state.phonenumber,
+        phonenumber: phonenumber,
         password: this.state.password,
       },
     });
@@ -147,93 +150,97 @@ class Users extends Component {
               </tbody>
 
             </Table>
+
             <Modal className="modal" show={this.state.addUser} onHide={this.closeAddUserModal}>
+
               <Modal.Header className="modalHeader">
                 <Modal.Title className="modalTitle">Add User</Modal.Title>
               </Modal.Header>
 
-              <Modal.Body className="modal-body">
-                <div id="addUserInputs">
-                  <Row>
-                    <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>First Name:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="firstname"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>Last Name:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="lastname"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
+              <Form onSubmit={this.onSubmit}>
 
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>Username(email):</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="username"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>Password:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="password"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>Phone Number:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="phonenumber"
-                          className="addUserInput"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </div>
-              </Modal.Body>
+                <Modal.Body className="modal-body">
+                  <div id="addUserInputs">
+                    <Row>
+                      <Col>
+                        <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                          <Form.Label>First Name</Form.Label>
+                          <Form.Control
+                            placeholder="First Name"
+                            rows={1}
+                            name="firstname"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                          <Form.Label>Last Name</Form.Label>
+                          <Form.Control
+                            placeholder="Last Name"
+                            rows={1}
+                            name="lastname"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
 
-              <Modal.Footer className="modalFooter">
-                <Button onClick={this.resetState} variant="secondary">
-                  Cancel
-                </Button>
-                <Button onClick={this.onSubmit}>Submit</Button>
-              </Modal.Footer>
+                        <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                          <Form.Label>Email</Form.Label>
+                          <Form.Control
+                            placeholder="Email"
+                            rows={1}
+                            name="username"
+                            className="addUserInput"
+                            pattern='/\S+@\S+\.\S+/'
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                          <Form.Label>Password</Form.Label>
+                          <Form.Control
+                            placeholder="Password"
+                            type="password"
+                            rows={1}
+                            name="password"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                          <Form.Label>Phone Number (Optional)</Form.Label>
+                          <Form.Control
+                            placeholder="###-###-####"
+                            type="tel"
+                            rows={1}
+                            name="phonenumber"
+                            className="addUserInput"
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </div>
+                </Modal.Body>
+
+                <Modal.Footer className="modalFooter">
+                  <Button onClick={this.resetState} variant="secondary">Cancel</Button>
+                  <Button type='submit'>Submit</Button>
+                </Modal.Footer>
+
+              </Form>
+
             </Modal>
           </Container>
         </div>

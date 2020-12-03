@@ -57,7 +57,7 @@ class UserItem extends Component {
                 {this.props.user.firstname} {this.props.user.lastname}
               </td>
               <td>{this.props.user.username}</td>
-              <td>{this.props.user.phonenumber}</td>
+              <td>{this.props.user.phonenumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}</td>
               <td>
                 <Button onClick={this.handleDeleteUser} variant="danger">
                   Delete
