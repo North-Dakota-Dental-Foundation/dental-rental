@@ -98,8 +98,6 @@ class Users extends Component {
             </Col>
           </Row>
 
-          
-
           <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
             <Row>
               <Col className="text-center">
@@ -110,21 +108,26 @@ class Users extends Component {
             </Row>
           </Alert>
 
-          <h5 id="welcome">Logged in as: {this.props.user.username}</h5>
-
           <Container>
-            <OverlayTrigger
-              placement="top"
-              delay={{ show: 1000 }}
-              overlay={
-                <Tooltip id="button-tooltip-2">
-                  Add a new Admin user to your system.
+            <Row>
+              <Col style={{ paddingTop: "15px", textAlign: "left" }}>
+                <h5 id="welcome">Logged in as: <strong>{this.props.user.username}</strong></h5>
+              </Col>
+              <Col />
+              <Col style={{ textAlign: "right" }}>
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 1000 }}
+                  overlay={
+                    <Tooltip id="button-tooltip-2">
+                      Add a new Admin user to your system.
                 </Tooltip>
-              }
-            >
-              <Button id='addUserButton' onClick={this.openAddUserModal}>Add User</Button>
-            </OverlayTrigger>
-
+                  }
+                >
+                  <Button id='addUserButton' onClick={this.openAddUserModal}>Add User</Button>
+                </OverlayTrigger>
+              </Col>
+            </Row>
             <Table id="table-container" bordered hover>
 
               <thead>

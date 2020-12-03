@@ -39,7 +39,7 @@ class InventoryView extends Component {
 
     filterStatus: [{ label: `NONE`, value: "N/A" }],
     filterOptions: [{ label: `NONE`, value: "N/A" }, { value: 0, label: 'AVAILABLE' }, { value: 4, label: 'MISSING' }, { value: 1, label: 'CHECKED-OUT' }, { value: 2, label: 'SHIPPED' }, { value: 3, label: 'IN-INSPECTION' }],
-    selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'MISSING', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
+    selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'SHIPPED', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
@@ -128,10 +128,9 @@ class InventoryView extends Component {
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
-    console.log(this.state.inventory);
-    console.log(objectIndex);
-    console.log(inventoryId);
-
+    // console.log(this.state.inventory);
+    // console.log(objectIndex);
+    // console.log(inventoryId);
     swal({
       title: `Are you sure you want to delete ${this.state.inventory[objectIndex].equipment_item}?`,
       text: "Once this item is deleted, you will have to re-add it.",
@@ -473,9 +472,9 @@ class InventoryView extends Component {
                 <th>Equipment</th>
                 <th>Serial #</th>
                 <th>NDDF Code</th>
-                <th style={{ textAlign: "center", width: "15%" }}>Status</th>
+                <th style={{ textAlign: "center", width: "16%" }}>Status</th>
                 <th style={{ textAlign: "center" }}>Notes</th>
-                <th style={{ textAlign: "center" }}>Delete Equipment</th>
+                <th style={{ textAlign: "center" }}>Retire Equipment</th>
               </tr>
             </thead>
             <tbody>
@@ -521,7 +520,7 @@ class InventoryView extends Component {
                         this.deleteInventory(inventoryItem.id, index)
                       }
                     >
-                      Delete Item
+                      Retire Item
                     </Button>
                   </td>
                 </tr>
