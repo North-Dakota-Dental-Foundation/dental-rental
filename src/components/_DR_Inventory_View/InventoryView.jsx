@@ -473,7 +473,7 @@ class InventoryView extends Component {
                 <th>NDDF Code</th>
                 <th style={{ textAlign: "center", width: "16%" }}>Status</th>
                 <th style={{ textAlign: "center" }}>Notes</th>
-                <th style={{ textAlign: "center" }}>Retire Equipment</th>
+                <th style={{ textAlign: "center" }}>Retire</th>
               </tr>
             </thead>
             <tbody>
@@ -527,8 +527,8 @@ class InventoryView extends Component {
                       <Button
                         className="deleteButton"
                         variant="danger"
-                        style={{ textAlign: "center", opacity: ".5" }}
-                        isDisabled
+                        style={{ textAlign: "center" }}
+                        disabled
                       >
                         Retire Item
                   </Button>
