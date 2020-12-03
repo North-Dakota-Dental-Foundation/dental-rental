@@ -38,7 +38,10 @@ router.get('/filterinv/:equipment_status?', rejectUnauthenticated,  (req, res) =
     SQLStatus = 'IN-INSPECTION';
   } else if (req.params.equipment_status == 4) { // 4 = 'MISSING'
     SQLStatus = 'MISSING';
-  }
+  } else if (req.params.equipment_status == 5) { // 4 = 'MISSING'
+  SQLStatus = 'RETIRED';
+}
+
 
   const queryText = 'SELECT * FROM "equipment" WHERE equipment_status = $1 ORDER BY "equipment_item";'; //Must recieve set equipment status string
   pool
@@ -60,7 +63,6 @@ router.post("/all-inventory-by-date-range/", rejectUnauthenticated, (req, res) =
   const startDateBuffered = moment(startDate).subtract(2, "week").format();
   const endDateBuffered = moment(endDate).add(2, "week").format();
   
-  console.log('in get inv by date range');
   const queryText = `SELECT "equipment".* FROM "equipment" WHERE "equipment".id NOT IN (SELECT DISTINCT "equipment".id FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".start_date <= ($1) AND "requests".end_date >= ($2) AND "requests".status IN ('PENDING', 'APPROVED', 'ACTIVE') )`;
   pool
     .query(queryText, [endDateBuffered, startDateBuffered])

@@ -38,7 +38,7 @@ class InventoryView extends Component {
     itemToEdit: null,
 
     filterStatus: [{ label: `NONE`, value: "N/A" }],
-    filterOptions: [{ label: `NONE`, value: "N/A" }, { value: 0, label: 'AVAILABLE' }, { value: 4, label: 'MISSING' }, { value: 1, label: 'CHECKED-OUT' }, { value: 2, label: 'SHIPPED' }, { value: 3, label: 'IN-INSPECTION' }],
+    filterOptions: [{ label: `NONE`, value: "N/A" }, { value: 0, label: 'AVAILABLE' }, { value: 1, label: 'CHECKED-OUT' }, , { value: 3, label: 'IN-INSPECTION' }, { value: 4, label: 'MISSING' }, { value: 2, label: 'SHIPPED' }, { value: 5, label: 'RETIRED' }],
     selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'SHIPPED', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
   };
 
@@ -464,7 +464,6 @@ class InventoryView extends Component {
               </OverlayTrigger>
             </Col>
           </Row>
-          <br />
           <br />
           <Table id="table-container" bordered hover>
             <thead>
