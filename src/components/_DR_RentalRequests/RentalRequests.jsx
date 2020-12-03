@@ -80,7 +80,6 @@ class RentalRequests extends Component {
           <Row>
             <Col className="text-center">
               <h1 id="form-header">Dental Rental Requests</h1>
-              <br />
             </Col>
           </Row>
 
@@ -89,7 +88,7 @@ class RentalRequests extends Component {
               <Col className="text-center">
                 Browse through all clients equipment requests.
                 <br />
-                Change, and filter by the request status. 
+                Change, and filter by the request status.
             </Col>
             </Row>
           </Alert>

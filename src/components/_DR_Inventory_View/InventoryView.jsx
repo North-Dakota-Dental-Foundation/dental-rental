@@ -231,8 +231,6 @@ class InventoryView extends Component {
         <Col className="text-center">
           <h1 id="form-header">Inventory Management</h1>
         </Col>
-        <br />
-
         <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
           <Row>
             <Col className="text-center">
@@ -346,8 +344,7 @@ class InventoryView extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <br />
-        <br />
+
 
         <Modal
           className="modal"
@@ -408,60 +405,66 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <Container>
+          <Row>
+            <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+              <strong>Filter by Status:</strong> <br />
+              <Select
+                onChange={this.handleFilterChange}
+                className="basic-single"
+                classNamePrefix="select"
+                value={this.state.filterStatus}
+                name="filterStatus"
+                options={this.state.filterOptions}
+                placeholder="Filter by Status"
+              />
+            </Col>
+            <Col style={{ textAlign: "right", paddingTop: "25px" }}>
+              &nbsp; &nbsp;&nbsp;
           <OverlayTrigger
-            placement="top"
-            delay={{ show: 1000 }}
-            overlay={
-              <Tooltip id="button-tooltip-2">
-                Add new equipment to your inventory.
+                placement="top"
+                delay={{ show: 1000 }}
+                overlay={
+                  <Tooltip id="button-tooltip-2">
+                    Filter the inventory table by status.
               </Tooltip>
-            }
-          >
-            {({ ref, ...triggerHandler }) => (
-              <Button
-                variant="primary"
-                ref={ref}
-                {...triggerHandler}
-                className="btn-primary"
-                onClick={this.openModal}
-                style={{ float: "right" }}
+                }
               >
-                <span>Add New Equipment</span>
-              </Button>
-            )}
-          </OverlayTrigger>
-
-          <strong>App Status Filter:</strong> <br />
-          <Select
-            onChange={this.handleFilterChange}
-            className="basic-single"
-            classNamePrefix="select"
-            value={this.state.filterStatus}
-            name="filterStatus"
-            options={this.state.filterOptions}
-            placeholder="Filter by Status"
-          />
-          &nbsp; &nbsp;&nbsp;
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 1000 }}
-            overlay={
-              <Tooltip id="button-tooltip-2">
-                Filter the inventory table by status.
-              </Tooltip>
-            }
-          >
-            {({ ref, ...triggerHandler }) => (
-              <Button
-                variant="primary"
-                ref={ref}
-                {...triggerHandler}
-                onClick={this.submit}
+                {({ ref, ...triggerHandler }) => (
+                  <Button
+                    style={{ marginRight: "3px" }}
+                    variant="primary"
+                    ref={ref}
+                    {...triggerHandler}
+                    onClick={this.submit}
+                  >
+                    Refresh Table
+                  </Button>
+                )}
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 1000 }}
+                overlay={
+                  <Tooltip id="button-tooltip-2">
+                    Add new equipment to your inventory.
+                  </Tooltip>
+                }
               >
-                Refresh Table
-              </Button>
-            )}
-          </OverlayTrigger>
+                {({ ref, ...triggerHandler }) => (
+                  <Button
+                    variant="primary"
+                    ref={ref}
+                    {...triggerHandler}
+                    className="btn-primary"
+                    onClick={this.openModal}
+                    style={{ float: "right" }}
+                  >
+                    <span>Add New Equipment</span>
+                  </Button>
+                )}
+              </OverlayTrigger>
+            </Col>
+          </Row>
           <br />
           <br />
           <Table id="table-container" bordered hover>
@@ -470,7 +473,7 @@ class InventoryView extends Component {
                 <th>Equipment</th>
                 <th>Serial #</th>
                 <th>NDDF Code</th>
-                <th style={{ textAlign: "center" }}>Status</th>
+                <th style={{ textAlign: "center", width: "15%" }}>Status</th>
                 <th style={{ textAlign: "center" }}>Notes</th>
                 <th style={{ textAlign: "center" }}>Delete Equipment</th>
               </tr>
