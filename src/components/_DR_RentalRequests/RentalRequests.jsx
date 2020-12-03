@@ -21,7 +21,6 @@ class RentalRequests extends Component {
     this.props.dispatch({ type: "LOADING" }); //activates spinner effect
     this.getEquipmentInRequests();
     this.getRequests();
-
   }
 
   getRequests = () => {
@@ -177,41 +176,7 @@ const mapStoreToProps = (reduxState) => {
   let requests_2;
   let equipmentInRequests = reduxState.equipmentReducer;
 
-  //console.log(reduxState.equipmentReducer);
-  //need to get all equipment_items, transform the data into a string of equipment items
   if (reduxState.equipmentReducer && reduxState.rentalRequestsReducer) {
-
-    // ##################### 
-    // UNCOMMENT IF GOING BACK TO OLD WAY!
-
-    // const allRequestsObj = reduxState.equipmentReducer[0];
-    // //console.log(allRequestsObj);
-    // for (let key in allRequestsObj) {
-    //   let arrEquipmentItems = allRequestsObj[key];
-    //   let tempArr = [];
-
-    //   //loop and grab every equipment item and put into an arr
-    //   for (let item of arrEquipmentItems) {
-    //     //console.log(item);
-    //     tempArr.push(item.equipment_item);
-    //   }
-
-    //   let strListOfEquipmentItemsPerRequest = tempArr.join(", ");
-
-    //   for (let requestObj of requests) {
-    //     //console.log(requestObj.id, key);
-    //     if (String(requestObj.id) === key) {
-    //       //console.log('in here!')
-    //       requestObj[
-    //         "equipment_in_request"
-    //       ] = strListOfEquipmentItemsPerRequest;
-    //     }
-    //   }
-    // }
-    // #####################
-    // console.log(requests);
-    // console.log(equipmentInRequests);
-
     //create an temporary obj with key of each request's id and with a value of a string of equipment in particular request
     let tempObj = {};
     equipmentInRequests.map((obj) => {
@@ -226,13 +191,14 @@ const mapStoreToProps = (reduxState) => {
       }
     });
     // loop through request array [{request1}, {request2}]
-    // for each request, use id to get values in the object in step 1 and put into current request object with the key value "equipment_in_request"
-    requests_2 = requests.map((requestObj) => {
+    // for each request, use id to get values in the object in step 1 and 
+    // put into current request object with the key value "equipment_in_request"
+    requests = requests.map((requestObj) => {
       requestObj.equipment_in_request = tempObj[requestObj.id];
       return requestObj;
     });
   } // end of if
-  requests = requests_2;
+
   return { requests, isLoading: reduxState.isLoadingReducer };
 };
 
