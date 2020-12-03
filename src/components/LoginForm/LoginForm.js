@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import mapStoreToProps from "../../redux/mapStoreToProps";
-import { Button, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Row,
+  Col,
+  Container,
+  Table,
+  FormGroup,
+  Form,
+} from "react-bootstrap";
 
 class LoginForm extends Component {
   state = {
@@ -37,60 +45,74 @@ class LoginForm extends Component {
   render() {
     return (
       <>
-        <br />
-        <br />
-        <form
-          className="formPanel"
-          style={{
-            backgroundColor: "#9DBCD9",
-            borderRadius: "10px",
-            width: "27%",
-            justifyContent: "center",
-            margin: "0 auto",
-            display: "block",
-            opacity: "0.9",
-          }}
-          onSubmit={this.login}
-        >
+        <Container>
           <br />
-          <h2>Login</h2>
-          {this.props.store.errors.loginMessage && (
-            <h3 className="alert" role="alert">
-              {this.props.store.errors.loginMessage}
-            </h3>
-          )}
-          <div>
-            <label htmlFor="username">
-              Username:
-              <input
-                type="text"
-                name="username"
-                required
-                value={this.state.username}
-                onChange={this.handleInputChangeFor("username")}
-              />
-            </label>
-          </div>
-          <div>
-            <label htmlFor="password">
-              Password:
-              <input
-                type="password"
-                name="password"
-                required
-                value={this.state.password}
-                onChange={this.handleInputChangeFor("password")}
-              />
-            </label>
-          </div>
-          <div>
-            <Button className="btn" type="submit" value="Log In">
-              Log In
-            </Button>
-            <br />
-            <br />
-          </div>
-        </form>
+          <br />
+          <Table style={{ width: "350px" }} id="table-container" bordered hover>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "center" }}>
+                  <h3>Admin Login</h3>
+                  {this.props.store.errors.loginMessage && (
+                    <h3 className="alert" role="alert">
+                      {this.props.store.errors.loginMessage}
+                    </h3>
+                  )}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <td>
+                <form className="" onSubmit={this.login}>
+                  <div style={{ textAlign: "center" }}>
+                    <label htmlFor="username">
+                      Username:
+                      <Form.Group
+                        onChange={this.handleInputChangeFor("username")}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Control
+                          type="text"
+                          name="username"
+                          rows={1}
+                          value={this.state.username}
+                          required
+                        />
+                      </Form.Group>
+                    </label>
+                    <label htmlFor="password">
+                      Password:
+                      <Form.Group
+                        onChange={this.handleInputChangeFor("password")}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Control
+                          type="password"
+                          name="password"
+                          rows={1}
+                          value={this.state.password}
+                          required
+                        />
+                      </Form.Group>
+                    </label>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <Button
+                      onSubmit={this.login}
+                      className="btn"
+                      type="submit"
+                      value="Log In"
+                    >
+                      Log In
+                    </Button>
+                  </div>
+                </form>
+                <br />
+              </td>
+            </tbody>
+          </Table>
+        </Container>
       </>
     );
   }

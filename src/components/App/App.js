@@ -83,7 +83,7 @@ class App extends Component {
               exact
               path="/login"
               component={LoginPage}
-              authRedirect="/user"
+              authRedirect="/rental_requests"
             />
 
             {/* If none of the other routes matched, we will show a 404. */}
