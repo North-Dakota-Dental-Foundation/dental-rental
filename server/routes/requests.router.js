@@ -45,7 +45,6 @@ router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
     const allEquipmentInARequest = await pool.query(
       `SELECT "requests".id, "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";`
     );
-    console.log(allEquipmentInARequest.rows);
     res.send(allEquipmentInARequest.rows);
   } catch (error) {
     res.sendStatus(500);
