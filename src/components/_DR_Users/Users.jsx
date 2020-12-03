@@ -186,7 +186,7 @@ class Users extends Component {
                     <Col>
 
                       <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>Username(email):</Form.Label>
+                        <Form.Label>Username (email):</Form.Label>
                         <Form.Control
                           placeholder=""
                           as="textarea"
