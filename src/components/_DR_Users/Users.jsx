@@ -20,11 +20,11 @@ import UserItem from "./UserItem";
 
 class Users extends Component {
   state = {
-    firstname: '',
-    lastname: '',
-    username: '', // USERNAME IS EMAIL
-    phonenumber: 'N/A',
-    password: '',
+    firstname: "",
+    lastname: "",
+    username: "", // USERNAME IS EMAIL
+    phonenumber: "N/A",
+    password: "",
 
     super_admin: false,
     addUser: false,
@@ -40,24 +40,23 @@ class Users extends Component {
     });
   };
 
-
-  resetState = () => this.setState({
-    firstname: '',
-    lastname: '',
-    username: '', // USERNAME IS EMAIL
-    phonenumber: 'N/A',
-    password: '',
-    super_admin: false,
-    addUser: false,
-  });
+  resetState = () =>
+    this.setState({
+      firstname: "",
+      lastname: "",
+      username: "", // USERNAME IS EMAIL
+      phonenumber: "N/A",
+      password: "",
+      super_admin: false,
+      addUser: false,
+    });
 
   onSubmit = () => {
-
-    // if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A') 
+    // if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A')
     // { return }
 
     this.props.dispatch({
-      type: 'REGISTER',
+      type: "REGISTER",
 
       payload: {
         firstname: this.state.firstname,
@@ -91,27 +90,31 @@ class Users extends Component {
       <>
         <br />
         <div id="users">
-
           <Row>
             <Col className="text-center">
               <h1 id="form-header">User Management</h1>
             </Col>
           </Row>
 
-          <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+          <Alert
+            style={{ paddingLeft: "80px", paddingRight: "80px" }}
+            variant="light"
+          >
             <Row>
               <Col className="text-center">
                 Browse through all users, and add new users to the system.
                 <br />
                 All users will have access too all Dental Rental functionality.
-            </Col>
+              </Col>
             </Row>
           </Alert>
 
           <Container>
             <Row>
               <Col style={{ paddingTop: "15px", textAlign: "left" }}>
-                <h5 id="welcome">Logged in as: <strong>{this.props.user.username}</strong></h5>
+                <h5 id="welcome">
+                  Logged in as: <strong>{this.props.user.username}</strong>
+                </h5>
               </Col>
               <Col />
               <Col style={{ textAlign: "right" }}>
@@ -121,15 +124,16 @@ class Users extends Component {
                   overlay={
                     <Tooltip id="button-tooltip-2">
                       Add a new Admin user to your system.
-                </Tooltip>
+                    </Tooltip>
                   }
                 >
-                  <Button id='addUserButton' onClick={this.openAddUserModal}>Add User</Button>
+                  <Button id="addUserButton" onClick={this.openAddUserModal}>
+                    Add User
+                  </Button>
                 </OverlayTrigger>
               </Col>
             </Row>
             <Table id="table-container" bordered hover>
-
               <thead>
                 <tr>
                   <th>Name</th>
@@ -142,12 +146,15 @@ class Users extends Component {
               <tbody>
                 {this.props.users !== undefined &&
                   this.props.users.map((user) => {
-                    return <UserItem user={user} key={user.id} />
+                    return <UserItem user={user} key={user.id} />;
                   })}
               </tbody>
-
             </Table>
-            <Modal className="modal" show={this.state.addUser} onHide={this.closeAddUserModal}>
+            <Modal
+              className="modal"
+              show={this.state.addUser}
+              onHide={this.closeAddUserModal}
+            >
               <Modal.Header className="modalHeader">
                 <Modal.Title className="modalTitle">Add User</Modal.Title>
               </Modal.Header>
@@ -156,7 +163,10 @@ class Users extends Component {
                 <div id="addUserInputs">
                   <Row>
                     <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                      <Form.Group
+                        onChange={this.handleChange}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
                         <Form.Label>First Name:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -169,7 +179,10 @@ class Users extends Component {
                       </Form.Group>
                     </Col>
                     <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                      <Form.Group
+                        onChange={this.handleChange}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
                         <Form.Label>Last Name:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -184,9 +197,11 @@ class Users extends Component {
                   </Row>
                   <Row>
                     <Col>
-
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
-                        <Form.Label>Username(email):</Form.Label>
+                      <Form.Group
+                        onChange={this.handleChange}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
+                        <Form.Label>Username (Email):</Form.Label>
                         <Form.Control
                           placeholder=""
                           as="textarea"
@@ -198,7 +213,10 @@ class Users extends Component {
                       </Form.Group>
                     </Col>
                     <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                      <Form.Group
+                        onChange={this.handleChange}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
                         <Form.Label>Password:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -213,7 +231,10 @@ class Users extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Form.Group onChange={this.handleChange} controlId="exampleForm.ControlTextarea1a">
+                      <Form.Group
+                        onChange={this.handleChange}
+                        controlId="exampleForm.ControlTextarea1a"
+                      >
                         <Form.Label>Phone Number:</Form.Label>
                         <Form.Control
                           placeholder=""
@@ -226,21 +247,34 @@ class Users extends Component {
                     </Col>
                   </Row>
                 </div>
+                <Row>
+                  <Col>
+                    <Button
+                      onClick={this.onSubmit}
+                      variant="primary w-100 text-center"
+                    >
+                      Submit{" "}
+                    </Button>
+                  </Col>
+                </Row>
               </Modal.Body>
 
               <Modal.Footer className="modalFooter">
-                <Button onClick={this.resetState} variant="secondary">
-                  Cancel
+                <Button
+                  className="footerButton"
+                  variant="secondary w-100 text-center"
+                  onClick={this.resetState}
+                >
+                  Close
                 </Button>
-                <Button onClick={this.onSubmit}>Submit</Button>
               </Modal.Footer>
             </Modal>
           </Container>
         </div>
       </>
     );
-  };
-};
+  }
+}
 
 const mapStoreToProps = (reduxState) => ({
   users: reduxState.userPageReducer,
