@@ -173,7 +173,6 @@ class RentalRequests extends Component {
 
 const mapStoreToProps = (reduxState) => {
   let requests = reduxState.rentalRequestsReducer;
-  let requests_2;
   let equipmentInRequests = reduxState.equipmentReducer;
 
   if (reduxState.equipmentReducer && reduxState.rentalRequestsReducer) {

@@ -39,33 +39,14 @@ router.get('/filterrequests/:requeststatus?', rejectUnauthenticated, async (req,
   }
 }); // End of GET filter route
 
+// GET all equipment items per request with associated request id
 router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
   try {
-    const allRequests = await pool.query(
-      `SELECT id from "requests";`
-    );
-    const allRequestIds = allRequests.rows.map((obj) => {
-      return obj.id;
-    });
-    // create an object of all requests with corresponding equipment items per request
-    let allRequestsObj = {};
-    for (let i = 0; i < allRequestIds.length; i++) {
-      try {
-        const allEquipmentPerRequest = await pool.query('SELECT "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id" WHERE "requests".id = ($1)', [allRequestIds[i]]);
-        
-        allRequestsObj[allRequestIds[i]] = allEquipmentPerRequest.rows;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     const allEquipmentInARequest = await pool.query(
       `SELECT "requests".id, "equipment".equipment_item FROM "equipment" JOIN "equipment_requests" ON "equipment_requests"."equipment_id" = "equipment"."id" JOIN "requests" ON "requests"."id" = "equipment_requests"."request_id";`
     );
     console.log(allEquipmentInARequest.rows);
     res.send(allEquipmentInARequest.rows);
-      //old send (change it back if this doesn't work)
-      //res.send([allRequestsObj]);
   } catch (error) {
     res.sendStatus(500);
     console.log(error)
