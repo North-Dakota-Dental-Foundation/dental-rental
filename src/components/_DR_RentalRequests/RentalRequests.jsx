@@ -95,7 +95,7 @@ class RentalRequests extends Component {
 
           <Row>
             <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-              <strong>Application Status Filter:</strong>
+              <strong>Filter by Status:</strong>
               <Select
                 onChange={this.handleFilterChange}
                 className="basic-single"
