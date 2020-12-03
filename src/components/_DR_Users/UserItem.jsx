@@ -51,7 +51,7 @@ class UserItem extends Component {
     return (
       <>
         <tr>
-          {this.props.user.username !== "SuperAdmin" && (
+          {!this.props.user.super_admin && (
             <>
               <td>
                 {this.props.user.firstname} {this.props.user.lastname}
