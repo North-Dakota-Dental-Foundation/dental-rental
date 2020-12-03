@@ -47,10 +47,10 @@ const Nav = (props) => {
                 to="/inventory_view"
                 style={{ color: "white", justifyContent: "center" }}
               >
-                Inventory Management
+                Inventory Management{" "}
               </Link>
               <Link className="nav-link" to="/users" style={{ color: "white" }}>
-                User Management
+                User Management{" "}
               </Link>
               <Link
                 className="nav-link"
@@ -59,7 +59,7 @@ const Nav = (props) => {
               >
                 {" "}
                 {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
-                Client Submission Form
+                Client Submission Form{" "}
               </Link>
               <span>
                 <LogOutButton className="logout-button" />

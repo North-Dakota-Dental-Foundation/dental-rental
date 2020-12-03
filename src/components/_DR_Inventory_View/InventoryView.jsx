@@ -19,8 +19,7 @@ import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 import axios from "axios";
 
-import Select from 'react-select';
-
+import Select from "react-select";
 
 class InventoryView extends Component {
   state = {
@@ -38,15 +37,28 @@ class InventoryView extends Component {
     itemToEdit: null,
 
     filterStatus: [{ label: `NONE`, value: "N/A" }],
-    filterOptions: [{ label: `NONE`, value: "N/A" }, { value: 0, label: 'AVAILABLE' }, { value: 4, label: 'MISSING' }, { value: 1, label: 'CHECKED-OUT' }, { value: 2, label: 'SHIPPED' }, { value: 3, label: 'IN-INSPECTION' }],
-    selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'MISSING', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
+    filterOptions: [
+      { label: `NONE`, value: "N/A" },
+      { value: 0, label: "AVAILABLE" },
+      { value: 4, label: "MISSING" },
+      { value: 1, label: "CHECKED-OUT" },
+      { value: 2, label: "SHIPPED" },
+      { value: 3, label: "IN-INSPECTION" },
+    ],
+    selectOptions: [
+      { value: "AVAILABLE", label: "AVAILABLE" },
+      { value: "MISSING", label: "MISSING" },
+      { value: "CHECKED-OUT", label: "CHECKED-OUT" },
+      { value: "SHIPPED", label: "SHIPPED" },
+      { value: "IN-INSPECTION", label: "IN-INSPECTION" },
+    ],
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
 
   componentDidMount() {
     this.getInventory();
-  };
+  }
 
   handleNoteChange = (event) => {
     this.setState({
@@ -128,10 +140,9 @@ class InventoryView extends Component {
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
-    console.log(this.state.inventory);
-    console.log(objectIndex);
-    console.log(inventoryId);
-
+    // console.log(this.state.inventory);
+    // console.log(objectIndex);
+    // console.log(inventoryId);
     swal({
       title: `Are you sure you want to delete ${this.state.inventory[objectIndex].equipment_item}?`,
       text: "Once this item is deleted, you will have to re-add it.",
@@ -231,14 +242,16 @@ class InventoryView extends Component {
         <Col className="text-center">
           <h1 id="form-header">Inventory Management</h1>
         </Col>
-        <br />
-
-        <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+        <Alert
+          style={{ paddingLeft: "80px", paddingRight: "80px" }}
+          variant="light"
+        >
           <Row>
             <Col className="text-center">
               Browse through all of the inventory.
-                <br />
-                Add new equipment to the inventory, and change/filter by the equipment status.
+              <br />
+              Add new equipment to the inventory, and change/filter by the
+              equipment status.
             </Col>
           </Row>
         </Alert>
@@ -248,9 +261,11 @@ class InventoryView extends Component {
           show={this.state.isOpen}
           onHide={this.closeModal}
         >
-          <Modal.Header className="modalHeader" closeButton>
-            <Modal.Title className="modalTitle" style={{ textAlign: "center" }}>
-              Add New Equipment{" "}
+          <Modal.Header className="modalHeader">
+            <Modal.Title className="modalTitle">
+              <div>
+                <h4 className="modalTitle"> Add New Equipment </h4>
+              </div>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="modal-body">
@@ -346,15 +361,13 @@ class InventoryView extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <br />
-        <br />
 
         <Modal
           className="modal"
           show={this.state.noteIsOpen}
           onHide={this.closeNoteModal}
         >
-          <Modal.Header className="modalHeader" closeButton>
+          <Modal.Header className="modalHeader">
             <Modal.Title
               className="modalTitle"
               style={{ justifyContent: "center" }}
@@ -377,7 +390,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${ }</Form.Label>
+                        <Form.Label>Notes for ${}</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -408,60 +421,66 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <Container>
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 1000 }}
-            overlay={
-              <Tooltip id="button-tooltip-2">
-                Add new equipment to your inventory.
-              </Tooltip>
-            }
-          >
-            {({ ref, ...triggerHandler }) => (
-              <Button
-                variant="primary"
-                ref={ref}
-                {...triggerHandler}
-                className="btn-primary"
-                onClick={this.openModal}
-                style={{ float: "right" }}
+          <Row>
+            <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+              <strong>Filter by Status:</strong> <br />
+              <Select
+                onChange={this.handleFilterChange}
+                className="basic-single"
+                classNamePrefix="select"
+                value={this.state.filterStatus}
+                name="filterStatus"
+                options={this.state.filterOptions}
+                placeholder="Filter by Status"
+              />
+            </Col>
+            <Col style={{ textAlign: "right", paddingTop: "25px" }}>
+              &nbsp; &nbsp;&nbsp;
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 1000 }}
+                overlay={
+                  <Tooltip id="button-tooltip-2">
+                    Filter the inventory table by status.
+                  </Tooltip>
+                }
               >
-                <span>Add New Equipment</span>
-              </Button>
-            )}
-          </OverlayTrigger>
-
-          <strong>App Status Filter:</strong> <br />
-          <Select
-            onChange={this.handleFilterChange}
-            className="basic-single"
-            classNamePrefix="select"
-            value={this.state.filterStatus}
-            name="filterStatus"
-            options={this.state.filterOptions}
-            placeholder="Filter by Status"
-          />
-          &nbsp; &nbsp;&nbsp;
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 1000 }}
-            overlay={
-              <Tooltip id="button-tooltip-2">
-                Filter the inventory table by status.
-              </Tooltip>
-            }
-          >
-            {({ ref, ...triggerHandler }) => (
-              <Button
-                variant="primary"
-                ref={ref}
-                {...triggerHandler}
-                onClick={this.submit}
+                {({ ref, ...triggerHandler }) => (
+                  <Button
+                    style={{ marginRight: "3px" }}
+                    variant="primary"
+                    ref={ref}
+                    {...triggerHandler}
+                    onClick={this.submit}
+                  >
+                    Refresh Table
+                  </Button>
+                )}
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 1000 }}
+                overlay={
+                  <Tooltip id="button-tooltip-2">
+                    Add new equipment to your inventory.
+                  </Tooltip>
+                }
               >
-                Refresh Table
-              </Button>
-            )}
-          </OverlayTrigger>
+                {({ ref, ...triggerHandler }) => (
+                  <Button
+                    variant="primary"
+                    ref={ref}
+                    {...triggerHandler}
+                    className="btn-primary"
+                    onClick={this.openModal}
+                    style={{ float: "right" }}
+                  >
+                    <span>Add New Equipment</span>
+                  </Button>
+                )}
+              </OverlayTrigger>
+            </Col>
+          </Row>
           <br />
           <br />
           <Table id="table-container" bordered hover>
@@ -470,9 +489,9 @@ class InventoryView extends Component {
                 <th>Equipment</th>
                 <th>Serial #</th>
                 <th>NDDF Code</th>
-                <th style={{ textAlign: "center" }}>Status</th>
+                <th style={{ textAlign: "center", width: "16%" }}>Status</th>
                 <th style={{ textAlign: "center" }}>Notes</th>
-                <th style={{ textAlign: "center" }}>Delete Equipment</th>
+                <th style={{ textAlign: "center" }}>Retire Equipment</th>
               </tr>
             </thead>
             <tbody>
@@ -492,7 +511,12 @@ class InventoryView extends Component {
                       onChange={(e) => this.editStatus(e, inventoryItem.id)}
                       className="basic-single"
                       classNamePrefix="select"
-                      value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                      value={[
+                        {
+                          label: `${inventoryItem.equipment_status}`,
+                          value: `${inventoryItem.equipment_status}`,
+                        },
+                      ]}
                       name="requestStatus"
                       options={this.state.selectOptions}
                     />
@@ -518,7 +542,7 @@ class InventoryView extends Component {
                         this.deleteInventory(inventoryItem.id, index)
                       }
                     >
-                      Delete Item
+                      Retire Item
                     </Button>
                   </td>
                 </tr>
@@ -531,7 +555,7 @@ class InventoryView extends Component {
           show={this.state.noteIsOpen}
           onHide={this.closeNoteModal}
         >
-          <Modal.Header className="modalHeader" closeButton>
+          <Modal.Header className="modalHeader">
             <Modal.Title
               className="modalTitle"
               style={{ justifyContent: "center" }}
