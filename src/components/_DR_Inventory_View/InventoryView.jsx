@@ -19,8 +19,7 @@ import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 import axios from "axios";
 
-import Select from 'react-select';
-
+import Select from "react-select";
 
 class InventoryView extends Component {
   state = {
@@ -38,15 +37,28 @@ class InventoryView extends Component {
     itemToEdit: null,
 
     filterStatus: [{ label: `NONE`, value: "N/A" }],
-    filterOptions: [{ label: `NONE`, value: "N/A" }, { value: 0, label: 'AVAILABLE' }, { value: 4, label: 'MISSING' }, { value: 1, label: 'CHECKED-OUT' }, { value: 2, label: 'SHIPPED' }, { value: 3, label: 'IN-INSPECTION' }],
-    selectOptions: [{ value: 'AVAILABLE', label: 'AVAILABLE' }, { value: 'MISSING', label: 'MISSING' }, { value: 'CHECKED-OUT', label: 'CHECKED-OUT' }, { value: 'SHIPPED', label: 'SHIPPED' }, { value: 'IN-INSPECTION', label: 'IN-INSPECTION' }],
+    filterOptions: [
+      { label: `NONE`, value: "N/A" },
+      { value: 0, label: "AVAILABLE" },
+      { value: 4, label: "MISSING" },
+      { value: 1, label: "CHECKED-OUT" },
+      { value: 2, label: "SHIPPED" },
+      { value: 3, label: "IN-INSPECTION" },
+    ],
+    selectOptions: [
+      { value: "AVAILABLE", label: "AVAILABLE" },
+      { value: "MISSING", label: "MISSING" },
+      { value: "CHECKED-OUT", label: "CHECKED-OUT" },
+      { value: "SHIPPED", label: "SHIPPED" },
+      { value: "IN-INSPECTION", label: "IN-INSPECTION" },
+    ],
   };
 
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
 
   componentDidMount() {
     this.getInventory();
-  };
+  }
 
   handleNoteChange = (event) => {
     this.setState({
@@ -230,12 +242,16 @@ class InventoryView extends Component {
         <Col className="text-center">
           <h1 id="form-header">Inventory Management</h1>
         </Col>
-        <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+        <Alert
+          style={{ paddingLeft: "80px", paddingRight: "80px" }}
+          variant="light"
+        >
           <Row>
             <Col className="text-center">
               Browse through all of the inventory.
-                <br />
-                Add new equipment to the inventory, and change/filter by the equipment status.
+              <br />
+              Add new equipment to the inventory, and change/filter by the
+              equipment status.
             </Col>
           </Row>
         </Alert>
@@ -245,9 +261,11 @@ class InventoryView extends Component {
           show={this.state.isOpen}
           onHide={this.closeModal}
         >
-          <Modal.Header className="modalHeader" closeButton>
-            <Modal.Title className="modalTitle" style={{ textAlign: "center" }}>
-              Add New Equipment{" "}
+          <Modal.Header className="modalHeader">
+            <Modal.Title className="modalTitle">
+              <div>
+                <h4 className="modalTitle"> Add New Equipment </h4>
+              </div>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="modal-body">
@@ -344,13 +362,12 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
 
-
         <Modal
           className="modal"
           show={this.state.noteIsOpen}
           onHide={this.closeNoteModal}
         >
-          <Modal.Header className="modalHeader" closeButton>
+          <Modal.Header className="modalHeader">
             <Modal.Title
               className="modalTitle"
               style={{ justifyContent: "center" }}
@@ -373,7 +390,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${ }</Form.Label>
+                        <Form.Label>Notes for ${}</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -419,13 +436,13 @@ class InventoryView extends Component {
             </Col>
             <Col style={{ textAlign: "right", paddingTop: "25px" }}>
               &nbsp; &nbsp;&nbsp;
-          <OverlayTrigger
+              <OverlayTrigger
                 placement="top"
                 delay={{ show: 1000 }}
                 overlay={
                   <Tooltip id="button-tooltip-2">
                     Filter the inventory table by status.
-              </Tooltip>
+                  </Tooltip>
                 }
               >
                 {({ ref, ...triggerHandler }) => (
@@ -494,7 +511,12 @@ class InventoryView extends Component {
                       onChange={(e) => this.editStatus(e, inventoryItem.id)}
                       className="basic-single"
                       classNamePrefix="select"
-                      value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                      value={[
+                        {
+                          label: `${inventoryItem.equipment_status}`,
+                          value: `${inventoryItem.equipment_status}`,
+                        },
+                      ]}
                       name="requestStatus"
                       options={this.state.selectOptions}
                     />
@@ -533,7 +555,7 @@ class InventoryView extends Component {
           show={this.state.noteIsOpen}
           onHide={this.closeNoteModal}
         >
-          <Modal.Header className="modalHeader" closeButton>
+          <Modal.Header className="modalHeader">
             <Modal.Title
               className="modalTitle"
               style={{ justifyContent: "center" }}
