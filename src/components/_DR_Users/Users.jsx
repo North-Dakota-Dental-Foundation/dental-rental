@@ -245,6 +245,8 @@ class Users extends Component {
                           rows={1}
                           name="phonenumber"
                           className="addUserInput"
+                          require
+                          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         />
                       </Form.Group>
                     </Col>
