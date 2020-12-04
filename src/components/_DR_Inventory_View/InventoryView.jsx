@@ -35,15 +35,15 @@ class InventoryView extends Component {
     inventory: [],
     isEdit: false,
     itemToEdit: null,
-
     filterStatus: [{ label: `NONE`, value: "N/A" }],
     filterOptions: [
       { label: `NONE`, value: "N/A" },
       { value: 0, label: "AVAILABLE" },
-      { value: 4, label: "MISSING" },
       { value: 1, label: "CHECKED-OUT" },
-      { value: 2, label: "SHIPPED" },
       { value: 3, label: "IN-INSPECTION" },
+      { value: 4, label: "MISSING" },
+      { value: 2, label: "SHIPPED" },
+      { value: 5, label: 'RETIRED' }
     ],
     selectOptions: [
       { value: "AVAILABLE", label: "AVAILABLE" },
@@ -144,8 +144,8 @@ class InventoryView extends Component {
     // console.log(objectIndex);
     // console.log(inventoryId);
     swal({
-      title: `Are you sure you want to delete ${this.state.inventory[objectIndex].equipment_item}?`,
-      text: "Once this item is deleted, you will have to re-add it.",
+      title: `Are you sure you want to retire ${this.state.inventory[objectIndex].equipment_item}?`,
+      text: "Once this item is retired, you will have to re-add it.",
       icon: "warning",
       buttons: true,
     }).then((willDelete) => {
@@ -155,7 +155,7 @@ class InventoryView extends Component {
           .then((response) => {
             console.log(response.data);
             swal(
-              `${this.state.inventory[objectIndex].equipment_item} has been deleted.`,
+              `${this.state.inventory[objectIndex].equipment_item} has been retired.`,
               {
                 icon: "success",
               }
@@ -167,7 +167,7 @@ class InventoryView extends Component {
           });
       } else {
         swal(
-          `${this.state.inventory[objectIndex].equipment_item} has NOT been deleted.`
+          `${this.state.inventory[objectIndex].equipment_item} has NOT been retired.`
         );
       }
     });
@@ -249,9 +249,8 @@ class InventoryView extends Component {
           <Row>
             <Col className="text-center">
               Browse through all of the inventory.
-              <br />
-              Add new equipment to the inventory, and change/filter by the
-              equipment status.
+                <br />
+                Add new equipment to the inventory, and change or filter by the equipment status.
             </Col>
           </Row>
         </Alert>
@@ -390,7 +389,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Label>Notes for ${ }</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -482,7 +481,6 @@ class InventoryView extends Component {
             </Col>
           </Row>
           <br />
-          <br />
           <Table id="table-container" bordered hover>
             <thead>
               <tr>
@@ -491,7 +489,7 @@ class InventoryView extends Component {
                 <th>NDDF Code</th>
                 <th style={{ textAlign: "center", width: "16%" }}>Status</th>
                 <th style={{ textAlign: "center" }}>Notes</th>
-                <th style={{ textAlign: "center" }}>Retire Equipment</th>
+                <th style={{ textAlign: "center" }}>Retire</th>
               </tr>
             </thead>
             <tbody>
@@ -507,21 +505,27 @@ class InventoryView extends Component {
                     {inventoryItem.nddf_code}
                   </td>
                   <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-                    <Select
-                      onChange={(e) => this.editStatus(e, inventoryItem.id)}
-                      className="basic-single"
-                      classNamePrefix="select"
-                      value={[
-                        {
-                          label: `${inventoryItem.equipment_status}`,
-                          value: `${inventoryItem.equipment_status}`,
-                        },
-                      ]}
-                      name="requestStatus"
-                      options={this.state.selectOptions}
-                    />
-                  </td>
 
+                    {inventoryItem.equipment_status === "RETIRED" ?
+                      <Select
+                        className="basic-single"
+                        classNamePrefix="select"
+                        value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                        name="requestStatus"
+                        options={this.state.selectOptions}
+                        isDisabled
+                      />
+                      :
+                      <Select
+                        onChange={(e) => this.editStatus(e, inventoryItem.id)}
+                        className="basic-single"
+                        classNamePrefix="select"
+                        value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                        name="requestStatus"
+                        options={this.state.selectOptions}
+                      />
+                    }
+                  </td>
                   <td style={{ textAlign: "center" }}>
                     {" "}
                     <Button
@@ -534,16 +538,27 @@ class InventoryView extends Component {
                   </td>
                   <td style={{ textAlign: "center" }}>
                     {" "}
-                    <Button
-                      className="deleteButton"
-                      variant="danger"
-                      style={{ textAlign: "center" }}
-                      onClick={() =>
-                        this.deleteInventory(inventoryItem.id, index)
-                      }
-                    >
-                      Retire Item
+                    {inventoryItem.equipment_status === "RETIRED" ?
+                      <Button
+                        className="deleteButton"
+                        variant="danger"
+                        style={{ textAlign: "center" }}
+                        disabled
+                      >
+                        Retire Item
+                  </Button>
+                      :
+                      <Button
+                        className="deleteButton"
+                        variant="danger"
+                        style={{ textAlign: "center" }}
+                        onClick={() =>
+                          this.deleteInventory(inventoryItem.id, index)
+                        }
+                      >
+                        Retire Item
                     </Button>
+                    }
                   </td>
                 </tr>
               ))}

@@ -51,9 +51,12 @@ class Users extends Component {
       addUser: false,
     });
 
-  onSubmit = () => {
-    // if (this.state.firstname === 'N/A' || this.state.lastname === 'N/A' || this.state.username === 'N/A' || this.state.password === 'N/A')
-    // { return }
+  onSubmit = (event) => {
+    event.preventDefault(); // Prevents page from reloading, which is a default function for when a (type='submit') is used on a form button
+
+    let phonenumber = this.state.phonenumber; // Take phone number from state
+    let arrPhoneNumber = phonenumber.split("-"); // Slice it into an array, sliced by "-"
+    phonenumber = arrPhoneNumber.join(""); // Join the array back into one variable for DB
 
     this.props.dispatch({
       type: "REGISTER",
@@ -62,7 +65,7 @@ class Users extends Component {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
         username: this.state.username, // USERNAME IS EMAIL
-        phonenumber: this.state.phonenumber,
+        phonenumber: phonenumber,
         password: this.state.password,
       },
     });
