@@ -197,7 +197,7 @@ class Users extends Component {
                             rows={1}
                             name="username"
                             className="addUserInput"
-                            pattern='/\S+@\S+\.\S+/'
+                            // pattern='/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/' // Regex does not work to check for valid email
                             required
                           />
                         </Form.Group>
