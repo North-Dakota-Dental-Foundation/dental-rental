@@ -83,7 +83,7 @@ class RentalRequests extends Component {
               <Col className="text-center">
                 Browse through all clients equipment requests.
                 <br />
-                Change, and filter by the request status.
+                Change and filter by the request status.
             </Col>
             </Row>
           </Alert>
