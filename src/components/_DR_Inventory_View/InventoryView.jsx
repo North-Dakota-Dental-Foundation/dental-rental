@@ -18,7 +18,7 @@ import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 import axios from "axios";
-
+import ThreeDots from "../_DR_ThreeDots/ThreeDots";
 import Select from "react-select";
 
 class InventoryView extends Component {
@@ -57,6 +57,7 @@ class InventoryView extends Component {
   // TODO: If "filterStatus" equals "N/A", run "filterInv();"
 
   componentDidMount() {
+    this.props.dispatch({ type: "LOADING" }); //activates spinner effect
     this.getInventory();
   }
 
@@ -86,6 +87,7 @@ class InventoryView extends Component {
         this.setState({
           inventory: response.data,
         });
+        this.props.dispatch({ type: "NOT_LOADING" });
       })
       .catch((error) => {
         console.log(error);
@@ -420,150 +422,164 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <Container>
-          <Row>
-            <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-              <strong>Filter by Status:</strong> <br />
-              <Select
-                onChange={this.handleFilterChange}
-                className="basic-single"
-                classNamePrefix="select"
-                value={this.state.filterStatus}
-                name="filterStatus"
-                options={this.state.filterOptions}
-                placeholder="Filter by Status"
-              />
-            </Col>
-            <Col style={{ textAlign: "right", paddingTop: "25px" }}>
-              &nbsp; &nbsp;&nbsp;
+          {this.props.state.isLoadingReducer ?
+            <>
+              <br />
+              <br />
+              <Row>
+                <Col className="text-center">
+                  <ThreeDots />
+                </Col>
+              </Row>
+            </>
+            :
+            <>
+              <Row>
+                <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+                  <strong>Filter by Status:</strong> <br />
+                  <Select
+                    onChange={this.handleFilterChange}
+                    className="basic-single"
+                    classNamePrefix="select"
+                    value={this.state.filterStatus}
+                    name="filterStatus"
+                    options={this.state.filterOptions}
+                    placeholder="Filter by Status"
+                  />
+                </Col>
+                <Col style={{ textAlign: "right", paddingTop: "25px" }}>
+                  &nbsp; &nbsp;&nbsp;
               <OverlayTrigger
-                placement="top"
-                delay={{ show: 1000 }}
-                overlay={
-                  <Tooltip id="button-tooltip-2">
-                    Filter the inventory table by status.
+                    placement="top"
+                    delay={{ show: 1000 }}
+                    overlay={
+                      <Tooltip id="button-tooltip-2">
+                        Filter the inventory table by status.
                   </Tooltip>
-                }
-              >
-                {({ ref, ...triggerHandler }) => (
-                  <Button
-                    style={{ marginRight: "3px" }}
-                    variant="primary"
-                    ref={ref}
-                    {...triggerHandler}
-                    onClick={this.submit}
+                    }
                   >
-                    Refresh Table
-                  </Button>
-                )}
-              </OverlayTrigger>
-              <OverlayTrigger
-                placement="top"
-                delay={{ show: 1000 }}
-                overlay={
-                  <Tooltip id="button-tooltip-2">
-                    Add new equipment to your inventory.
+                    {({ ref, ...triggerHandler }) => (
+                      <Button
+                        style={{ marginRight: "3px" }}
+                        variant="primary"
+                        ref={ref}
+                        {...triggerHandler}
+                        onClick={this.submit}
+                      >
+                        Refresh Table
+                      </Button>
+                    )}
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 1000 }}
+                    overlay={
+                      <Tooltip id="button-tooltip-2">
+                        Add new equipment to your inventory.
                   </Tooltip>
-                }
-              >
-                {({ ref, ...triggerHandler }) => (
-                  <Button
-                    variant="primary"
-                    ref={ref}
-                    {...triggerHandler}
-                    className="btn-primary"
-                    onClick={this.openModal}
-                    style={{ float: "right" }}
+                    }
                   >
-                    <span>Add New Equipment</span>
-                  </Button>
-                )}
-              </OverlayTrigger>
-            </Col>
-          </Row>
-          <br />
-          <Table id="table-container" bordered hover>
-            <thead>
-              <tr>
-                <th>Equipment</th>
-                <th>Serial #</th>
-                <th>NDDF Code</th>
-                <th style={{ textAlign: "center", width: "16%" }}>Status</th>
-                <th style={{ textAlign: "center" }}>Notes</th>
-                <th style={{ textAlign: "center" }}>Retire</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.inventory.map((inventoryItem, index) => (
-                <tr>
-                  <td style={{ verticalAlign: "middle" }}>
-                    {inventoryItem.equipment_item}
-                  </td>
-                  <td style={{ verticalAlign: "middle" }}>
-                    {inventoryItem.serial_number}
-                  </td>
-                  <td style={{ verticalAlign: "middle" }}>
-                    {inventoryItem.nddf_code}
-                  </td>
-                  <td style={{ textAlign: "center", verticalAlign: "middle" }}>
+                    {({ ref, ...triggerHandler }) => (
+                      <Button
+                        variant="primary"
+                        ref={ref}
+                        {...triggerHandler}
+                        className="btn-primary"
+                        onClick={this.openModal}
+                        style={{ float: "right" }}
+                      >
+                        <span>Add New Equipment</span>
+                      </Button>
+                    )}
+                  </OverlayTrigger>
+                </Col>
+              </Row>
+              <br />
+              <Table id="table-container" bordered hover>
+                <thead>
+                  <tr>
+                    <th>Equipment</th>
+                    <th>Serial #</th>
+                    <th>NDDF Code</th>
+                    <th style={{ textAlign: "center", width: "16%" }}>Status</th>
+                    <th style={{ textAlign: "center" }}>Notes</th>
+                    <th style={{ textAlign: "center" }}>Retire</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.inventory.map((inventoryItem, index) => (
+                    <tr>
+                      <td style={{ verticalAlign: "middle" }}>
+                        {inventoryItem.equipment_item}
+                      </td>
+                      <td style={{ verticalAlign: "middle" }}>
+                        {inventoryItem.serial_number}
+                      </td>
+                      <td style={{ verticalAlign: "middle" }}>
+                        {inventoryItem.nddf_code}
+                      </td>
+                      <td style={{ textAlign: "center", verticalAlign: "middle" }}>
 
-                    {inventoryItem.equipment_status === "RETIRED" ?
-                      <Select
-                        className="basic-single"
-                        classNamePrefix="select"
-                        value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
-                        name="requestStatus"
-                        options={this.state.selectOptions}
-                        isDisabled
-                      />
-                      :
-                      <Select
-                        onChange={(e) => this.editStatus(e, inventoryItem.id)}
-                        className="basic-single"
-                        classNamePrefix="select"
-                        value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
-                        name="requestStatus"
-                        options={this.state.selectOptions}
-                      />
-                    }
-                  </td>
-                  <td style={{ textAlign: "center" }}>
-                    {" "}
-                    <Button
-                      variant="primary"
-                      className="btn-primary"
-                      onClick={(event) => this.openNoteModal(inventoryItem)}
-                    >
-                      Notes{" "}
-                    </Button>{" "}
-                  </td>
-                  <td style={{ textAlign: "center" }}>
-                    {" "}
-                    {inventoryItem.equipment_status === "RETIRED" ?
-                      <Button
-                        className="deleteButton"
-                        variant="danger"
-                        style={{ textAlign: "center" }}
-                        disabled
-                      >
-                        Retire Item
-                  </Button>
-                      :
-                      <Button
-                        className="deleteButton"
-                        variant="danger"
-                        style={{ textAlign: "center" }}
-                        onClick={() =>
-                          this.deleteInventory(inventoryItem.id, index)
+                        {inventoryItem.equipment_status === "RETIRED" ?
+                          <Select
+                            className="basic-single"
+                            classNamePrefix="select"
+                            value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                            name="requestStatus"
+                            options={this.state.selectOptions}
+                            isDisabled
+                          />
+                          :
+                          <Select
+                            onChange={(e) => this.editStatus(e, inventoryItem.id)}
+                            className="basic-single"
+                            classNamePrefix="select"
+                            value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                            name="requestStatus"
+                            options={this.state.selectOptions}
+                          />
                         }
-                      >
-                        Retire Item
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        {" "}
+                        <Button
+                          variant="primary"
+                          className="btn-primary"
+                          onClick={(event) => this.openNoteModal(inventoryItem)}
+                        >
+                          Notes{" "}
+                        </Button>{" "}
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        {" "}
+                        {inventoryItem.equipment_status === "RETIRED" ?
+                          <Button
+                            className="deleteButton"
+                            variant="danger"
+                            style={{ textAlign: "center" }}
+                            disabled
+                          >
+                            Retire Item
+                  </Button>
+                          :
+                          <Button
+                            className="deleteButton"
+                            variant="danger"
+                            style={{ textAlign: "center" }}
+                            onClick={() =>
+                              this.deleteInventory(inventoryItem.id, index)
+                            }
+                          >
+                            Retire Item
                     </Button>
-                    }
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+                        }
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </>
+          }
         </Container>
         <Modal
           className="modal"
