@@ -105,9 +105,9 @@ class Users extends Component {
           >
             <Row>
               <Col className="text-center">
-                Browse through all users, and add new users to the system.
+                Browse through all users and add new ones to the system.
                 <br />
-                All users will have access too all Dental Rental functionality.
+                All users will have access to all Dental Rental functionality.
               </Col>
             </Row>
           </Alert>
