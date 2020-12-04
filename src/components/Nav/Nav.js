@@ -21,7 +21,7 @@ const Nav = (props) => {
   return (
     <div>
       <Navbar bg="dark" className="navbar-default">
-        <Navbar.Brand href="#rental_requests">
+        <Navbar.Brand>
           <img
             alt=""
             src={logo}
@@ -31,19 +31,16 @@ const Nav = (props) => {
           />{" "}
         </Navbar.Brand>
 
-        <Link
-          style={{ color: "white" }}
-          className="nav-link"
-          to={loginLinkData.path}
-        >
-          {/* Show this link if they are logged in or not,
-          but call this link 'Home' if they are logged in,
-          and call this link 'Login / Register' if they are not */}
-          {loginLinkData.text}
-        </Link>
         {/* Show the link to the info page and the logout button if the user is logged in */}
         {props.store.user.id && (
           <>
+            <Link
+              className="nav-link"
+              to="/rental_requests"
+              style={{ color: "white", justifyContent: "center" }}
+            >
+              Rental Requests Management
+            </Link>
             <Link
               className="nav-link"
               to="/inventory_view"
