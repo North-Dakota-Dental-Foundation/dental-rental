@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import "./Nav.css";
 import mapStoreToProps from "../../redux/mapStoreToProps";
-import { Navbar } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import logo from "./Nav.png";
 
-const Nav = (props) => {
+const Navigation = (props) => {
   let loginLinkData = {
     path: "/login",
     text: "Login",
@@ -20,7 +20,7 @@ const Nav = (props) => {
 
   return (
     <div>
-      <Navbar bg="dark" className="navbar-default">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Brand>
           <img
             alt=""
@@ -30,9 +30,10 @@ const Nav = (props) => {
             className="d-inline-block align-top"
           />{" "}
         </Navbar.Brand>
-
-        {/* Show the link to the info page and the logout button if the user is logged in */}
-        {props.store.user.id && (
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+          {props.store.user.id && (
           <>
             <Link
               className="nav-link"
@@ -59,16 +60,19 @@ const Nav = (props) => {
               {" "}
               {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
               Client Submission Form{" "}
-            </Link>
+              </Link>
           </>
         )}
-        {/* Always show this link since the about page is not protected */}
-        <ul className="nav navbar-nav ml-auto">
-          <LogOutButton className="logout-button" />
-        </ul>
+          </Nav>
+          <Nav>
+            {props.store.user.id &&
+              <LogOutButton className="logout-button" />
+            }
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
     </div>
   );
 };
 
-export default connect(mapStoreToProps)(Nav);
+export default connect(mapStoreToProps)(Navigation);

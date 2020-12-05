@@ -141,8 +141,6 @@ class SubmissionForm extends Component {
   render() {
     return (
       <Container>
-        {/* <Button onClick={this.handleShow}>Show Modal</Button>
-        <Button onClick={() => this.setState({ formSubmissionSuccess: true })}>Form success</Button> */}
         <br />
         <Form id="form-container" onSubmit={this.handleSubmit}>
           <Row>
@@ -275,11 +273,11 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
-                <Form.Label>Dental Rental Purpose</Form.Label>
+                <Form.Label>Reason for Request</Form.Label>
                 <Form.Control
                   type="text"
                   name="purposeForRequest"
-                  placeholder="Ex: Improve dental health of community."
+                  placeholder="Ex: School/Retirement Community/Prisoner dental outreach."
                   value={this.state.purposeForRequest}
                   onChange={this.handleChange}
                   required
@@ -305,9 +303,9 @@ class SubmissionForm extends Component {
                 <Form.Label>Select Dental Rental Equipment</Form.Label>
                 <Select
                   components={animatedComponents}
-                  noOptionsMessage={() => "Ops! There is no available equipment for the given date range."}
+                  noOptionsMessage={() => "No available equipment for the given date range."}
                   isMulti
-                  placeholder="Please select one or multiple pieces of equipment for the given date range."
+                  placeholder="Select one/multiple equipment item(s)"
                   name="available-equipment"
                   options={this.state.arrOptions}
                   className="basic-multi-select"

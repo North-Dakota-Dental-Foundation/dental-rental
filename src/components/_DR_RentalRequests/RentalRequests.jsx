@@ -20,7 +20,7 @@ class RentalRequests extends Component {
   componentDidMount() {
     this.props.dispatch({ type: "LOADING" }); //activates spinner effect
     this.getEquipmentInRequests();
-    this.getRequests();
+    //this.getRequests();
   }
 
   getRequests = () => {
@@ -142,12 +142,12 @@ class RentalRequests extends Component {
               <Table className="mb-5" id="table-container" bordered hover responsive>
                 <thead>
                   <tr>
-                    <th > Contact</th>
+                    <th>Contact</th>
                     <th>Practice/Company</th>
                     <th>Address</th>
                     <th>Phone Number</th>
                     <th>Equipment</th>
-                    <th>Purpose</th>
+                    <th>Request Reason</th>
                     <th>Applied Date</th>
                     <th>Requested Dates</th>
                     <th style={{ width: "15%" }}>Application Status</th>

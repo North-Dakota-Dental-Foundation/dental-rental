@@ -8,7 +8,7 @@ import {
 
 import { connect } from "react-redux";
 
-import Nav from "../Nav/Nav";
+import Navigation from "../Nav/Nav";
 import Footer from "../Footer/Footer";
 
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -35,7 +35,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Nav />
+          <Navigation />
           <Switch>
             <Redirect exact from="/" to="/rental_requests" />
 
