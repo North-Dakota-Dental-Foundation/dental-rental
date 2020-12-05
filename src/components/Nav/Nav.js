@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import "./Nav.css";
 import mapStoreToProps from "../../redux/mapStoreToProps";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import logo from "./Nav.png";
 
 const Navigation = (props) => {
@@ -20,15 +20,17 @@ const Navigation = (props) => {
 
   return (
     <div>
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="shadow-md p-3 mb-2">
         <Navbar.Brand>
+          <Container>
           <img
             alt=""
             src={logo}
             width="180"
             height="60"
             className="d-inline-block align-top"
-          />{" "}
+            />{" "}
+            </Container>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -38,24 +40,24 @@ const Navigation = (props) => {
             <Link
               className="nav-link"
               to="/rental_requests"
-              style={{ color: "white", justifyContent: "center" }}
+              style={{ color: "white", justifyContent: "center", textAlign: "center" }}
             >
               Rental Requests Management
             </Link>
             <Link
               className="nav-link"
               to="/inventory_view"
-              style={{ color: "white", justifyContent: "center" }}
+              style={{ color: "white", justifyContent: "center", textAlign: "center" }}
             >
               Inventory Management{" "}
             </Link>
-            <Link className="nav-link" to="/users" style={{ color: "white" }}>
+            <Link className="nav-link" to="/users" style={{ color: "white", textAlign: "center" }}>
               User Management{" "}
             </Link>
             <Link
               className="nav-link"
               to="/rental_submission_form"
-              style={{ color: "white" }}
+              style={{ color: "white", textAlign: "center" }}
             >
               {" "}
               {/*TODO: REMOVE THIS FROM NAV BAR AFTER SUFFICIENT TESTING!!!*/}
