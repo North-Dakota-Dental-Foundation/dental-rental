@@ -12,6 +12,7 @@ function* fetchEquipmentInRequests(action) {
     try {
         const response = yield axios.get(`/api/requests/all-equipment`);
         yield put({ type: 'SET_REQUEST_EQUIPMENT', payload: response.data });
+        yield put({type: 'FETCH_REQUESTS'})
         yield put({ type: "NOT_LOADING" }); //this removes the spinner effect
     } catch (error) {
         console.log('Failed to get user info from /api/requests', error);
