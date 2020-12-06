@@ -16,7 +16,7 @@ function* createEquipment(action) {
       },
     });
     // refresh list of uploads
-    yield put({ type: "FETCH_ITEM" });
+    yield put({ type: "FETCH_INVENTORY" });
   } catch (error) {
     // dispatch an error that the upload was rejected
     yield put({
@@ -32,10 +32,13 @@ function* editStatus(action) {
   try {
     const response = yield axios.put(
       `/api/inventory/${action.payload.equipment_id}`,
-      { equipment_status: action.payload.equipment_status }
+      {
+        equipment_status: action.payload.equipment_status,
+      }
     );
+    yield put({ type: "FETCH_INVENTORY" });
+
     yield put({ type: "SET_STATUS", payload: response.data });
-    yield put({ type: "FETCH_ITEM" });
 
     console.log("Success in updating Status.");
   } catch (error) {
@@ -48,36 +51,41 @@ function* editNote(action) {
   try {
     const response = yield axios.put(
       `/api/inventory/${action.payload.equipment_id}/update-note`,
-      { note: action.payload.note }
+      {
+        note: action.payload.note,
+      }
     );
+    yield put({ type: "FETCH_INVENTORY" });
+
     console.log("Success in updating Note.");
-    // refresh list of uploads
-    yield put({ type: "FETCH_ITEM" });
   } catch (error) {
     console.log("error editing Note", error);
   }
 }
 
-function* fetchItem() {
+function* fetchInventory() {
   try {
     const response = yield axios.get("/api/inventory");
     // add the upload to the redux store
-    yield put({ type: "SET_ITEM", payload: response.data });
+    yield put({ type: "SET_INVENTORY", payload: response.data });
   } catch (error) {
     // dispatch an error that the upload was rejected
     yield put({
       type: "SET_ALERT",
-      payload: { message: "Error retrieving Equipment", alert: "alert-error" },
+      payload: {
+        message: "Error retrieving inventory items",
+        alert: "alert-error",
+      },
     });
     console.log("Error getting Equipment from server:", error);
   }
 }
 
 function* inventoryViewSaga() {
-  yield takeLatest("CREATE_ITEM", createEquipment);
-  yield takeLatest("FETCH_ITEM", fetchItem);
-  yield takeLatest("EDIT_STATUS", editStatus);
-  yield takeLatest("EDIT_NOTE", editNote);
+  yield takeEvery("CREATE_ITEM", createEquipment);
+  yield takeEvery("FETCH_INVENTORY", fetchInventory);
+  yield takeEvery("EDIT_STATUS", editStatus);
+  yield takeEvery("EDIT_NOTE", editNote);
 
   // yield takeEvery(
   //     'FETCH',

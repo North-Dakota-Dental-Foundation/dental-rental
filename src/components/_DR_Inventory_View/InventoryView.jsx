@@ -43,7 +43,7 @@ class InventoryView extends Component {
       { value: 3, label: "IN-INSPECTION" },
       { value: 4, label: "MISSING" },
       { value: 2, label: "SHIPPED" },
-      { value: 5, label: 'RETIRED' }
+      { value: 5, label: "RETIRED" },
     ],
     selectOptions: [
       { value: "AVAILABLE", label: "AVAILABLE" },
@@ -77,6 +77,12 @@ class InventoryView extends Component {
       this.getFilterInventory();
     }
   };
+
+  /*   getInventory = () => {
+    this.props.dispatch({
+      type: "FETCH_INVENTORY",
+    });
+  }; */
 
   getInventory = () => {
     console.log("Getting entire inventory");
@@ -119,7 +125,6 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
-    this.getInventory();
   };
 
   editNotes = () => {
@@ -137,8 +142,6 @@ class InventoryView extends Component {
       icon: "success",
       buttons: true,
     });
-    /*     this.getInventory(); // TODO: Move this to your EDIT_NOTE saga due to async delays
-     */
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
@@ -251,8 +254,9 @@ class InventoryView extends Component {
           <Row>
             <Col className="text-center">
               Browse through all of the inventory.
-                <br />
-                Add new equipment to the inventory and change or filter by the equipment status.
+              <br />
+              Add new equipment to the inventory and change or filter by the
+              equipment status.
             </Col>
           </Row>
         </Alert>
@@ -391,7 +395,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${ }</Form.Label>
+                        <Form.Label>Notes for ${}</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -422,7 +426,7 @@ class InventoryView extends Component {
           </Modal.Footer>
         </Modal>
         <Container>
-          {this.props.state.isLoadingReducer ?
+          {this.props.state.isLoadingReducer ? (
             <>
               <br />
               <br />
@@ -432,7 +436,7 @@ class InventoryView extends Component {
                 </Col>
               </Row>
             </>
-            :
+          ) : (
             <>
               <Row>
                 <Col xs={3} md={3} sm={3} lg={3} xl={3}>
@@ -449,13 +453,13 @@ class InventoryView extends Component {
                 </Col>
                 <Col style={{ textAlign: "right", paddingTop: "25px" }}>
                   &nbsp; &nbsp;&nbsp;
-              <OverlayTrigger
+                  <OverlayTrigger
                     placement="top"
                     delay={{ show: 1000 }}
                     overlay={
                       <Tooltip id="button-tooltip-2">
                         Filter the inventory table by status.
-                  </Tooltip>
+                      </Tooltip>
                     }
                   >
                     {({ ref, ...triggerHandler }) => (
@@ -476,7 +480,7 @@ class InventoryView extends Component {
                     overlay={
                       <Tooltip id="button-tooltip-2">
                         Add new equipment to your inventory.
-                  </Tooltip>
+                      </Tooltip>
                     }
                   >
                     {({ ref, ...triggerHandler }) => (
@@ -501,13 +505,15 @@ class InventoryView extends Component {
                     <th>Equipment</th>
                     <th>Serial #</th>
                     <th>NDDF Code</th>
-                    <th style={{ textAlign: "center", width: "16%" }}>Status</th>
+                    <th style={{ textAlign: "center", width: "16%" }}>
+                      Status
+                    </th>
                     <th style={{ textAlign: "center" }}>Notes</th>
                     <th style={{ textAlign: "center" }}>Retire</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.inventory.map((inventoryItem, index) => (
+                  {this.props.inventory.map((inventoryItem, index) => (
                     <tr>
                       <td style={{ verticalAlign: "middle" }}>
                         {inventoryItem.equipment_item}
@@ -518,27 +524,40 @@ class InventoryView extends Component {
                       <td style={{ verticalAlign: "middle" }}>
                         {inventoryItem.nddf_code}
                       </td>
-                      <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-
-                        {inventoryItem.equipment_status === "RETIRED" ?
+                      <td
+                        style={{ textAlign: "center", verticalAlign: "middle" }}
+                      >
+                        {inventoryItem.equipment_status === "RETIRED" ? (
                           <Select
                             className="basic-single"
                             classNamePrefix="select"
-                            value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                            value={[
+                              {
+                                label: `${inventoryItem.equipment_status}`,
+                                value: `${inventoryItem.equipment_status}`,
+                              },
+                            ]}
                             name="requestStatus"
                             options={this.state.selectOptions}
                             isDisabled
                           />
-                          :
+                        ) : (
                           <Select
-                            onChange={(e) => this.editStatus(e, inventoryItem.id)}
+                            onChange={(e) =>
+                              this.editStatus(e, inventoryItem.id)
+                            }
                             className="basic-single"
                             classNamePrefix="select"
-                            value={[{ label: `${inventoryItem.equipment_status}`, value: `${inventoryItem.equipment_status}` }]}
+                            value={[
+                              {
+                                label: `${inventoryItem.equipment_status}`,
+                                value: `${inventoryItem.equipment_status}`,
+                              },
+                            ]}
                             name="requestStatus"
                             options={this.state.selectOptions}
                           />
-                        }
+                        )}
                       </td>
                       <td style={{ textAlign: "center" }}>
                         {" "}
@@ -552,7 +571,7 @@ class InventoryView extends Component {
                       </td>
                       <td style={{ textAlign: "center" }}>
                         {" "}
-                        {inventoryItem.equipment_status === "RETIRED" ?
+                        {inventoryItem.equipment_status === "RETIRED" ? (
                           <Button
                             className="deleteButton"
                             variant="danger"
@@ -560,8 +579,8 @@ class InventoryView extends Component {
                             disabled
                           >
                             Retire Item
-                  </Button>
-                          :
+                          </Button>
+                        ) : (
                           <Button
                             className="deleteButton"
                             variant="danger"
@@ -571,15 +590,15 @@ class InventoryView extends Component {
                             }
                           >
                             Retire Item
-                    </Button>
-                        }
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
             </>
-          }
+          )}
         </Container>
         <Modal
           className="modal"
@@ -649,6 +668,6 @@ class InventoryView extends Component {
 
 const mapStateToProps = (state) => ({
   state: state,
-  equipment: state.inventoryReducer.equipment,
+  inventory: state.inventoryReducer.inventory,
 });
 export default connect(mapStateToProps)(InventoryView);
