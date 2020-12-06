@@ -1,15 +1,15 @@
 const defaultState = {
   currentItem: null,
-  equipment: [],
+  inventory: [],
 };
 const inventoryReducer = (state = defaultState, action) => {
-  if (action.type === "SET_ITEM") {
+  if (action.type === "SET_INVENTORY") {
     // clear uploads and set to a new list (action.payload)
     return {
       ...state,
-      rinks: action.payload,
+      inventory: action.payload,
     };
-  } else if (action.type === "SET_CURRENT_ITEM") {
+  } else if (action.type === "SET_CURRENT_INVENTORY") {
     return {
       ...state,
       currentItem: action.payload,

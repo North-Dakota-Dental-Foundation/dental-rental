@@ -277,7 +277,7 @@ class SubmissionForm extends Component {
                 <Form.Control
                   type="text"
                   name="purposeForRequest"
-                  placeholder="Ex: School/Retirement Community/Prisoner dental outreach."
+                  placeholder="Ex: School/Retirement community/Prison dental outreach."
                   value={this.state.purposeForRequest}
                   onChange={this.handleChange}
                   required
