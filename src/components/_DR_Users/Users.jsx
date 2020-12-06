@@ -163,105 +163,92 @@ class Users extends Component {
               </Modal.Header>
 
               <Modal.Body className="modal-body">
-                <div id="addUserInputs">
+                <Form onSubmit={this.onSubmit}>
+                  <div id="addUserInputs">
+                    <Row>
+                      <Col>
+                        <Form.Group>
+                          <Form.Label>First Name:</Form.Label>
+                          <Form.Control
+                            onChange={this.handleChange}
+                            placeholder=""
+                            type="text"
+                            name="firstname"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group>
+                          <Form.Label>Last Name:</Form.Label>
+                          <Form.Control
+                            onChange={this.handleChange}
+                            placeholder=""
+                            type="text"
+                            name="lastname"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Form.Group>
+                          <Form.Label>Username (Email):</Form.Label>
+                          <Form.Control
+                            onChange={this.handleChange}
+                            placeholder=""
+                            type="text"
+                            name="username"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group>
+                          <Form.Label>Password:</Form.Label>
+                          <Form.Control
+                            onChange={this.handleChange}
+                            placeholder=""
+                            type="password"
+                            name="password"
+                            className="addUserInput"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Form.Group>
+                          <Form.Label>Phone Number:</Form.Label>
+                          <Form.Control
+                            onChange={this.handleChange}
+                            placeholder="###-###-####"
+                            type="tel"
+                            name="phonenumber"
+                            className="addUserInput"
+                            require
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </div>
                   <Row>
                     <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
+                      <Button
+                        type="submit"
+                        variant="primary w-100 text-center"
                       >
-                        <Form.Label>First Name:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="firstname"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
-                        <Form.Label>Last Name:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="lastname"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
+                        Submit
+                      </Button>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
-                        <Form.Label>Username (Email):</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="username"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
-                        <Form.Label>Password:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="password"
-                          className="addUserInput"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Form.Group
-                        onChange={this.handleChange}
-                        controlId="exampleForm.ControlTextarea1a"
-                      >
-                        <Form.Label>Phone Number:</Form.Label>
-                        <Form.Control
-                          placeholder=""
-                          as="textarea"
-                          rows={1}
-                          name="phonenumber"
-                          className="addUserInput"
-                          require
-                          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </div>
-                <Row>
-                  <Col>
-                    <Button
-                      onClick={this.onSubmit}
-                      variant="primary w-100 text-center"
-                    >
-                      Submit{" "}
-                    </Button>
-                  </Col>
-                </Row>
+                </Form>
               </Modal.Body>
 
               <Modal.Footer className="modalFooter">
