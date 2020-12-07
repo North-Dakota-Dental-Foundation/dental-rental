@@ -54,7 +54,6 @@ function* editNote(action) {
         note: action.payload.note,
       }
     );
-    yield put({ type: "FETCH_INVENTORY" });
 
     console.log("Success in updating Note.");
   } catch (error) {
