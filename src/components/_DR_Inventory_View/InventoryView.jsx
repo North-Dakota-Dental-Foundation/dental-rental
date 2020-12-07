@@ -176,6 +176,7 @@ class InventoryView extends Component {
       icon: "success",
       buttons: true,
     });
+    setTimeout(this.submit, 100);
   };
 
   deleteInventory = (inventoryId, objectIndex) => {
