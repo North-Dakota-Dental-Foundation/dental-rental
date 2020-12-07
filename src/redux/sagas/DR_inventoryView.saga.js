@@ -36,7 +36,6 @@ function* editStatus(action) {
         equipment_status: action.payload.equipment_status,
       }
     );
-    yield put({ type: "FETCH_INVENTORY" });
 
     yield put({ type: "SET_STATUS", payload: response.data });
 
@@ -65,9 +64,10 @@ function* editNote(action) {
 
 function* fetchInventory() {
   try {
+
     const response = yield axios.get("/api/inventory");
-    // add the upload to the redux store
-    yield put({ type: "SET_INVENTORY", payload: response.data });
+    yield put({ type: "SET_INVENTORY", payload: response.data }); // add the upload to the redux store
+
   } catch (error) {
     // dispatch an error that the upload was rejected
     yield put({
@@ -81,28 +81,39 @@ function* fetchInventory() {
   }
 }
 
+// function* fetchFilteredInventory() {
+//   try {
+//     console.log(payload);
+//     // const response = yield axios.get(`/api/inventory/filterinv/${this.state.filterStatus[0].value}`)
+//   }
+// }
+
+function* fetchFilteredInventory(action) {
+  try {
+
+    console.log(`Filtered inventory: ${action.payload}`);
+
+    const response = yield axios.get(`/api/inventory/filterinv/${action.payload}`);
+    yield put({ type: "SET_INVENTORY", payload: response.data });
+
+  } catch (error) {
+    yield put({
+      type: "SET_ALERT",
+      payload: {
+        message: "Error retrieving inventory items",
+        alert: "alert-error",
+      },
+    });
+    console.log("Error getting Equipment from server:", error);
+  };
+};
+
 function* inventoryViewSaga() {
   yield takeEvery("CREATE_ITEM", createEquipment);
   yield takeEvery("FETCH_INVENTORY", fetchInventory);
+  yield takeEvery('FETCH_FILTERED_INVENTORY', fetchFilteredInventory);
   yield takeEvery("EDIT_STATUS", editStatus);
   yield takeEvery("EDIT_NOTE", editNote);
-
-  // yield takeEvery(
-  //     'FETCH',
-  //     fetchItem,
-  // );
-  // yield takeEvery(
-  //     'POST',
-  //     postItem,
-  // );
-  // yield takeEvery(
-  //     'DELETE',
-  //     deleteItem,
-  // );
-  // yield takeEvery(
-  //     'EDIT',
-  //     editItem,
-  // )
 }
 
 export default inventoryViewSaga;

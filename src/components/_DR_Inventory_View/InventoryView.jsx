@@ -47,19 +47,28 @@ class InventoryView extends Component {
     ],
     selectOptions: [
       { value: "AVAILABLE", label: "AVAILABLE" },
-      { value: "MISSING", label: "MISSING" },
       { value: "CHECKED-OUT", label: "CHECKED-OUT" },
-      { value: "SHIPPED", label: "SHIPPED" },
       { value: "IN-INSPECTION", label: "IN-INSPECTION" },
+      { value: "MISSING", label: "MISSING" },
+      { value: "SHIPPED", label: "SHIPPED" },
     ],
   };
 
-  // TODO: If "filterStatus" equals "N/A", run "filterInv();"
-
   componentDidMount() {
-    this.props.dispatch({ type: "LOADING" }); //activates spinner effect
-    this.getInventory();
-  }
+    // this.props.dispatch({ type: 'LOADING' });
+    this.props.dispatch({ type: 'FETCH_INVENTORY' }); // Fetch ALL inventory
+    // this.props.dispatch({ type: "NOT_LOADING" });
+  };
+
+//   componentDidUpdate(prevProps){
+//     if(prevProps.value !== this.props.value){ this.submit() }
+//  }
+
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps !== this.props) {
+  //     console.log('Inventory has changed!');
+  //   };
+  // };
 
   handleNoteChange = (event) => {
     this.setState({
@@ -72,9 +81,9 @@ class InventoryView extends Component {
     console.log(`Applying filter number... ${this.state.filterStatus}`);
 
     if (this.state.filterStatus[0].value === "N/A") {
-      this.getInventory();
+      this.props.dispatch({ type: 'FETCH_INVENTORY' });
     } else if (this.state.filterStatus[0].value !== "N/A") {
-      this.getFilterInventory();
+      this.props.dispatch({ type: 'FETCH_FILTERED_INVENTORY', payload: this.state.filterStatus[0].value });
     }
   };
 
@@ -84,37 +93,37 @@ class InventoryView extends Component {
     });
   }; */
 
-  getInventory = () => {
-    console.log("Getting entire inventory");
-    axios
-      .get("/api/inventory")
-      .then((response) => {
-        console.log(response.data);
-        this.setState({
-          inventory: response.data,
-        });
-        this.props.dispatch({ type: "NOT_LOADING" });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // getInventory = () => {
+  //   console.log("Getting entire inventory");
+  //   axios
+  //     .get("/api/inventory")
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       this.setState({
+  //         inventory: response.data,
+  //       });
+  //       this.props.dispatch({ type: "NOT_LOADING" });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
-  getFilterInventory = () => {
-    // Repopulates this.state.inventory with filtered data
-    console.log("Filtering inventory...");
-    axios
-      .get(`/api/inventory/filterinv/${this.state.filterStatus[0].value}`) // GET request with selected filter
-      .then((response) => {
-        this.setState({
-          // Sets this.state.inventory to new data
-          inventory: response.data,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // getFilterInventory = () => {
+  //   // Repopulates this.state.inventory with filtered data
+  //   console.log("Filtering inventory...");
+  //   axios
+  //     .get(`/api/inventory/filterinv/${this.state.filterStatus[0].value}`) // GET request with selected filter
+  //     .then((response) => {
+  //       this.setState({
+  //         // Sets this.state.inventory to new data
+  //         inventory: response.data,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   editStatus = (valueObj, id) => {
     console.log(valueObj.value, id);
@@ -125,6 +134,31 @@ class InventoryView extends Component {
         equipment_id: id,
       },
     });
+    setTimeout(this.submit, 100); // Set timeout that runs "this.submit" hopefully after the item status has been updated // 1000 = 1 second
+    this.props.dispatch({
+      type: "EDIT_STATUS",
+      payload: {
+        equipment_status: valueObj.value,
+        equipment_id: id,
+      },
+    });
+    setTimeout(this.submit, 100); // Set timeout that runs "this.submit" hopefully after the item status has been updated // 1000 = 1 second
+    this.props.dispatch({
+      type: "EDIT_STATUS",
+      payload: {
+        equipment_status: valueObj.value,
+        equipment_id: id,
+      },
+    });
+    setTimeout(this.submit, 100); // Set timeout that runs "this.submit" hopefully after the item status has been updated // 1000 = 1 second
+    this.props.dispatch({
+      type: "EDIT_STATUS",
+      payload: {
+        equipment_status: valueObj.value,
+        equipment_id: id,
+      },
+    });
+    setTimeout(this.submit, 100); // Set timeout that runs "this.submit" hopefully after the item status has been updated // 1000 = 1 second
   };
 
   editNotes = () => {
@@ -149,7 +183,7 @@ class InventoryView extends Component {
     // console.log(objectIndex);
     // console.log(inventoryId);
     swal({
-      title: `Are you sure you want to retire ${this.state.inventory[objectIndex].equipment_item}?`,
+      title: `Are you sure you want to retire ${this.props.inventory[objectIndex].equipment_item}?`,
       text: "Once this item is retired, you will have to re-add it.",
       icon: "warning",
       buttons: true,
@@ -160,7 +194,7 @@ class InventoryView extends Component {
           .then((response) => {
             console.log(response.data);
             swal(
-              `${this.state.inventory[objectIndex].equipment_item} has been retired.`,
+              `${this.props.inventory[objectIndex].equipment_item} has been retired.`,
               {
                 icon: "success",
               }
@@ -172,7 +206,7 @@ class InventoryView extends Component {
           });
       } else {
         swal(
-          `${this.state.inventory[objectIndex].equipment_item} has NOT been retired.`
+          `${this.props.inventory[objectIndex].equipment_item} has NOT been retired.`
         );
       }
     });
@@ -395,7 +429,7 @@ class InventoryView extends Component {
                   <Row>
                     <Col>
                       <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Notes for ${}</Form.Label>
+                        <Form.Label>Notes for ${ }</Form.Label>
                         <Form.Control
                           onChange={(event) => {
                             console.log(event.target.value);
@@ -437,168 +471,168 @@ class InventoryView extends Component {
               </Row>
             </>
           ) : (
-            <>
-              <Row>
-                <Col xs={3} md={3} sm={3} lg={3} xl={3}>
-                  <strong>Filter by Status:</strong> <br />
-                  <Select
-                    onChange={this.handleFilterChange}
-                    className="basic-single"
-                    classNamePrefix="select"
-                    value={this.state.filterStatus}
-                    name="filterStatus"
-                    options={this.state.filterOptions}
-                    placeholder="Filter by Status"
-                  />
-                </Col>
-                <Col style={{ textAlign: "right", paddingTop: "25px" }}>
-                  &nbsp; &nbsp;&nbsp;
-                  <OverlayTrigger
-                    placement="top"
-                    delay={{ show: 1000 }}
-                    overlay={
-                      <Tooltip id="button-tooltip-2">
-                        Filter the inventory table by status.
+              <>
+                <Row>
+                  <Col xs={3} md={3} sm={3} lg={3} xl={3}>
+                    <strong>Filter by Status:</strong> <br />
+                    <Select
+                      onChange={this.handleFilterChange}
+                      className="basic-single"
+                      classNamePrefix="select"
+                      value={this.state.filterStatus}
+                      name="filterStatus"
+                      options={this.state.filterOptions}
+                      placeholder="Filter by Status"
+                    />
+                  </Col>
+                  <Col style={{ textAlign: "right", paddingTop: "25px" }}>
+                    &nbsp; &nbsp;&nbsp;
+                  {/* <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 1000 }}
+                      overlay={
+                        <Tooltip id="button-tooltip-2">
+                          Filter the inventory table by status.
                       </Tooltip>
-                    }
-                  >
-                    {({ ref, ...triggerHandler }) => (
-                      <Button
-                        style={{ marginRight: "3px" }}
-                        variant="primary"
-                        ref={ref}
-                        {...triggerHandler}
-                        onClick={this.submit}
-                      >
-                        Refresh Table
-                      </Button>
-                    )}
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="top"
-                    delay={{ show: 1000 }}
-                    overlay={
-                      <Tooltip id="button-tooltip-2">
-                        Add new equipment to your inventory.
+                      }
+                    >
+                      {({ ref, ...triggerHandler }) => (
+                        <Button
+                          style={{ marginRight: "3px" }}
+                          variant="primary"
+                          ref={ref}
+                          {...triggerHandler}
+                          onClick={this.submit}
+                        >
+                           Refresh Table 
+                        </Button>
+                      )}
+                    </OverlayTrigger> */}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 1000 }}
+                      overlay={
+                        <Tooltip id="button-tooltip-2">
+                          Add new equipment to your inventory.
                       </Tooltip>
-                    }
-                  >
-                    {({ ref, ...triggerHandler }) => (
-                      <Button
-                        variant="primary"
-                        ref={ref}
-                        {...triggerHandler}
-                        className="btn-primary"
-                        onClick={this.openModal}
-                        style={{ float: "right" }}
-                      >
-                        <span>Add New Equipment</span>
-                      </Button>
-                    )}
-                  </OverlayTrigger>
-                </Col>
-              </Row>
-              <br />
-              <Table id="table-container" bordered hover>
-                <thead>
-                  <tr>
-                    <th>Equipment</th>
-                    <th>Serial #</th>
-                    <th>NDDF Code</th>
-                    <th style={{ textAlign: "center", width: "16%" }}>
-                      Status
-                    </th>
-                    <th style={{ textAlign: "center" }}>Notes</th>
-                    <th style={{ textAlign: "center" }}>Retire</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.props.inventory.map((inventoryItem, index) => (
-                    <tr>
-                      <td style={{ verticalAlign: "middle" }}>
-                        {inventoryItem.equipment_item}
-                      </td>
-                      <td style={{ verticalAlign: "middle" }}>
-                        {inventoryItem.serial_number}
-                      </td>
-                      <td style={{ verticalAlign: "middle" }}>
-                        {inventoryItem.nddf_code}
-                      </td>
-                      <td
-                        style={{ textAlign: "center", verticalAlign: "middle" }}
-                      >
-                        {inventoryItem.equipment_status === "RETIRED" ? (
-                          <Select
-                            className="basic-single"
-                            classNamePrefix="select"
-                            value={[
-                              {
-                                label: `${inventoryItem.equipment_status}`,
-                                value: `${inventoryItem.equipment_status}`,
-                              },
-                            ]}
-                            name="requestStatus"
-                            options={this.state.selectOptions}
-                            isDisabled
-                          />
-                        ) : (
-                          <Select
-                            onChange={(e) =>
-                              this.editStatus(e, inventoryItem.id)
-                            }
-                            className="basic-single"
-                            classNamePrefix="select"
-                            value={[
-                              {
-                                label: `${inventoryItem.equipment_status}`,
-                                value: `${inventoryItem.equipment_status}`,
-                              },
-                            ]}
-                            name="requestStatus"
-                            options={this.state.selectOptions}
-                          />
-                        )}
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {" "}
+                      }
+                    >
+                      {({ ref, ...triggerHandler }) => (
                         <Button
                           variant="primary"
+                          ref={ref}
+                          {...triggerHandler}
                           className="btn-primary"
-                          onClick={(event) => this.openNoteModal(inventoryItem)}
+                          onClick={this.openModal}
+                          style={{ float: "right" }}
                         >
-                          Notes{" "}
-                        </Button>{" "}
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {" "}
-                        {inventoryItem.equipment_status === "RETIRED" ? (
-                          <Button
-                            className="deleteButton"
-                            variant="danger"
-                            style={{ textAlign: "center" }}
-                            disabled
-                          >
-                            Retire Item
-                          </Button>
-                        ) : (
-                          <Button
-                            className="deleteButton"
-                            variant="danger"
-                            style={{ textAlign: "center" }}
-                            onClick={() =>
-                              this.deleteInventory(inventoryItem.id, index)
-                            }
-                          >
-                            Retire Item
-                          </Button>
-                        )}
-                      </td>
+                          <span>Add New Equipment</span>
+                        </Button>
+                      )}
+                    </OverlayTrigger>
+                  </Col>
+                </Row>
+                <br />
+                <Table id="table-container" bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Equipment</th>
+                      <th>Serial #</th>
+                      <th>NDDF Code</th>
+                      <th style={{ textAlign: "center", width: "16%" }}>
+                        Status
+                    </th>
+                      <th style={{ textAlign: "center" }}>Notes</th>
+                      <th style={{ textAlign: "center" }}>Retire</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </>
-          )}
+                  </thead>
+                  <tbody>
+                    {this.props.inventory.map((inventoryItem, index) => (
+                      <tr>
+                        <td style={{ verticalAlign: "middle" }}>
+                          {inventoryItem.equipment_item}
+                        </td>
+                        <td style={{ verticalAlign: "middle" }}>
+                          {inventoryItem.serial_number}
+                        </td>
+                        <td style={{ verticalAlign: "middle" }}>
+                          {inventoryItem.nddf_code}
+                        </td>
+                        <td
+                          style={{ textAlign: "center", verticalAlign: "middle" }}
+                        >
+                          {inventoryItem.equipment_status === "RETIRED" ? (
+                            <Select
+                              className="basic-single"
+                              classNamePrefix="select"
+                              value={[
+                                {
+                                  label: `${inventoryItem.equipment_status}`,
+                                  value: `${inventoryItem.equipment_status}`,
+                                },
+                              ]}
+                              name="requestStatus"
+                              options={this.state.selectOptions}
+                              isDisabled
+                            />
+                          ) : (
+                              <Select
+                                onChange={(e) =>
+                                  this.editStatus(e, inventoryItem.id)
+                                }
+                                className="basic-single"
+                                classNamePrefix="select"
+                                value={[
+                                  {
+                                    label: `${inventoryItem.equipment_status}`,
+                                    value: `${inventoryItem.equipment_status}`,
+                                  },
+                                ]}
+                                name="requestStatus"
+                                options={this.state.selectOptions}
+                              />
+                            )}
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          {" "}
+                          <Button
+                            variant="primary"
+                            className="btn-primary"
+                            onClick={(event) => this.openNoteModal(inventoryItem)}
+                          >
+                            Notes{" "}
+                          </Button>{" "}
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          {" "}
+                          {inventoryItem.equipment_status === "RETIRED" ? (
+                            <Button
+                              className="deleteButton"
+                              variant="danger"
+                              style={{ textAlign: "center" }}
+                              disabled
+                            >
+                              Retire Item
+                            </Button>
+                          ) : (
+                              <Button
+                                className="deleteButton"
+                                variant="danger"
+                                style={{ textAlign: "center" }}
+                                onClick={() =>
+                                  this.deleteInventory(inventoryItem.id, index)
+                                }
+                              >
+                                Retire Item
+                              </Button>
+                            )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </>
+            )}
         </Container>
         <Modal
           className="modal"
