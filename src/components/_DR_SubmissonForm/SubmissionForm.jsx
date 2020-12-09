@@ -148,7 +148,9 @@ class SubmissionForm extends Component {
               <h1 id="form-header">Dental Rental Request Form</h1>
             </Col>
           </Row>
-          <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
+          <br />
+          <br />
+          {/* <Alert style={{ paddingLeft: "80px", paddingRight: "80px" }} variant="light">
             <Row>
               <Col className="text-center">
                 Please fill out the form by giving your contact and practice/organization information,
@@ -156,7 +158,7 @@ class SubmissionForm extends Component {
                 purpose, rental request date range, and all requested dental equipment.
             </Col>
             </Row>
-          </Alert>
+          </Alert> */}
           <Form.Group controlId="formBasicInfo">
             <Row>
               <Col>
@@ -300,7 +302,7 @@ class SubmissionForm extends Component {
           <Form.Group>
             <Row>
               <Col>
-                <Form.Label>Select Dental Rental Equipment</Form.Label>
+                <Form.Label>Select Dental Rental Equipment for Date Range</Form.Label>
                 <Select
                   components={animatedComponents}
                   noOptionsMessage={() => "No available equipment for the given date range."}

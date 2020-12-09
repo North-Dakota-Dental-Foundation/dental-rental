@@ -74,7 +74,7 @@ class RentalRequests extends Component {
         <Container className="mb-5" id="table-col-increase-padding" fluid>
           <Row>
             <Col className="text-center">
-              <h1 id="form-header">Dental Rental Requests</h1>
+              <h1 id="form-header">Rental Requests Management</h1>
             </Col>
           </Row>
 
