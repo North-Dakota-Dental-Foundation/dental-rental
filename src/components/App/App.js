@@ -5,24 +5,15 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
-
 import { connect } from "react-redux";
-
 import Navigation from "../Nav/Nav";
 import Footer from "../Footer/Footer";
-
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-
-import AboutPage from "../AboutPage/AboutPage";
-import UserPage from "../UserPage/UserPage";
-import InfoPage from "../InfoPage/InfoPage";
-import LandingPage from "../LandingPage/LandingPage";
 import LoginPage from "../LoginPage/LoginPage";
-import RegisterPage from "../RegisterPage/RegisterPage";
-import InventoryView from "../_DR_Inventory_View/InventoryView";
-import RentalRequest from "../_DR_RentalRequests/RentalRequests";
-import SubmissionForm from "../_DR_SubmissonForm/SubmissionForm";
-import Users from "../_DR_Users/Users";
+import InventoryView from "../InventoryView/InventoryView";
+import RentalRequest from "../RentalRequests/RentalRequests";
+import SubmissionForm from "../SubmissonForm/SubmissionForm";
+import Users from "../Users/Users";
 
 import "./App.css";
 

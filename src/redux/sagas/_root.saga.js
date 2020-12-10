@@ -3,19 +3,11 @@ import loginSaga from "./login.saga";
 import registrationSaga from "./registration.saga";
 import userSaga from "./user.saga";
 
-import inventoryViewSaga from "./DR_inventoryView.saga";
-import rentalRequestSaga from "./DR_rentalRequest.saga";
-import submissionFormSaga from "./DR_submissionForm.saga";
-import userPageSaga from "./DR_userPage.saga";
-import equipmentInRequestsSaga from "./DR_EquipmentInRequest.saga";
+import inventoryViewSaga from "./inventoryView.saga";
+import rentalRequestSaga from "./rentalRequest.saga";
+import userPageSaga from "./userPage.saga";
+import equipmentInRequestSaga from "./equipmentInRequest.saga";
 
-// rootSaga is the primary saga.
-// It bundles up all of the other sagas so our project can use them.
-// This is imported in index.js as rootSaga
-
-// some sagas trigger other sagas, as an example
-// the registration triggers a login
-// and login triggers setting the user
 export default function* rootSaga() {
   yield all([
     loginSaga(), // login saga is now registered
@@ -24,8 +16,7 @@ export default function* rootSaga() {
 
     inventoryViewSaga(),
     rentalRequestSaga(),
-    //submissionFormSaga(),
     userPageSaga(),
-    equipmentInRequestsSaga(),
+    equipmentInRequestSaga(),
   ]);
 }

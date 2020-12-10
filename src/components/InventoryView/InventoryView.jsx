@@ -18,7 +18,7 @@ import swal from "sweetalert";
 import { Row, Col } from "react-bootstrap";
 import "../App/App.css";
 import axios from "axios";
-import ThreeDots from "../_DR_ThreeDots/ThreeDots";
+import ThreeDots from "../ThreeDots/ThreeDots";
 import Select from "react-select";
 
 class InventoryView extends Component {
@@ -60,9 +60,9 @@ class InventoryView extends Component {
     // this.props.dispatch({ type: "NOT_LOADING" });
   };
 
-//   componentDidUpdate(prevProps){
-//     if(prevProps.value !== this.props.value){ this.submit() }
-//  }
+  //   componentDidUpdate(prevProps){
+  //     if(prevProps.value !== this.props.value){ this.submit() }
+  //  }
 
   // componentDidUpdate(prevProps) {
   //   if (prevProps !== this.props) {

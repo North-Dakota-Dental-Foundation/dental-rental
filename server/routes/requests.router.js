@@ -4,7 +4,6 @@ const router = express.Router();
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
-const { request } = require("express");
 
 /**
  * GET route
@@ -157,10 +156,6 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
  * DELETE route
  */
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
-  // console.log(req.requests, req.params);
-  // console.log(
-  //   `Deleting Equipment with ID ${req.params.id} by User ${req.requests.name}`
-  // );
   const { id } = req.params;
 
   //note: must delete from junction table first due to foreign key constraints

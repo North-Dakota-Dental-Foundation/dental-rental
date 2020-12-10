@@ -18,7 +18,7 @@ function* fetchRequests(action) {
     try {
         const response = yield axios.get(`/api/requests`);
         yield put({ type: 'SET_REQUESTS', payload: response.data });
-        yield put({ type: "NOT_LOADING" }); //this removes the spinner effect
+        yield put({ type: "NOT_LOADING" }); //this removes the skeleton effect
     } catch (error) {
         console.log('Failed to get request info from /api/requests', error);
     };
@@ -29,7 +29,7 @@ function* fetchFilteredRequests(action) {
         const requestFilterStatus = action.payload;
         const response = yield axios.get(`/api/requests/filterrequests/${requestFilterStatus}`);
         yield put({ type: 'SET_REQUESTS', payload: response.data });
-        yield put({ type: "NOT_LOADING" }); //this removes the spinner effect
+        yield put({ type: "NOT_LOADING" }); //this removes the skeleton effect
     } catch (error) {
         console.log('Failed to get request info from /api/requests/filterrequests/', error);
     };

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Alert, Table, Container, Row, Col } from "react-bootstrap";
 import RequestItem from "./RequestItem";
-import equipmentInRequestsSaga from "../../redux/sagas/DR_EquipmentInRequest.saga"; //TODO: REMOVE!
-import ThreeDots from "../_DR_ThreeDots/ThreeDots";
+import ThreeDots from "../ThreeDots/ThreeDots";
 import Select from 'react-select';
 import "./RentalRequest.css"
 
@@ -18,9 +17,8 @@ class RentalRequests extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch({ type: "LOADING" }); //activates spinner effect
+    this.props.dispatch({ type: "LOADING" }); //activates threedots effect
     this.getEquipmentInRequests();
-    //this.getRequests();
   }
 
   getRequests = () => {
@@ -179,7 +177,6 @@ const mapStoreToProps = (reduxState) => {
     //create an temporary obj with key of each request's id and with a value of a string of equipment in particular request
     let tempObj = {};
     equipmentInRequests.map((obj) => {
-      console.log(typeof obj.id);
       //if the obj.id is NOT a key in the tempObj, this is a new request. Insert initial content
       if (!tempObj.hasOwnProperty(obj.id)) {
         tempObj[obj.id] = obj.equipment_item;
