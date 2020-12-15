@@ -30,5 +30,5 @@ module.exports = cookieSession({
   resave: 'false',
   saveUninitialized: false,
   maxAge: 60 * 60 * 1000, // Set to 1 hour - 60 min/hour * 60 s/min * 1000 ms/s
-  secure: false
+  secure: false,
 });

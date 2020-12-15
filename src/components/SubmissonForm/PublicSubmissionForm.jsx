@@ -340,11 +340,6 @@ class SubmissionForm extends Component {
               <br />
               <Button variant="link" href="https://nddental.org">Back to the ND Dental Foundation homepage.</Button>
             </Modal.Body>
-            <Modal.Footer>
-          <Button variant="secondary" onClick={this.handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
           </Modal> :
             <Modal
               show={this.state.show}
@@ -361,11 +356,6 @@ class SubmissionForm extends Component {
                  <br />
                 <Button variant="link" href="https://nddental.org">Back to the ND Dental Foundation homepage.</Button>
               </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={this.handleClose}>
-                  Close
-                </Button>
-          </Modal.Footer>
             </Modal>
         }
       </Container >

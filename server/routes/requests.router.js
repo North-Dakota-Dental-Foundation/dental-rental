@@ -56,11 +56,7 @@ router.get("/all-equipment", rejectUnauthenticated, async (req, res) => {
 /**
  * POST route
  */
-router.post("/", rejectUnauthenticated, async (req, res) => {
-  if (req.isAuthenticated() === false) {
-    res.sendStatus(403);
-    return;
-  }
+router.post("/", async (req, res) => {
   try {
     const {
       company, //string

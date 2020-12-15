@@ -14,6 +14,7 @@ import InventoryView from "../InventoryView/InventoryView";
 import RentalRequest from "../RentalRequests/RentalRequests";
 import SubmissionForm from "../SubmissonForm/SubmissionForm";
 import Users from "../Users/Users";
+import PublicSubmissionForm from "../SubmissonForm/PublicSubmissionForm";
 
 import "./App.css";
 
@@ -21,13 +22,19 @@ class App extends Component {
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_USER" });
     this.props.dispatch({ type: "FETCH_INVENTORY" });
+
+    setInterval( () => {
+      this.props.dispatch({ type: "FETCH_USER" });
+    }, 1000 * 10) // Run every 10 seconds
   }
 
   render() {
     return (
       <Router>
         <div>
-          <Navigation />
+
+          <Navigation /> 
+          
           <Switch>
             <Redirect exact from="/" to="/rental_requests" />
 
@@ -79,6 +86,7 @@ class App extends Component {
             />
 
             {/* If none of the other routes matched, we will show a 404. */}
+            <Route path="/public_rental_submission_form" component={PublicSubmissionForm} />
             <Route render={() => <h1>404</h1>} />
           </Switch>
           <Footer />
@@ -91,5 +99,6 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   state: state,
   equipment: state.inventoryReducer.equipment,
+  user: state.user,
 });
 export default connect(mapStateToProps)(App);

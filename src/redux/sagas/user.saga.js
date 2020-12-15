@@ -21,6 +21,7 @@ function* fetchUser() {
     yield put({ type: 'SET_USER', payload: response.data });
   } catch (error) {
     console.log('User get request failed', error);
+    yield put({ type: 'LOGOUT' }); // Clears the user when logout is determined
   }
 }
 

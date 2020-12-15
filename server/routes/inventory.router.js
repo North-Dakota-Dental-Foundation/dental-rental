@@ -67,7 +67,6 @@ router.get(
  */
 router.post(
   "/all-inventory-by-date-range/",
-  rejectUnauthenticated,
   (req, res) => {
     const { endDate, startDate } = req.body; //date format: yyyy-mm-dd
     const startDateBuffered = moment(startDate).subtract(2, "week").format();
